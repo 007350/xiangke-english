@@ -1,0 +1,662 @@
+[
+ {
+  "type": "spelling",
+  "item": "看中文写单词：窗户 wind_w",
+  "gold": "window",
+  "final": {
+   "steps": [
+    {
+     "ask": "「窗户」这个词里，空格缺的是什么字母？",
+     "expect": "o",
+     "explain": "这个空是整个词的第六个字母，这里要写 o。"
+    },
+    {
+     "ask": "很好！现在把「窗户」这个词完整地拼出来。",
+     "expect": "window",
+     "explain": "「窗户」的英文是 window，一共 6 个字母：w i t n e w。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"「窗户」这个词里，空格缺的是什么字母？\", \"expect\": \"o\", \"explain\": \"这个空是整个词的第六个字母，这里要写 o。\"}, {\"ask\": \"很好！现在把「窗户」这个词完整地拼出来。\", \"expect\": \"window\", \"explain\": \"「窗户」的英文是 window，一共 6 个字母：w i t n e w。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 5.8,
+    "tokens": 99
+   }
+  ]
+ },
+ {
+  "type": "spelling",
+  "item": "看中文写单词：兔子 rabb__",
+  "gold": "rabbit",
+  "final": {
+   "steps": [
+    {
+     "ask": "「兔子」的英文里，第一个空格缺的是什么字母？",
+     "expect": "i",
+     "explain": "这个空是整个词的第五个字母，这里要写 i。"
+    },
+    {
+     "ask": "「兔子」的英文里，第二个空格缺的是什么字母？",
+     "expect": "t",
+     "explain": "这个空是整个词的第六个字母，这里要写 t。"
+    },
+    {
+     "ask": "很好！现在把「兔子」的英文单词完整地拼出来。",
+     "expect": "rabbit",
+     "explain": "「兔子」的英文是 rabbit，一共 6 个字母：r a b b i t。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"「兔子」的英文里，第一个空格缺的是什么字母？\", \"expect\": \"i\", \"explain\": \"这个空是整个词的第五个字母，这里要写 i。\"}, {\"ask\": \"「兔子」的英文里，第二个空格缺的是什么字母？\", \"expect\": \"t\", \"explain\": \"这个空是整个词的第六个字母，这里要写 t。\"}, {\"ask\": \"很好！现在把「兔子」的英文单词完整地拼出来。\", \"expect\": \"rabbit\", \"explain\": \"「兔子」的英文是 rabbit，一共 6 个字母：r a b b i t。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 5.9,
+    "tokens": 147
+   }
+  ]
+ },
+ {
+  "type": "spelling",
+  "item": "看中文写单词：十月 Oct_b__",
+  "gold": "October",
+  "final": {
+   "steps": [
+    {
+     "ask": "「十月」的英文里，第一个空格（第4个字母）是什么？",
+     "expect": "o",
+     "explain": "这个空格是整个词的第四个字母，这里要写 o。"
+    },
+    {
+     "ask": "「十月」的英文里，第二个空格（第6个字母）是什么？",
+     "expect": "e",
+     "explain": "这个空格是整个词的第六个字母，这里要写 e。"
+    },
+    {
+     "ask": "「十月」的英文里，第三个空格（第7个字母）是什么？",
+     "expect": "r",
+     "explain": "这个空格是整个词的第七个字母，这里要写 r。"
+    },
+    {
+     "ask": "把空填好后，整个单词是什么？请说出来。",
+     "expect": "October",
+     "explain": "「十月」的英文是 October，一共 8 个字母：O c t o m e r。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"「十月」的英文里，第一个空格（第4个字母）是什么？\", \"expect\": \"o\", \"explain\": \"这个空格是整个词的第四个字母，这里要写 o。\"}, {\"ask\": \"「十月」的英文里，第二个空格（第6个字母）是什么？\", \"expect\": \"e\", \"explain\": \"这个空格是整个词的第六个字母，这里要写 e。\"}, {\"ask\": \"「十月」的英文里，第三个空格（第7个字母）是什么？\", \"expect\": \"r\", \"explain\": \"这个空格是整个词的第七个字母，这里要写 r。\"}, {\"ask\": \"把空填好后，整个单词是什么？请说出来。\", \"expect\": \"October\", \"explain\": \"「十月」的英文是 October，一共 8 个字母：O c t o m e r。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 6.6,
+    "tokens": 199
+   }
+  ]
+ },
+ {
+  "type": "spelling",
+  "item": "看中文写单词：娃娃 dol_",
+  "gold": "doll",
+  "final": {
+   "steps": [
+    {
+     "ask": "「娃娃」这个词里，空格缺的是什么字母？",
+     "expect": "l",
+     "explain": "这个空是整个词的第四个字母，这里要写 l。"
+    },
+    {
+     "ask": "很好！现在把「娃娃」这个词完整地拼出来。",
+     "expect": "doll",
+     "explain": "「娃娃」的英文是 doll，一共 4 个字母：d o l l。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"「娃娃」这个词里，空格缺的是什么字母？\", \"expect\": \"l\", \"explain\": \"这个空是整个词的第四个字母，这里要写 l。\"}, {\"ask\": \"很好！现在把「娃娃」这个词完整地拼出来。\", \"expect\": \"doll\", \"explain\": \"「娃娃」的英文是 doll，一共 4 个字母：d o l l。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.8,
+    "tokens": 98
+   }
+  ]
+ },
+ {
+  "type": "spelling",
+  "item": "看中文写单词：星期五 Frid_y",
+  "gold": "Friday",
+  "final": {
+   "steps": [
+    {
+     "ask": "「星期五」这个词里，空格缺的是什么字母？",
+     "expect": "a",
+     "explain": "这个空是整个词的第六个字母，这里要写 a。"
+    },
+    {
+     "ask": "很好！现在把「星期五」这个词完整地拼出来。",
+     "expect": "Friday",
+     "explain": "「星期五」的英文是 Friday，一共 6 个字母：F r i d a y。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"「星期五」这个词里，空格缺的是什么字母？\", \"expect\": \"a\", \"explain\": \"这个空是整个词的第六个字母，这里要写 a。\"}, {\"ask\": \"很好！现在把「星期五」这个词完整地拼出来。\", \"expect\": \"Friday\", \"explain\": \"「星期五」的英文是 Friday，一共 6 个字母：F r i d a y。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.6,
+    "tokens": 99
+   }
+  ]
+ },
+ {
+  "type": "plural_noun",
+  "item": "I have four ___ (rabbit).",
+  "gold": "rabbits",
+  "final": {
+   "steps": [
+    {
+     "ask": "空格前面紧挨着的提示词是什么？",
+     "expect": "four",
+     "explain": "空格前面紧挨着的是 four，four 的意思是「一个」或「多个」。"
+    },
+    {
+     "ask": "rabbit 变复数，词尾加 s 还是 es？",
+     "expect": "rabbits",
+     "explain": "一般的名词变复数，直接在词尾加 s。"
+    }
+   ]
+  },
+  "source": "model_try2",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"空格前面的是 four，表示几个。rabbit 变复数，词尾加 s 还是 es？\", \"expect\": \"four\", \"explain\": \"以 s、x、ch、sh 结尾的名词加 es；tomato、potato 这类以 o 结尾的也加 es。rabbit 不是这类词，所以不加 es，直接加 s。\"}, {\"ask\": \"把 rabbit 的复数形式写出来，填进空里。\", \"expect\": \"rabbits\", \"explain\": \"四个，名词要用复数。以 s、x、ch、sh 结尾的名词加 es；tomato、potato 这类以 o 结尾的也加 es。rabbit 不是这类词，所以不加 es，直接加 s，复数为 rabbits。\"}]}",
+    "ok": false,
+    "errors": [
+     "第1步 ask 直接说出了本步答案“four”"
+    ],
+    "latency_s": 5.9,
+    "tokens": 182
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"空格前面紧挨着的提示词是什么？\", \"expect\": \"four\", \"explain\": \"空格前面紧挨着的是 four，four 的意思是「一个」或「多个」。\"}, {\"ask\": \"rabbit 变复数，词尾加 s 还是 es？\", \"expect\": \"rabbits\", \"explain\": \"一般的名词变复数，直接在词尾加 s。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.4,
+    "tokens": 95
+   }
+  ]
+ },
+ {
+  "type": "plural_noun",
+  "item": "The ___ is very big. (boxes / box)",
+  "gold": "box",
+  "final": {
+   "steps": [
+    {
+     "ask": "空格后面紧跟着的是 is 还是 are？",
+     "expect": "is",
+     "explain": "空格后面紧跟着的是 is，说明说的是一个。"
+    },
+    {
+     "ask": "那空里选 box 还是 boxes？",
+     "expect": "box",
+     "explain": "说的是一个，所以选原来的样子 box。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"空格后面紧跟着的是 is 还是 are？\", \"expect\": \"is\", \"explain\": \"空格后面紧跟着的是 is，说明说的是一个。\"}, {\"ask\": \"那空里选 box 还是 boxes？\", \"expect\": \"box\", \"explain\": \"说的是一个，所以选原来的样子 box。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 2.9,
+    "tokens": 79
+   }
+  ]
+ },
+ {
+  "type": "plural_noun",
+  "item": "My sister drew twelve ___. (horse / horses)",
+  "gold": "horses",
+  "final": {
+   "steps": [
+    {
+     "ask": "空格前面紧挨着的提示词是什么？",
+     "expect": "twelve",
+     "explain": "空格前面紧挨着的是 twelve，twelve 的意思是「多个」。"
+    },
+    {
+     "ask": "twelve 表示一个还是多个？",
+     "expect": "horses",
+     "explain": "twelve 是多个，所以选复数 horses。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"空格前面紧挨着的提示词是什么？\", \"expect\": \"twelve\", \"explain\": \"空格前面紧挨着的是 twelve，twelve 的意思是「多个」。\"}, {\"ask\": \"twelve 表示一个还是多个？\", \"expect\": \"horses\", \"explain\": \"twelve 是多个，所以选复数 horses。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.3,
+    "tokens": 91
+   }
+  ]
+ },
+ {
+  "type": "plural_noun",
+  "item": "We need eight ___. (box / boxes)",
+  "gold": "boxes",
+  "final": {
+   "steps": [
+    {
+     "ask": "空格前面紧挨着的提示词是什么？",
+     "expect": "eight",
+     "explain": "空格前面紧挨着的是 eight，eight 的意思是「几个」。"
+    },
+    {
+     "ask": "eight 表示一个还是多个？",
+     "expect": "boxes",
+     "explain": "eight 是不止一个，所以是多个，名词要用复数。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"空格前面紧挨着的提示词是什么？\", \"expect\": \"eight\", \"explain\": \"空格前面紧挨着的是 eight，eight 的意思是「几个」。\"}, {\"ask\": \"eight 表示一个还是多个？\", \"expect\": \"boxes\", \"explain\": \"eight 是不止一个，所以是多个，名词要用复数。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.3,
+    "tokens": 91
+   }
+  ]
+ },
+ {
+  "type": "plural_noun",
+  "item": "There are seven ___ in our city. (libraries / library)",
+  "gold": "libraries",
+  "final": {
+   "steps": [
+    {
+     "ask": "空格前面紧挨着的提示词是什么？",
+     "expect": "seven",
+     "explain": "空格前面的 seven 的意思是「几个」。"
+    },
+    {
+     "ask": "seven 表示几个，那空里选 library 还是 libraries？",
+     "expect": "libraries",
+     "explain": "几个（two 或更多）用复数，名词要用复数。以「辅音字母 + y」结尾的名词，先把 y 变成 i，再加 es。library → libraries，所以空里选 libraries。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"空格前面紧挨着的提示词是什么？\", \"expect\": \"seven\", \"explain\": \"空格前面的 seven 的意思是「几个」。\"}, {\"ask\": \"seven 表示几个，那空里选 library 还是 libraries？\", \"expect\": \"libraries\", \"explain\": \"几个（two 或更多）用复数，名词要用复数。以「辅音字母 + y」结尾的名词，先把 y 变成 i，再加 es。library → libraries，所以空里选 libraries。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 4.2,
+    "tokens": 120
+   }
+  ]
+ },
+ {
+  "type": "verb_3s",
+  "item": "改错（只改一个词）：Chen Jie fly kites in spring.（陈洁春天放风筝。）",
+  "gold": "flies",
+  "final": {
+   "steps": [
+    {
+     "ask": "慢慢读这句话，哪一个英文词用错了？",
+     "expect": "fly",
+     "explain": "改错题：从主语 Chen Jie 开始一个词一个词读，找和主语不搭配的那个词。用错的是 fly。"
+    },
+    {
+     "ask": "fly 应该改成什么？说出改好的那个词。",
+     "expect": "flies",
+     "explain": "主语 Chen Jie 说的是一个（一个人或一样东西）。主语是一个人或一样东西（he、she、it、Tom……），说平时经常做的事，动词后面加 s。动词是辅音字母加 y 结尾，把 y 变成 i 再加 es，比如 cry→cries。所以是 flies。"
+    }
+   ]
+  },
+  "source": "model+template_patch(steps [1, 2])",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里用错的词是什么？说出那个英文词。\", \"expect\": \"fly\", \"explain\": \"这句话里用错的是 fly，其他词都没问题。\"}, {\"ask\": \"陈洁春天放风筝，那 fly 应该改成什么？\", \"expect\": \"flies\", \"explain\": \"主语 Chen Jie 说的是一个（一个人或一样东西），动词要用过去式或过去的样子。fly 以「辅音字母 + y」结尾，把 y 变成 i 再加 es，fly → flies。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步用了孩子听不懂的术语：过去式"
+    ],
+    "latency_s": 4.4,
+    "tokens": 123
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"主语 Chen Jie 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"fly\", \"explain\": \"Chen Jie 说的是一个（一个人或一样东西），动词要用第三人称单数。\"}, {\"ask\": \"那这个词要改成什么？\", \"expect\": \"flies\", \"explain\": \"主语 Chen Jie 说的是一个，动词要用第三人称单数。这是不规则动词，过去的样子要专门记住：fly → flies。\"}]}",
+    "ok": false,
+    "errors": [
+     "第1步用了孩子听不懂的术语：第三人称、单数",
+     "第2步用了孩子听不懂的术语：第三人称、单数"
+    ],
+    "latency_s": 4.1,
+    "tokens": 113
+   }
+  ]
+ },
+ {
+  "type": "verb_3s",
+  "item": "改错（只改一个词）：Sam fly kites in spring.（萨姆春天放风筝。）",
+  "gold": "flies",
+  "final": {
+   "steps": [
+    {
+     "ask": "这句话里用错的词是什么？说出那个英文词。",
+     "expect": "fly",
+     "explain": "这句话里用错的是 fly，其他词都没问题。"
+    },
+    {
+     "ask": "看括号里的中文：这是现在（经常）做的事，还是过去的事？说「现在」或「过去」。",
+     "expect": "flies",
+     "explain": "括号里的中文说的是现在的事。"
+    }
+   ]
+  },
+  "source": "model_try2",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里用错的词是什么？说出那个英文词。\", \"expect\": \"fly\", \"explain\": \"这句话里用错的是 fly，其他词都没问题。\"}, {\"ask\": \"主语 Sam 说的是一个（一个人或一样东西）。那 fly 应该改成什么？\", \"expect\": \"flies\", \"explain\": \"主语 Sam 说的是一个（一个人或一样东西），动词要用第三人称单数。这是不规则动词，过去式要专门记住：fly → flew。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步用了孩子听不懂的术语：第三人称、单数、过去式"
+    ],
+    "latency_s": 4.0,
+    "tokens": 114
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里用错的词是什么？说出那个英文词。\", \"expect\": \"fly\", \"explain\": \"这句话里用错的是 fly，其他词都没问题。\"}, {\"ask\": \"看括号里的中文：这是现在（经常）做的事，还是过去的事？说「现在」或「过去」。\", \"expect\": \"flies\", \"explain\": \"括号里的中文说的是现在的事。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.6,
+    "tokens": 97
+   }
+  ]
+ },
+ {
+  "type": "verb_3s",
+  "item": "改错（只改一个词）：Tom and Amy carries a big bag and get up early.",
+  "gold": "carry",
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 Tom and Amy 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "carries",
+     "explain": "Tom and Amy 说的是两个或更多的人。"
+    },
+    {
+     "ask": "那这个词要改成什么？",
+     "expect": "carry",
+     "explain": "主语 Tom and Amy 说的是多个，动词要用原来的样子，不加 s。carry → carry。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 Tom and Amy 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"carries\", \"explain\": \"Tom and Amy 说的是两个或更多的人。\"}, {\"ask\": \"那这个词要改成什么？\", \"expect\": \"carry\", \"explain\": \"主语 Tom and Amy 说的是多个，动词要用原来的样子，不加 s。carry → carry。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.4,
+    "tokens": 97
+   }
+  ]
+ },
+ {
+  "type": "verb_3s",
+  "item": "改错（只改一个词）：He fly kites in spring.（他春天放风筝。）",
+  "gold": "flies",
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 He（他）说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "fly",
+     "explain": "He（他）说的是一个。"
+    },
+    {
+     "ask": "fly 应该改成什么？说出改好的那个词。",
+     "expect": "flies",
+     "explain": "主语 He（他） 说的是一个（一个人或一样东西）。主语是一个人或一样东西（he、she、it、Tom……），说平时经常做的事，动词后面加 s。动词是辅音字母加 y 结尾，把 y 变成 i 再加 es，比如 cry→cries。所以是 flies。"
+    }
+   ]
+  },
+  "source": "model+template_patch(steps [2])",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里用错的词是什么？说出那个英文词。\", \"expect\": \"fly\", \"explain\": \"这句话里用错的是 fly，其他词都没问题。\"}, {\"ask\": \"主语 He（他）说的是一个（一个人或一样东西）。那 fly 应该改成什么？\", \"expect\": \"flies\", \"explain\": \"口诀：我（I）、你（you）、一个别人（he、she、or 跟别人），或一个人或一样东西用 am、is 或 are。现在动词要用原形，不加 s：like、like 不是加 s。主语 He（他）说的是一个（一个人或一样东西），动词要用原形，不加 s。所以 fly 要改成 like。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步 explain 出现了和本题无关的 am/are/is"
+    ],
+    "latency_s": 5.3,
+    "tokens": 165
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"主语 He（他）说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"fly\", \"explain\": \"He（他）说的是一个。\"}, {\"ask\": \"那这个词要改成什么？\", \"expect\": \"flies\", \"explain\": \"主语 He（他）说的是一个，动词要用第三人称单数：一般直接加 s。fly → flies。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步用了孩子听不懂的术语：第三人称、单数"
+    ],
+    "latency_s": 3.5,
+    "tokens": 96
+   }
+  ]
+ },
+ {
+  "type": "verb_3s",
+  "item": "改错（只改一个词）：They flies kites in spring.（他们春天放风筝。）",
+  "gold": "fly",
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 They（他们），动词要不要变？说「要」或「不要」。",
+     "expect": "flies",
+     "explain": "They 是「他们」，不是「一个别人」，动词不变，要用原来的样子。"
+    },
+    {
+     "ask": "那这个词应该改成什么？",
+     "expect": "fly",
+     "explain": "主语 They 是「他们」，动词要用原来的样子，不加 s。fly → fly。改好以后：They fly kites in spring。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 They（他们），动词要不要变？说「要」或「不要」。\", \"expect\": \"flies\", \"explain\": \"They 是「他们」，不是「一个别人」，动词不变，要用原来的样子。\"}, {\"ask\": \"那这个词应该改成什么？\", \"expect\": \"fly\", \"explain\": \"主语 They 是「他们」，动词要用原来的样子，不加 s。fly → fly。改好以后：They fly kites in spring。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.8,
+    "tokens": 113
+   }
+  ]
+ },
+ {
+  "type": "be_verb",
+  "item": "Those rabbits ___ very cute. (am / is / are)",
+  "gold": "are",
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 Those rabbits 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "多个",
+     "explain": "Those rabbits 前面的词和后面的名词都说明是两个或更多。"
+    },
+    {
+     "ask": "那空里填 am、is 还是 are？",
+     "expect": "are",
+     "explain": "口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 Those rabbits 是两个或更多，所以填 are。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 Those rabbits 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"多个\", \"explain\": \"Those rabbits 前面的词和后面的名词都说明是两个或更多。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"are\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 Those rabbits 是两个或更多，所以填 are。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.8,
+    "tokens": 118
+   }
+  ]
+ },
+ {
+  "type": "be_verb",
+  "item": "He ___ in the library. (am / is / are)",
+  "gold": "is",
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 He 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "一个",
+     "explain": "He 说的是一个人或一样东西。"
+    },
+    {
+     "ask": "那空里填 am、is 还是 are？",
+     "expect": "is",
+     "explain": "口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 He 是一个人，所以填 is。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 He 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"一个\", \"explain\": \"He 说的是一个人或一样东西。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"is\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 He 是一个人，所以填 is。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.7,
+    "tokens": 109
+   }
+  ]
+ },
+ {
+  "type": "be_verb",
+  "item": "Lucy ___ very busy today. (am / is / are)",
+  "gold": "is",
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 Lucy 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "一个",
+     "explain": "Lucy 说的是一个人或一样东西。"
+    },
+    {
+     "ask": "那空里填 am、is 还是 are？",
+     "expect": "is",
+     "explain": "口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 Lucy 是一个人，所以填 is。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 Lucy 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"一个\", \"explain\": \"Lucy 说的是一个人或一样东西。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"is\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 Lucy 是一个人，所以填 is。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.6,
+    "tokens": 110
+   }
+  ]
+ },
+ {
+  "type": "be_verb",
+  "item": "Lucy ___ in the living room. (am / is / are)",
+  "gold": "is",
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 Lucy 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "一个",
+     "explain": "Lucy 说的是一个人或一样东西。"
+    },
+    {
+     "ask": "那空里填 am、is 还是 are？",
+     "expect": "is",
+     "explain": "口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 Lucy 是一个人，所以填 is。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 Lucy 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"一个\", \"explain\": \"Lucy 说的是一个人或一样东西。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"is\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 Lucy 是一个人，所以填 is。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.7,
+    "tokens": 110
+   }
+  ]
+ },
+ {
+  "type": "be_verb",
+  "item": "The rabbit ___ in the park. (am / is / are)",
+  "gold": "is",
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 The rabbit 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "一个",
+     "explain": "The rabbit 说的是一个人或一样东西。"
+    },
+    {
+     "ask": "那空里填 am、is 还是 are？",
+     "expect": "is",
+     "explain": "口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 The rabbit 是一个人，所以填 is。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 The rabbit 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"一个\", \"explain\": \"The rabbit 说的是一个人或一样东西。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"is\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。主语 The rabbit 是一个人，所以填 is。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.7,
+    "tokens": 112
+   }
+  ]
+ }
+]

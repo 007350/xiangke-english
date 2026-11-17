@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2f6f57">
+<title>乡课英语</title>
+<style>
+:root {
+  --paper: #f7f3ea;
+  --card: #fffdf8;
+  --ink: #1f2d27;
+  --muted: #5f6d66;
+  --line: #e2dccd;
+  --green: #2f6f57;
+  --green-dark: #235543;
+  --green-soft: #e3f0e9;
+  --amber: #b86a12;
+  --amber-soft: #fbefd9;
+  --red-soft: #fae7e2;
+  --red: #a8432e;
+  --cn: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --en: Georgia, "Times New Roman", serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: #e9e4d7; color: var(--ink); font-family: var(--cn); font-size: 17px; line-height: 1.55; -webkit-text-size-adjust: 100%; }
+button, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+#phone { max-width: 440px; height: 100dvh; margin: 0 auto; background: var(--paper); display: flex; flex-direction: column; position: relative; overflow: hidden; }
+@media (min-width: 500px) { #phone { box-shadow: 0 0 40px rgba(40, 50, 40, .18); } }
+header { display: flex; align-items: center; gap: 10px; padding: 14px 16px; min-height: 60px; background: var(--green); color: #fff; flex: none; }
+header h1 { font-size: 19px; font-weight: 600; margin: 0; flex: 1; }
+.back { background: none; border: 0; color: #fff; min-width: 44px; min-height: 44px; font-size: 22px; margin-left: -10px; border-radius: 10px; }
+.back:hover { background: rgba(255, 255, 255, .14); }
+.pill { font-size: 13px; min-height: 34px; padding: 3px 12px; border: 0; border-radius: 99px; background: rgba(255, 255, 255, .18); white-space: nowrap; }
+.pill:hover { background: rgba(255, 255, 255, .28); }
+.sync-box { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-top: 8px; }
+.sync-box p { margin: 0; font-size: 14.5px; color: var(--muted); }
+.sync-box p + p { margin-top: 4px; }
+.sync-box button { margin-top: 10px; min-height: 44px; }
+main { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+.screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
+.screen.on { display: flex; }
+.primary { width: 100%; min-height: 56px; border: 0; border-radius: 14px; background: var(--green); color: #fff; font-size: 19px; font-weight: 600; padding: 10px 16px; }
+.primary:hover { background: var(--green-dark); }
+.primary:disabled { opacity: .5; cursor: default; }
+.secondary { width: 100%; min-height: 50px; border: 1.5px solid var(--green); border-radius: 14px; background: transparent; color: var(--green-dark); font-weight: 600; padding: 8px 16px; }
+.secondary:hover { background: var(--green-soft); }
+.link { background: none; border: 0; color: var(--green-dark); text-decoration: underline; padding: 10px; min-height: 44px; }
+h2 { font-size: 15px; font-weight: 600; color: var(--muted); margin: 24px 0 8px; }
+.hello { font-size: 24px; font-weight: 600; margin: 4px 0 2px; }
+.sub { color: var(--muted); margin: 0 0 18px; }
+.camera { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 100%; min-height: 136px; border: 0; border-radius: 18px; background: var(--green); color: #fff; font-size: 22px; font-weight: 600; cursor: pointer; }
+.camera:hover { background: var(--green-dark); }
+.camera small { font-size: 14px; font-weight: 400; opacity: .9; }
+.camera svg { width: 38px; height: 38px; margin-bottom: 4px; }
+#photo { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.row { display: block; width: 100%; text-align: left; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; min-height: 48px; }
+button.row:hover { border-color: var(--green); }
+.en { font-family: var(--en); font-size: 18px; }
+.meta { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 13.5px; margin-top: 3px; }
+.tag { padding: 0 8px; border-radius: 6px; background: var(--green-soft); color: var(--green-dark); white-space: nowrap; }
+.tag.maybe { background: var(--amber-soft); color: var(--amber); }
+.tag.none { background: #ece8dc; color: var(--muted); }
+.question-answer { margin: 9px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.question-context { margin: 5px 0; color: var(--muted); font-size: 14px; }
+.note { color: var(--muted); font-size: 14px; margin: 18px 0 0; text-align: center; }
+textarea { width: 100%; min-height: 110px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--card); padding: 12px; font-family: var(--en); font-size: 19px; resize: vertical; }
+textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1px; border-color: var(--green); }
+.tip { color: var(--muted); font-size: 14.5px; margin: 8px 0 16px; }
+.line-pick.on { border-color: var(--green); background: var(--green-soft); }
+.alert { background: var(--red-soft); color: var(--red); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+.card-q { flex: none; background: var(--card); border-bottom: 1px solid var(--line); padding: 10px 16px; }
+.card-q .en { line-height: 1.4; }
+.blank { display: inline-block; min-width: 46px; border-bottom: 2.5px solid var(--green); margin: 0 3px; height: 1em; vertical-align: baseline; }
+.progress { display: flex; gap: 5px; margin-top: 8px; }
+.progress i { flex: 1; height: 5px; border-radius: 3px; background: var(--line); }
+.progress i.done { background: var(--green); }
+.notsure { flex: none; background: var(--amber-soft); color: var(--amber); padding: 7px 16px; font-size: 14.5px; }
+#chat { flex: 1; overflow-y: auto; padding: 14px 14px 8px; display: flex; flex-direction: column; gap: 9px; }
+.bubble { max-width: 86%; padding: 10px 13px; border-radius: 16px; white-space: pre-wrap; word-break: break-word; }
+.phone-say { align-self: flex-start; background: var(--card); border: 1px solid var(--line); border-bottom-left-radius: 5px; }
+.child-say { align-self: flex-end; background: var(--green); color: #fff; border-bottom-right-radius: 5px; }
+.good { background: var(--green-soft); border-color: #bcd9ca; color: var(--green-dark); font-weight: 600; }
+.thinking { color: var(--muted); }
+.thinking span { animation: blink 1.2s infinite; }
+.thinking span:nth-child(2) { animation-delay: .2s; }
+.thinking span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 50% { opacity: .2; } }
+@media (prefers-reduced-motion: reduce) { .thinking span { animation: none; } }
+#quick { flex: none; display: flex; gap: 8px; padding: 2px 12px 8px; overflow-x: auto; }
+.chip { flex: none; min-height: 42px; padding: 6px 15px; border-radius: 21px; border: 1.5px solid var(--green); background: var(--card); color: var(--green-dark); }
+.chip:hover { background: var(--green-soft); }
+.chip:disabled { opacity: .5; cursor: default; }
+#composer { flex: none; display: flex; gap: 8px; padding: 8px 12px calc(10px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 1px solid var(--line); }
+#say { flex: 1; min-width: 0; min-height: 50px; border: 1.5px solid var(--line); border-radius: 14px; padding: 8px 14px; background: var(--card); font-size: 18px; }
+#send { flex: none; min-width: 72px; min-height: 50px; border: 0; border-radius: 14px; background: var(--green); color: #fff; font-weight: 600; }
+#send:disabled { opacity: .5; cursor: default; }
+#finish { flex: none; padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); background: var(--card); border-top: 1px solid var(--line); }
+#finish h3 { margin: 0 0 4px; font-size: 21px; }
+#finish p { margin: 0 0 12px; color: var(--muted); }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div id="phone">
+  <header>
+    <button class="back hidden" id="back" aria-label="返回">‹</button>
+    <h1 id="title">乡课英语</h1>
+    <button class="pill" id="net" title="模拟网络的开关，点一下切换">已断网 · 点此联网</button>
+  </header>
+
+  <!-- 首页 -->
+  <section class="screen on" id="s-home">
+    <main>
+      <p class="hello">今天学点什么？</p>
+      <p class="sub">不会的题拍下来，一步一步来。</p>
+      <label class="camera" for="photo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        拍一道题
+        <small>印刷的题目认得最准</small>
+      </label>
+      <input type="file" id="photo" accept="image/*" capture="environment">
+      <button class="link" id="type-it" style="width:100%">不方便拍照？直接输入题目</button>
+      <div id="home-error" class="alert hidden" role="alert"></div>
+      <div class="sync-box">
+        <p id="sync"></p>
+        <p id="plan-version"></p>
+        <p id="sync-result" aria-live="polite"></p>
+        <button class="secondary hidden" id="sync-now">同步</button>
+      </div>
+      <div id="drills-box" class="hidden">
+        <h2>给你准备的专属题</h2>
+        <div id="drills"></div>
+      </div>
+      <div id="questions-box" class="hidden">
+        <h2>我留下的疑惑</h2>
+        <p class="tip">云端老师解答后，同步到这里；收到的解答断网也能看。</p>
+        <div id="questions" aria-live="polite"></div>
+      </div>
+      <h2>课包里的题</h2>
+      <div id="pack"></div>
+      <h2>做过的题</h2>
+      <div id="history"></div>
+    </main>
+  </section>
+
+  <!-- 确认题目 -->
+  <section class="screen" id="s-confirm">
+    <main>
+      <div id="confirm-error" class="alert hidden" role="alert"></div>
+      <div id="lines-box" class="hidden">
+        <h2 style="margin-top:0">认出了这些，点一下要做的那道题</h2>
+        <div id="lines"></div>
+      </div>
+      <label for="text" style="font-weight:600">题目是这样吗？不对可以直接改</label>
+      <textarea id="text" style="margin-top:6px" spellcheck="false" autocapitalize="off" placeholder="例如：They ___ my friends. (am / is / are)"></textarea>
+      <p class="tip">空写成三条下划线 ___，选项跟卷子一样写在括号里。</p>
+      <button class="primary" id="confirm">是这道题</button>
+    </main>
+  </section>
+
+  <!-- 做题 -->
+  <section class="screen" id="s-chat">
+    <div class="card-q">
+      <div class="en" id="question"></div>
+      <div class="progress" id="progress" aria-hidden="true"></div>
+      <button class="link hidden" id="flag-item" style="padding:6px 0;min-height:36px;font-size:14px">这道题好像不对</button>
+    </div>
+    <div class="notsure hidden" id="notsure">这道题我不一定对，也不算你的对错，可以问问老师。</div>
+    <div id="chat" aria-live="polite"></div>
+    <div id="quick">
+      <button class="chip" data-say="不知道">不知道</button>
+      <button class="chip" data-say="为什么？">为什么？</button>
+      <button class="chip" data-say="这是什么意思？">什么意思？</button>
+      <button class="chip" id="save-question" title="先在输入框写下疑惑，再点这里">记下疑惑</button>
+    </div>
+    <div id="confirm-chips" class="hidden" style="display:flex;gap:8px;padding:2px 12px 8px">
+      <button class="chip" data-say="是">是的</button>
+      <button class="chip" data-say="不是">不是</button>
+    </div>
+    <form id="composer" autocomplete="off">
+      <input id="say" aria-label="你的回答" placeholder="在这里回答" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="send">
+      <button id="send" type="submit">说</button>
+    </form>
+    <div id="finish" class="hidden">
+      <h3 id="finish-title"></h3>
+      <p id="finish-text"></p>
+      <div class="stack">
+        <button class="primary" id="again">再做一道</button>
+        <button class="secondary hidden" id="fix-text">检查题目文字</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const screens = { home: "s-home", confirm: "s-confirm", chat: "s-chat" };
+const titles = { home: "乡课英语", confirm: "确认题目", chat: "一起做题" };
+let current = "home";
+let textSource = "photo";
+let lastQuestion = "";
+let busy = false;
+
+function show(name) {
+  current = name;
+  for (const key in screens) $(screens[key]).classList.toggle("on", key === name);
+  $("title").textContent = titles[name];
+  $("back").classList.toggle("hidden", name === "home");
+}
+
+async function api(path, body, raw) {
+  const options = body === undefined ? {} : {
+    method: "POST",
+    headers: { "Content-Type": raw ? "application/octet-stream" : "application/json" },
+    body: raw ? body : JSON.stringify(body),
+  };
+  let response;
+  try {
+    response = await fetch(path, options);
+  } catch (error) {
+    throw new Error("连不上手机的程序，请确认它还开着");
+  }
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || "出了点问题，请再试一次");
+  return data;
+}
+
+function fail(id, message) {
+  const box = $(id);
+  box.textContent = message || "";
+  box.classList.toggle("hidden", !message);
+}
+
+/* 首页 */
+function renderHome(data) {
+  const pack = $("pack");
+  pack.replaceChildren(...data.pack.map(text => {
+    const button = document.createElement("button");
+    button.className = "row en";
+    button.textContent = text;
+    button.onclick = () => openConfirm(text, "pack");
+    return button;
+  }));
+  const drills = data.drills || [];
+  $("drills-box").classList.toggle("hidden", !drills.length);
+  $("drills").replaceChildren(...drills.map(item => {
+    const button = document.createElement("button");
+    button.className = "row";
+    const text = document.createElement("div");
+    text.className = "en";
+    text.textContent = item.text;
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = item.source === "redo" ? "上次错过的题" : "专门给你练的";
+    meta.append(tag);
+    button.append(text, meta);
+    button.onclick = () => openDrill(item);
+    return button;
+  }));
+  const questions = data.questions || [];
+  $("questions-box").classList.toggle("hidden", !questions.length);
+  $("questions").replaceChildren(...questions.map(item => {
+    const card = document.createElement("details");
+    card.className = "row";
+    const summary = document.createElement("summary");
+    const labels = { pending: "待云端解答", answered: "云端已解答", needs_teacher: "需要老师确认" };
+    const label = item.seq === 0 ? "待同步" : labels[item.status];
+    summary.textContent = `${label}：${item.question}`;
+    const context = document.createElement("p");
+    context.className = "question-context";
+    context.textContent = `当时的小问：${item.ask}`;
+    const text = document.createElement("div");
+    text.className = "en";
+    text.textContent = item.text;
+    const answer = document.createElement("p");
+    answer.className = "question-answer";
+    answer.textContent = item.answer || (item.seq === 0 ? "疑惑保存在这台设备上，联网后点同步交给云端老师。" : "疑惑已经收到，解答写好后再同步查看。");
+    card.append(summary, text, context, answer);
+    return card;
+  }));
+  const history = $("history");
+  if (!data.history.length) {
+    const empty = document.createElement("div");
+    empty.className = "tip";
+    empty.textContent = "还没有做过题。";
+    history.replaceChildren(empty);
+  } else {
+    history.replaceChildren(...data.history.slice(0, 8).map(historyRow));
+  }
+  $("sync").textContent = data.waitingSync ? `有 ${data.waitingSync} 次辅导等待同步` : "记录都同步好了";
+  $("plan-version").textContent = `现在用的是第 ${data.planVersion} 版讲法`;
+  $("net").textContent = data.online ? "已联网 · 点此断网" : "已断网 · 点此联网";
+  $("net").dataset.online = data.online ? "1" : "";
+  $("sync-now").classList.toggle("hidden", !data.online);
+}
+
+/* 同步：传完记录就回来，云端在后台写，这里隔一会儿再取一次，直到云端写完 */
+const POLL_MS = 8000;
+const POLL_TIMES = 60;
+let syncNote = null;
+let pollTimer = null;
+let pollsLeft = 0;
+
+function newSyncNote() {
+  return { sent: 0, accepted: 0, planVersion: null, drills: 0, refused: false, failed: false, working: false, questions: 0, questionFailed: false, questionsRefused: false };
+}
+
+function addToNote(note, result) {
+  note.sent += result.sent;
+  note.accepted += result.accepted;
+  if (result.planUpdated) note.planVersion = result.planVersion;
+  if (result.planRefused.length) note.refused = true;
+  if (result.planFailed) note.failed = true;
+  note.drills += result.drillsAdded || 0;
+  note.questions += result.questionsUpdated || 0;
+  note.questionFailed = Boolean(result.questionFailed);
+  note.questionsRefused = Boolean(result.questionsRefused);
+  note.working = Boolean(result.working);
+  note.recorded = Boolean(result.recorded);
+}
+
+function syncText(note) {
+  const parts = [note.accepted ? `传上去 ${note.accepted} 次辅导。` : "没有新的辅导要传。"];
+  if (note.accepted < note.sent) parts.push(`还有 ${note.sent - note.accepted} 次云端没收下，下次再传。`);
+  if (note.planVersion !== null) parts.push(`讲法更新到第 ${note.planVersion} 版。`);
+  if (note.drills) parts.push(`收到 ${note.drills} 道专属题。`);
+  if (note.questions) parts.push("疑惑和解答已更新，可以在下面查看。");
+  if (note.questionFailed) parts.push("部分疑惑这次还没解答，记录保留着，下次点同步重试。");
+  if (note.questionsRefused) parts.push("答疑内容没有收完整，稍后再同步。");
+  if (note.refused) parts.push("新讲法没通过检查，继续用旧的。");
+  if (note.failed) parts.push("云端这次没写出新讲法，继续用旧的，下次同步再试。");
+  if (note.working && !note.questionFailed) parts.push("云端老师还在看这次的记录，写好了会自动收到。");
+  else if (note.planVersion === null && !note.drills && !note.refused && !note.failed) parts.push("讲法没有变化。");
+  if (note.recorded) parts.push("（演示备份：云端内容是提前写好的。）");
+  return parts.join("");
+}
+
+function stopPolling() {
+  clearTimeout(pollTimer);
+  pollTimer = null;
+  pollsLeft = 0;
+}
+
+function schedulePoll() {
+  clearTimeout(pollTimer);
+  if (pollsLeft <= 0) return;
+  pollTimer = setTimeout(pollOnce, POLL_MS);
+}
+
+async function pollOnce() {
+  pollsLeft -= 1;
+  // 孩子在做题时不打扰，回到首页再取
+  if (current !== "home") {
+    pollsLeft += 1;
+    schedulePoll();
+    return;
+  }
+  try {
+    const data = await api("/api/sync", {});
+    renderHome(data);
+    addToNote(syncNote, data.syncResult);
+    $("sync-result").textContent = syncText(syncNote);
+    if (data.syncResult.working && !data.syncResult.questionFailed && !data.syncResult.questionsRefused) schedulePoll();
+    else stopPolling();
+  } catch (error) {
+    stopPolling();
+    syncNote.working = false;
+    $("sync-result").textContent = syncText(syncNote);
+  }
+}
+
+$("net").onclick = async () => {
+  const online = !$("net").dataset.online;
+  $("sync-result").textContent = "";
+  stopPolling();
+  try {
+    renderHome(await api("/api/network", { online }));
+    fail("home-error", "");
+  } catch (error) {
+    fail("home-error", error.message);
+  }
+};
+
+$("sync-now").onclick = async () => {
+  const button = $("sync-now");
+  button.disabled = true;
+  button.textContent = "正在同步……";
+  $("sync-result").textContent = "";
+  fail("home-error", "");
+  stopPolling();
+  try {
+    const data = await api("/api/sync", {});
+    renderHome(data);
+    syncNote = newSyncNote();
+    addToNote(syncNote, data.syncResult);
+    $("sync-result").textContent = syncText(syncNote);
+    if (data.syncResult.working && !data.syncResult.questionFailed && !data.syncResult.questionsRefused) {
+      pollsLeft = POLL_TIMES;
+      schedulePoll();
+    }
+  } catch (error) {
+    fail("home-error", error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = "同步";
+  }
+};
+
+function historyRow(item) {
+  const row = document.createElement("div");
+  row.className = "row";
+  const text = document.createElement("div");
+  text.className = "en";
+  text.textContent = item.question;
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  const when = document.createElement("span");
+  when.textContent = item.at.slice(5, 16).replace("T", " ");
+  const tag = document.createElement("span");
+  if (item.flagged) {
+    tag.className = "tag maybe";
+    tag.textContent = "等老师看这道题";
+  } else if (item.answerSource === "program" || item.answerSource === "cloud") {
+    tag.className = "tag";
+    tag.textContent = item.finished ? (item.wrong ? `做完了，错 ${item.wrong} 次` : "全对") : "没做完";
+  } else if (item.answerSource === "model") {
+    tag.className = "tag maybe";
+    tag.textContent = "不一定对，问问老师";
+  } else {
+    tag.className = "tag none";
+    tag.textContent = "还不会讲";
+  }
+  meta.append(when, tag);
+  row.append(text, meta);
+  return row;
+}
+
+async function loadHome() {
+  try {
+    renderHome(await api("/api/home"));
+    fail("home-error", "");
+  } catch (error) {
+    fail("home-error", error.message);
+  }
+}
+
+$("photo").addEventListener("change", async event => {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+  fail("home-error", "");
+  openConfirm("", "photo");
+  $("text").placeholder = "正在认题，请稍等……";
+  $("confirm").disabled = true;
+  try {
+    const data = await api("/api/recognize", file, true);
+    renderLines(data.lines);
+  } catch (error) {
+    fail("confirm-error", error.message);
+  } finally {
+    $("confirm").disabled = false;
+    $("text").placeholder = "例如：They ___ my friends. (am / is / are)";
+  }
+});
+
+$("type-it").onclick = () => openConfirm("", "photo");
+
+/* 确认题目 */
+function openConfirm(text, source) {
+  textSource = source;
+  $("text").value = text;
+  $("lines").replaceChildren();
+  $("lines-box").classList.add("hidden");
+  fail("confirm-error", "");
+  show("confirm");
+}
+
+function renderLines(lines) {
+  if (lines.length === 1) {
+    $("text").value = lines[0];
+    return;
+  }
+  $("lines").replaceChildren(...lines.map(line => {
+    const button = document.createElement("button");
+    button.className = "row en line-pick";
+    button.textContent = line;
+    button.onclick = () => {
+      $("text").value = line;
+      document.querySelectorAll(".line-pick").forEach(item => item.classList.toggle("on", item === button));
+    };
+    return button;
+  }));
+  $("lines-box").classList.remove("hidden");
+}
+
+$("confirm").onclick = async () => {
+  const text = $("text").value.trim();
+  if (!text) {
+    fail("confirm-error", "请先写好题目");
+    return;
+  }
+  fail("confirm-error", "");
+  startChat(text);
+  try {
+    const view = await api("/api/start", { text, source: textSource });
+    applyView(view);
+  } catch (error) {
+    show("confirm");
+    fail("confirm-error", error.message);
+  } finally {
+    setBusy(false);
+  }
+};
+
+/* 专属题：题目是云端定好的，不用再确认 */
+async function openDrill(item) {
+  textSource = "drill";
+  startChat(item.text);
+  try {
+    applyView(await api("/api/drill", { drillId: item.drillId }));
+  } catch (error) {
+    show("home");
+    fail("home-error", error.message);
+    loadHome();
+  } finally {
+    setBusy(false);
+  }
+}
+
+$("flag-item").onclick = async () => {
+  if (busy) return;
+  try {
+    renderHome(await api("/api/flag", {}));
+    show("home");
+    stopPollingNoteClear();
+    $("sync-result").textContent = "记下了，这道题不算你错，老师会看一看。";
+  } catch (error) {
+    bubble(error.message, "phone-say");
+  }
+};
+
+function stopPollingNoteClear() {
+  fail("home-error", "");
+}
+
+/* 做题 */
+function renderQuestion(text) {
+  const box = $("question");
+  box.replaceChildren();
+  text.split(/(_{2,})/).forEach(part => {
+    if (/^_{2,}$/.test(part)) {
+      const blank = document.createElement("span");
+      blank.className = "blank";
+      blank.setAttribute("aria-label", "空");
+      box.append(blank);
+    } else if (part) {
+      box.append(part);
+    }
+  });
+}
+
+function startChat(text) {
+  lastQuestion = text;
+  renderQuestion(text);
+  $("chat").replaceChildren();
+  $("progress").replaceChildren();
+  $("notsure").classList.add("hidden");
+  $("finish").classList.add("hidden");
+  $("composer").classList.remove("hidden");
+  $("quick").classList.remove("hidden");
+  $("confirm-chips").classList.add("hidden");
+  $("confirm-chips").style.display = "none";
+  $("fix-text").classList.add("hidden");
+  $("flag-item").classList.add("hidden");
+  show("chat");
+  setBusy(true);
+}
+
+function bubble(text, who, extra) {
+  const item = document.createElement("div");
+  item.className = `bubble ${who}${extra ? " " + extra : ""}`;
+  item.textContent = text;
+  $("chat").append(item);
+  item.scrollIntoView({ block: "end" });
+  return item;
+}
+
+let thinking = null;
+function setBusy(value) {
+  busy = value;
+  $("say").disabled = value;
+  $("send").disabled = value;
+  document.querySelectorAll(".chip").forEach(chip => { chip.disabled = value; });
+  if (value && !thinking) {
+    thinking = document.createElement("div");
+    thinking.className = "bubble phone-say thinking";
+    thinking.innerHTML = "正在想<span>.</span><span>.</span><span>.</span>";
+    $("chat").append(thinking);
+    thinking.scrollIntoView({ block: "end" });
+  } else if (!value && thinking) {
+    thinking.remove();
+    thinking = null;
+    if (!$("finish").classList.contains("hidden")) return;
+    $("say").focus({ preventScroll: true });
+  }
+}
+
+function applyView(view) {
+  for (const text of view.messages) {
+    // 这句话已经固定显示在题目下面，不再重复
+    if (text.startsWith("这道题我不一定对")) continue;
+    bubble(text, "phone-say", text === "答对了！" ? "good" : "");
+  }
+  $("notsure").classList.toggle("hidden", view.mode !== "try");
+  $("flag-item").classList.toggle("hidden", !view.drill || view.done);
+  const dots = $("progress");
+  if (view.steps > 1) {
+    const reached = view.done && view.outcome === "finished" ? view.steps : view.step - 1;
+    dots.replaceChildren(...Array.from({ length: view.steps }, (_, index) => {
+      const dot = document.createElement("i");
+      if (index < reached) dot.className = "done";
+      return dot;
+    }));
+  }
+  const confirming = Boolean(view.confirming) && !view.done;
+  $("quick").classList.toggle("hidden", confirming || view.done);
+  $("confirm-chips").classList.toggle("hidden", !confirming);
+  $("confirm-chips").style.display = confirming ? "flex" : "none";
+  if (view.done) finish(view);
+}
+
+function finish(view) {
+  $("composer").classList.add("hidden");
+  $("quick").classList.add("hidden");
+  const summary = view.summary;
+  let title, text;
+  if (view.outcome === "cannot") {
+    title = "这道题先放一放";
+    text = "可以检查一下题目文字有没有认错，或者换一道题。";
+    $("fix-text").classList.remove("hidden");
+  } else if (view.outcome === "assisted") {
+    title = "这一问我们请老师帮忙";
+    text = "没关系，已经记下来了，老师会知道你在这里卡住了。";
+  } else if (view.mode === "try") {
+    title = "做完了";
+    text = "这道题的答案不一定对，明天可以问问老师。";
+  } else if (summary.wrong === 0) {
+    title = "全部答对！";
+    text = `这道题一共 ${summary.questions} 问，你都答对了。`;
+  } else {
+    title = "做完了，真不错！";
+    text = `这道题一共 ${summary.questions} 问，错了 ${summary.wrong} 次，最后都改对了。`;
+  }
+  $("finish-title").textContent = title;
+  $("finish-text").textContent = text;
+  $("finish").classList.remove("hidden");
+  $("chat").scrollTop = $("chat").scrollHeight;
+}
+
+async function send(said, isQuestion = false) {
+  said = said.trim();
+  if (!said || busy) return;
+  bubble(said, "child-say");
+  $("say").value = "";
+  setBusy(true);
+  try {
+    applyView(await api(isQuestion ? "/api/question" : "/api/reply", { said }));
+  } catch (error) {
+    bubble(error.message, "phone-say");
+  } finally {
+    setBusy(false);
+  }
+}
+
+$("composer").addEventListener("submit", event => {
+  event.preventDefault();
+  send($("say").value);
+});
+document.querySelectorAll(".chip[data-say]").forEach(chip => {
+  chip.onclick = () => send(chip.dataset.say);
+});
+$("save-question").onclick = () => {
+  const said = $("say").value.trim();
+  if (!said) {
+    bubble("先在输入框写下你的疑惑，再点记下疑惑。", "phone-say");
+    return;
+  }
+  send(said, true);
+};
+
+async function goHome() {
+  if (current === "chat") {
+    try { await api("/api/leave", {}); } catch (error) { /* 回到首页时再显示 */ }
+  }
+  show("home");
+  $("sync-result").textContent = "";
+  loadHome();
+}
+$("back").onclick = goHome;
+$("again").onclick = goHome;
+$("fix-text").onclick = () => openConfirm(lastQuestion, textSource === "drill" ? "photo" : textSource);
+
+loadHome();
+</script>
+</body>
+</html>

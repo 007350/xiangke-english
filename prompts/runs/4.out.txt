@@ -1,0 +1,43 @@
+
+
+Loading model... 
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b12084-f9448cddc
+model      : D:\competition\xiangke-v4-最终版-Q4_K_M.gguf
+ftype      : Q4_K - Medium
+modalities : text
+using custom system prompt
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> 题目（recognizedText，孩子已确认）：看中文写单词：书 b__k
+讲法（voice）：看着给出的字母，让他自己把缺的部分说出来。
+孩子犯过的错（reminders）：（无）
+禁令（forbid）：不要直接说出标准答案。
+拆题样例（examples，只模仿拆法，答案与本题无关）：
+[
+ {
+  "recognizedText": "She ___ my sister. (am / is / are)",
+  "steps": [
+   {"ask": "先找主语：这句话里是谁是我的姐姐？说出那个英文词。",  ... (truncated)
+{"steps": [{"ask": "「书」这个词里，第一个空格缺的是什么字母？", "expect": "o", "explain": "这个空是整个词的第二个字母，这里要写 o。"}, {"ask": "「书」这个词里，第二个空格缺的是什么字母？", "expect": "e", "explain": "这个空是整个词的第三个字母，这里要写 e。"}, {"ask": "很好！现在把「书」这个词完整地拼出来。", "expect": "book", "explain": "「书」的英文是 book，一共 4 个字母：b o o k。"}]}
+
+[ Prompt: 342.8 t/s | Generation: 36.3 t/s ]
+
+
+Exiting...

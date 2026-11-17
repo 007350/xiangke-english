@@ -1,0 +1,1884 @@
+{
+  "answers": [
+    {
+      "said": " Apple ",
+      "expect": "apple",
+      "result": "hit"
+    },
+    {
+      "said": "apples",
+      "expect": "apple",
+      "result": "miss"
+    },
+    {
+      "said": "am.",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "（am）",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "是am",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "选 am",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "用：apple",
+      "expect": "apple",
+      "result": "hit"
+    },
+    {
+      "said": "I am",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "a m",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "ａｍ",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "is",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "am",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "AM",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "Ａｍ",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "是是am",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "选是 am",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "《am》",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "am!!!",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "'am'",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "是 am",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "  是　ＡＭ。  ",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "　am　",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": " am ",
+      "expect": "am",
+      "result": "hit"
+    },
+    {
+      "said": "是am",
+      "expect": " AM. ",
+      "result": "hit"
+    },
+    {
+      "said": "am是",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "​am",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "I'm",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "don\u2019t",
+      "expect": "don't",
+      "result": "hit"
+    },
+    {
+      "said": "can\u2019t",
+      "expect": "can't",
+      "result": "hit"
+    },
+    {
+      "said": "it\u2019s",
+      "expect": "it's",
+      "result": "hit"
+    },
+    {
+      "said": "I\u2019m",
+      "expect": "I'm",
+      "result": "hit"
+    },
+    {
+      "said": "a-m",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "xam",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "???",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "是",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": " am am ",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "a.m",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "are",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "yes",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "be",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "  \n",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "IS",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "apple",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no ",
+      "expect": "am",
+      "result": "miss"
+    },
+    {
+      "said": "",
+      "expect": "",
+      "result": "hit"
+    },
+    {
+      "said": "是",
+      "expect": "",
+      "result": "hit"
+    },
+    {
+      "said": "!!!",
+      "expect": "",
+      "result": "hit"
+    },
+    {
+      "said": "apple",
+      "expect": "apple",
+      "result": "hit"
+    },
+    {
+      "said": "APPLE",
+      "expect": "apple",
+      "result": "hit"
+    },
+    {
+      "said": "用：APPLE！",
+      "expect": "apple",
+      "result": "hit"
+    },
+    {
+      "said": "用用apple",
+      "expect": "apple",
+      "result": "hit"
+    },
+    {
+      "said": "a pple",
+      "expect": "apple",
+      "result": "miss"
+    },
+    {
+      "said": "appl",
+      "expect": "apple",
+      "result": "miss"
+    },
+    {
+      "said": "applee",
+      "expect": "apple",
+      "result": "miss"
+    },
+    {
+      "said": "cat",
+      "expect": "apple",
+      "result": "miss"
+    },
+    {
+      "said": "I apple",
+      "expect": "apple",
+      "result": "miss"
+    },
+    {
+      "said": "cat",
+      "expect": "cat",
+      "result": "hit"
+    },
+    {
+      "said": "cat.",
+      "expect": "cat",
+      "result": "hit"
+    },
+    {
+      "said": "CAT",
+      "expect": "cat",
+      "result": "hit"
+    },
+    {
+      "said": "Cat",
+      "expect": "cat",
+      "result": "hit"
+    },
+    {
+      "said": "《cat》",
+      "expect": "cat",
+      "result": "hit"
+    },
+    {
+      "said": "cats",
+      "expect": "cat",
+      "result": "miss"
+    },
+    {
+      "said": "c at",
+      "expect": "cat",
+      "result": "miss"
+    },
+    {
+      "said": "car",
+      "expect": "cat",
+      "result": "miss"
+    },
+    {
+      "said": "cap",
+      "expect": "cat",
+      "result": "miss"
+    },
+    {
+      "said": "at",
+      "expect": "cat",
+      "result": "miss"
+    },
+    {
+      "said": "4",
+      "expect": "4",
+      "result": "hit"
+    },
+    {
+      "said": "４",
+      "expect": "4",
+      "result": "hit"
+    },
+    {
+      "said": "4.",
+      "expect": "4",
+      "result": "hit"
+    },
+    {
+      "said": "（4）",
+      "expect": "4",
+      "result": "hit"
+    },
+    {
+      "said": "四",
+      "expect": "4",
+      "result": "miss"
+    },
+    {
+      "said": "four",
+      "expect": "4",
+      "result": "miss"
+    },
+    {
+      "said": "5",
+      "expect": "4",
+      "result": "miss"
+    },
+    {
+      "said": "44",
+      "expect": "4",
+      "result": "miss"
+    },
+    {
+      "said": "name",
+      "expect": "4",
+      "result": "miss"
+    },
+    {
+      "said": "4",
+      "expect": "四",
+      "result": "miss"
+    },
+    {
+      "said": "Are",
+      "expect": "are",
+      "result": "hit"
+    },
+    {
+      "said": "is",
+      "expect": "are",
+      "result": "miss"
+    }
+  ],
+  "pools": [
+    {
+      "stepId": "s1",
+      "ask": "I 后面用 am、is 还是 are？",
+      "expect": "am",
+      "explain": "I 和 am 连用。",
+      "hits": [
+        "am",
+        "AM",
+        "ａｍ",
+        "是am",
+        "（am）",
+        "Ａｍ",
+        "是是am",
+        "选是 am",
+        "《am》",
+        "  是　ＡＭ。  "
+      ],
+      "misses": [
+        "is",
+        "I am",
+        "a m",
+        "I'm",
+        "are",
+        "是",
+        "???",
+        "xam",
+        "am是",
+        "a-m",
+        "yes",
+        "be",
+        "​am",
+        " am am ",
+        "  \n"
+      ]
+    },
+    {
+      "stepId": "s2",
+      "ask": "这个单词怎么拼？",
+      "expect": "apple",
+      "explain": "a-p-p-l-e，有两个 p。",
+      "hits": [
+        "apple",
+        "APPLE",
+        " Apple ",
+        "用：apple",
+        "用：APPLE！",
+        "用用apple"
+      ],
+      "misses": [
+        "apples",
+        "a pple",
+        "appl",
+        "applee",
+        "cat",
+        "I apple"
+      ]
+    },
+    {
+      "stepId": "s3",
+      "ask": "猫的英文怎么拼？",
+      "expect": "cat",
+      "explain": "c-a-t。",
+      "hits": [
+        "cat",
+        "cat.",
+        "CAT",
+        "Cat",
+        "《cat》"
+      ],
+      "misses": [
+        "cats",
+        "c at",
+        "car",
+        "cap",
+        "at"
+      ]
+    },
+    {
+      "stepId": "s4",
+      "ask": "name 有几个字母？",
+      "expect": "4",
+      "explain": "n-a-m-e，四个字母。",
+      "hits": [
+        "4",
+        "４",
+        "4.",
+        "（4）"
+      ],
+      "misses": [
+        "四",
+        "four",
+        "5",
+        "44",
+        "name"
+      ]
+    }
+  ],
+  "patterns": [
+    [
+      {
+        "kind": "H",
+        "hintUsed": 0
+      }
+    ],
+    [
+      {
+        "kind": "M",
+        "hintUsed": 1
+      },
+      {
+        "kind": "H",
+        "hintUsed": 1
+      }
+    ],
+    [
+      {
+        "kind": "M",
+        "hintUsed": 1
+      },
+      {
+        "kind": "M",
+        "hintUsed": 2
+      },
+      {
+        "kind": "H",
+        "hintUsed": 2
+      }
+    ],
+    [
+      {
+        "kind": "M",
+        "hintUsed": 1
+      },
+      {
+        "kind": "M",
+        "hintUsed": 2
+      },
+      {
+        "kind": "A",
+        "hintUsed": 2
+      }
+    ],
+    [
+      {
+        "kind": "M",
+        "hintUsed": 1
+      }
+    ],
+    [
+      {
+        "kind": "M",
+        "hintUsed": 1
+      },
+      {
+        "kind": "M",
+        "hintUsed": 2
+      }
+    ]
+  ],
+  "traces": [
+    {
+      "name": "连续十次说错只记到第三次",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [
+        "is",
+        "are",
+        "be",
+        "yes",
+        "I am",
+        "a m",
+        "I'm",
+        "xam",
+        "???",
+        "是"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "is",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "are",
+          "result": "miss",
+          "hintUsed": 2
+        },
+        {
+          "stepId": "s1",
+          "said": "be",
+          "result": "assisted",
+          "hintUsed": 2
+        }
+      ]
+    },
+    {
+      "name": "第一问用尽就停，后面的正确答案不记",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "a-p-p-l-e，有两个 p。"
+        },
+        {
+          "stepId": "s3",
+          "ask": "猫的英文怎么拼？",
+          "expect": "cat",
+          "explain": "c-a-t。"
+        }
+      ],
+      "saids": [
+        "is",
+        "are",
+        "be",
+        "apple",
+        "cat"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "is",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "are",
+          "result": "miss",
+          "hintUsed": 2
+        },
+        {
+          "stepId": "s1",
+          "said": "be",
+          "result": "assisted",
+          "hintUsed": 2
+        }
+      ]
+    },
+    {
+      "name": "第二问用尽就停，第三问不记",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "a-p-p-l-e，有两个 p。"
+        },
+        {
+          "stepId": "s3",
+          "ask": "猫的英文怎么拼？",
+          "expect": "cat",
+          "explain": "c-a-t。"
+        }
+      ],
+      "saids": [
+        "am",
+        "is",
+        "are",
+        "be",
+        "cat"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "am",
+          "result": "hit",
+          "hintUsed": 0
+        },
+        {
+          "stepId": "s2",
+          "said": "is",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s2",
+          "said": "are",
+          "result": "miss",
+          "hintUsed": 2
+        },
+        {
+          "stepId": "s2",
+          "said": "be",
+          "result": "assisted",
+          "hintUsed": 2
+        }
+      ]
+    },
+    {
+      "name": "下一问的次数从新开始",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "a-p-p-l-e，有两个 p。"
+        }
+      ],
+      "saids": [
+        "is",
+        "are",
+        "am",
+        "apples",
+        "apple"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "is",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "are",
+          "result": "miss",
+          "hintUsed": 2
+        },
+        {
+          "stepId": "s1",
+          "said": "am",
+          "result": "hit",
+          "hintUsed": 2
+        },
+        {
+          "stepId": "s2",
+          "said": "apples",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s2",
+          "said": "apple",
+          "result": "hit",
+          "hintUsed": 1
+        }
+      ]
+    },
+    {
+      "name": "大小写、前缀和标点混在三问里",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "a-p-p-l-e，有两个 p。"
+        },
+        {
+          "stepId": "s3",
+          "ask": "猫的英文怎么拼？",
+          "expect": "cat",
+          "explain": "c-a-t。"
+        }
+      ],
+      "saids": [
+        "IS",
+        "是am",
+        "APPLE",
+        "cats",
+        "c at",
+        "cat."
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "IS",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "是am",
+          "result": "hit",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s2",
+          "said": "APPLE",
+          "result": "hit",
+          "hintUsed": 0
+        },
+        {
+          "stepId": "s3",
+          "said": "cats",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s3",
+          "said": "c at",
+          "result": "miss",
+          "hintUsed": 2
+        },
+        {
+          "stepId": "s3",
+          "said": "cat.",
+          "result": "hit",
+          "hintUsed": 2
+        }
+      ]
+    },
+    {
+      "name": "提前说出下一问的答案，仍按当前问判错",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "a-p-p-l-e，有两个 p。"
+        }
+      ],
+      "saids": [
+        "apple",
+        "am",
+        "apple"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "apple",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "am",
+          "result": "hit",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s2",
+          "said": "apple",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "每一问自己的问句里可以有答案",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "空里填 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "拼写 apple",
+          "expect": "apple",
+          "explain": "有两个 p。"
+        }
+      ],
+      "saids": [
+        "am",
+        "apple"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "am",
+          "result": "hit",
+          "hintUsed": 0
+        },
+        {
+          "stepId": "s2",
+          "said": "apple",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "解释里写出下一问答案，仍然可以讲",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用哪个？",
+          "expect": "am",
+          "explain": "下一题的答案是 apple，现在不要说。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "怎么拼？",
+          "expect": "apple",
+          "explain": "两个 p。"
+        }
+      ],
+      "saids": [
+        "am",
+        "apple"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "am",
+          "result": "hit",
+          "hintUsed": 0
+        },
+        {
+          "stepId": "s2",
+          "said": "apple",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "name 里面的 am 不误伤下一问",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "name 有几个字母？",
+          "expect": "4",
+          "explain": "四个字母。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "I 后面用哪个词？",
+          "expect": "am",
+          "explain": "I 用 am。"
+        }
+      ],
+      "saids": [
+        "４",
+        "是am"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "４",
+          "result": "hit",
+          "hintUsed": 0
+        },
+        {
+          "stepId": "s2",
+          "said": "是am",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "问号不一定叫 s1",
+      "steps": [
+        {
+          "stepId": "q1",
+          "ask": "I 后面用哪个？",
+          "expect": "am",
+          "explain": "I 用 am。"
+        },
+        {
+          "stepId": "q2",
+          "ask": "猫怎么拼？",
+          "expect": "cat",
+          "explain": "c-a-t。"
+        }
+      ],
+      "saids": [
+        "is",
+        "am",
+        "cat"
+      ],
+      "events": [
+        {
+          "stepId": "q1",
+          "said": "is",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "q1",
+          "said": "am",
+          "result": "hit",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "q2",
+          "said": "cat",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "孩子还没说话",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [],
+      "events": []
+    },
+    {
+      "name": "已经答对后多说的不再记",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [
+        "（am）",
+        "is",
+        "are"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "（am）",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "先说空白再答对",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [
+        "  \n",
+        "am"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "  \n",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "am",
+          "result": "hit",
+          "hintUsed": 1
+        }
+      ]
+    },
+    {
+      "name": "只说「是」算错，再说「选 am」算对",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [
+        "是",
+        "选 am"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "是",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "选 am",
+          "result": "hit",
+          "hintUsed": 1
+        }
+      ]
+    },
+    {
+      "name": "句尾的「是」不去掉",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [
+        "am是",
+        "am"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "am是",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "am",
+          "result": "hit",
+          "hintUsed": 1
+        }
+      ]
+    },
+    {
+      "name": "标准答案本身带空格和标点",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "填空",
+          "expect": " AM. ",
+          "explain": "I 用 am。"
+        }
+      ],
+      "saids": [
+        "是am"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "是am",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "叠了两个「是」",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [
+        "是是am"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "是是am",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "只错了两次，还没到第三次",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "a-p-p-l-e，有两个 p。"
+        }
+      ],
+      "saids": [
+        "is",
+        "I am"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "is",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "I am",
+          "result": "miss",
+          "hintUsed": 2
+        }
+      ]
+    },
+    {
+      "name": "三问都一次答对，表面形式不同",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "a-p-p-l-e，有两个 p。"
+        },
+        {
+          "stepId": "s3",
+          "ask": "猫的英文怎么拼？",
+          "expect": "cat",
+          "explain": "c-a-t。"
+        }
+      ],
+      "saids": [
+        "Ａｍ",
+        "用：APPLE！",
+        "cat."
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "Ａｍ",
+          "result": "hit",
+          "hintUsed": 0
+        },
+        {
+          "stepId": "s2",
+          "said": "用：APPLE！",
+          "result": "hit",
+          "hintUsed": 0
+        },
+        {
+          "stepId": "s3",
+          "said": "cat.",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "第二问错一次就停，第三问还没说",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "a-p-p-l-e，有两个 p。"
+        },
+        {
+          "stepId": "s3",
+          "ask": "猫的英文怎么拼？",
+          "expect": "cat",
+          "explain": "c-a-t。"
+        }
+      ],
+      "saids": [
+        "是 am",
+        "apples"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "是 am",
+          "result": "hit",
+          "hintUsed": 0
+        },
+        {
+          "stepId": "s2",
+          "said": "apples",
+          "result": "miss",
+          "hintUsed": 1
+        }
+      ]
+    },
+    {
+      "name": "很长的一句废话，然后答对",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [
+        "no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no ",
+        "am."
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no no ",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "am.",
+          "result": "hit",
+          "hintUsed": 1
+        }
+      ]
+    },
+    {
+      "name": "全角空格和全角字母",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        }
+      ],
+      "saids": [
+        "　am　"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "　am　",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "name": "改一个词",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "They ___ students. (am / is / are)",
+          "expect": "are",
+          "explain": "they 和 are 连用。"
+        }
+      ],
+      "saids": [
+        "is",
+        "Are"
+      ],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "is",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "Are",
+          "result": "hit",
+          "hintUsed": 1
+        }
+      ]
+    }
+  ],
+  "refused": [
+    {
+      "name": "没有问",
+      "steps": [],
+      "saids": [
+        "am"
+      ],
+      "checkReasons": [
+        "empty_steps"
+      ]
+    },
+    {
+      "name": "没有 steps",
+      "steps": null,
+      "saids": [
+        "am"
+      ],
+      "checkReasons": [
+        "empty_steps"
+      ]
+    },
+    {
+      "name": "答案是空白",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "填什么？",
+          "expect": "  ",
+          "explain": ""
+        }
+      ],
+      "saids": [
+        "am"
+      ],
+      "checkReasons": [
+        "missing_expect"
+      ]
+    },
+    {
+      "name": "没有 expect",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "填什么？",
+          "explain": ""
+        }
+      ],
+      "saids": [
+        "am"
+      ],
+      "checkReasons": [
+        "missing_expect"
+      ]
+    },
+    {
+      "name": "第二问没有答案",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "怎么拼？",
+          "expect": "",
+          "explain": ""
+        }
+      ],
+      "saids": [
+        "am",
+        "apple"
+      ],
+      "checkReasons": [
+        "missing_expect"
+      ]
+    },
+    {
+      "name": "后一问的答案写在前一问里，哪怕孩子答得对也不讲",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "先看这个词 apple",
+          "expect": "cat",
+          "explain": "这是猫。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个水果怎么拼？",
+          "expect": "apple",
+          "explain": "两个 p。"
+        }
+      ],
+      "saids": [
+        "cat",
+        "apple"
+      ],
+      "checkReasons": [
+        "answer_leaked"
+      ]
+    },
+    {
+      "name": "数字单独出现在前一问里",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "先看 4 个字母",
+          "expect": "name",
+          "explain": "这是名字。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "有几个？",
+          "expect": "4",
+          "explain": "四个。"
+        }
+      ],
+      "saids": [
+        "name",
+        "4"
+      ],
+      "checkReasons": [
+        "answer_leaked"
+      ]
+    },
+    {
+      "name": "又缺答案又泄漏",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "先看单词 apple",
+          "expect": "",
+          "explain": ""
+        },
+        {
+          "stepId": "s2",
+          "ask": "怎么拼？",
+          "expect": "apple",
+          "explain": "两个 p。"
+        }
+      ],
+      "saids": [
+        "apple"
+      ],
+      "checkReasons": [
+        "missing_expect",
+        "answer_leaked"
+      ]
+    },
+    {
+      "name": "检查失败时一句都还没说，也拒绝",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "填什么？",
+          "expect": "",
+          "explain": ""
+        }
+      ],
+      "saids": [],
+      "checkReasons": [
+        "missing_expect"
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "name": "断网现拍",
+      "sessionId": "syn_photo",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "photo",
+      "recognizedText": "I ___ a student. (am / is / are)",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T19:12:00+08:00",
+      "endedAt": "2026-11-02T19:16:40+08:00"
+    },
+    {
+      "name": "有网课包",
+      "sessionId": "syn_pack",
+      "childId": "child_02",
+      "planVersion": 2,
+      "source": "pack",
+      "recognizedText": "Spell the word: apple",
+      "confirmed": true,
+      "offline": false,
+      "startedAt": "2026-11-02T07:05:00+08:00",
+      "endedAt": "2026-11-02T07:08:12+08:00"
+    },
+    {
+      "name": "全角题目",
+      "sessionId": "syn_wide",
+      "childId": "child_09",
+      "planVersion": 3,
+      "source": "photo",
+      "recognizedText": "Ｉ＿＿＿ａ　ｓｔｕｄｅｎｔ",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T21:00:00+08:00",
+      "endedAt": "2026-11-02T21:01:01+08:00"
+    },
+    {
+      "name": "题目是空的",
+      "sessionId": "syn_empty_text",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "pack",
+      "recognizedText": "",
+      "confirmed": true,
+      "offline": false,
+      "startedAt": "2026-11-02T12:00:00Z",
+      "endedAt": "2026-11-02T12:03:00Z"
+    },
+    {
+      "name": "很长的题目",
+      "sessionId": "syn_long",
+      "childId": "child_03",
+      "planVersion": 1,
+      "source": "photo",
+      "recognizedText": "Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. Choose one word. ",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T18:40:00+08:00",
+      "endedAt": "2026-11-02T18:44:00+08:00"
+    }
+  ],
+  "assemblies": [
+    {
+      "sessionId": "syn_edge",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "photo",
+      "recognizedText": "I ___ a student. (am / is / are)",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T19:20:00+08:00",
+      "endedAt": "2026-11-02T19:21:00+08:00",
+      "name": "失败却没给兜底",
+      "steps": [],
+      "saids": [
+        "am"
+      ],
+      "note": null,
+      "raises": true
+    },
+    {
+      "sessionId": "syn_edge",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "photo",
+      "recognizedText": "I ___ a student. (am / is / are)",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T19:20:00+08:00",
+      "endedAt": "2026-11-02T19:21:00+08:00",
+      "name": "兜底只有空白",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "填什么？",
+          "expect": "  ",
+          "explain": ""
+        }
+      ],
+      "saids": [
+        "am"
+      ],
+      "note": " \n\t ",
+      "raises": true
+    },
+    {
+      "sessionId": "syn_edge",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "photo",
+      "recognizedText": "I ___ a student. (am / is / are)",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T19:20:00+08:00",
+      "endedAt": "2026-11-02T19:21:00+08:00",
+      "name": "兜底的话刚好像答案，也不判对",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "空里填什么？",
+          "expect": "",
+          "explain": ""
+        }
+      ],
+      "saids": [
+        "是am",
+        "am"
+      ],
+      "note": "是am",
+      "raises": false,
+      "checkPassed": false,
+      "checkReasons": [
+        "missing_expect"
+      ],
+      "events": [
+        {
+          "stepId": "",
+          "said": "是am",
+          "result": "note",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "sessionId": "syn_edge",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "photo",
+      "recognizedText": "I ___ a student. (am / is / are)",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T19:20:00+08:00",
+      "endedAt": "2026-11-02T19:21:00+08:00",
+      "name": "兜底原样保留空格和标点",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "填什么？",
+          "expect": "",
+          "explain": ""
+        }
+      ],
+      "saids": [
+        "am"
+      ],
+      "note": "  （先不讲。）  ",
+      "raises": false,
+      "checkPassed": false,
+      "checkReasons": [
+        "missing_expect"
+      ],
+      "events": [
+        {
+          "stepId": "",
+          "said": "  （先不讲。）  ",
+          "result": "note",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "sessionId": "syn_edge",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "photo",
+      "recognizedText": "I ___ a student. (am / is / are)",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T19:20:00+08:00",
+      "endedAt": "2026-11-02T19:21:00+08:00",
+      "name": "检查通过时不收兜底",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用哪个？",
+          "expect": "am",
+          "explain": "I 用 am。"
+        }
+      ],
+      "saids": [
+        "是am"
+      ],
+      "note": "不要写入",
+      "raises": false,
+      "checkPassed": true,
+      "checkReasons": [],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "是am",
+          "result": "hit",
+          "hintUsed": 0
+        }
+      ]
+    },
+    {
+      "sessionId": "syn_quiet",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "pack",
+      "recognizedText": "I ___ a student. (am / is / are)",
+      "confirmed": true,
+      "offline": false,
+      "startedAt": "2026-11-02T19:20:00+08:00",
+      "endedAt": "2026-11-02T19:21:00+08:00",
+      "name": "还没说话",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "apple 怎么拼？",
+          "expect": "apple",
+          "explain": "两个 p。"
+        }
+      ],
+      "saids": [],
+      "note": "不要写入",
+      "raises": false,
+      "checkPassed": true,
+      "checkReasons": [],
+      "events": []
+    },
+    {
+      "sessionId": "syn_stop",
+      "childId": "child_02",
+      "planVersion": 2,
+      "source": "photo",
+      "recognizedText": "I ___ a student. apple",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T19:20:00+08:00",
+      "endedAt": "2026-11-02T19:21:00+08:00",
+      "name": "错满两次后的整条",
+      "steps": [
+        {
+          "stepId": "s1",
+          "ask": "I 后面用 am、is 还是 are？",
+          "expect": "am",
+          "explain": "I 和 am 连用。"
+        },
+        {
+          "stepId": "s2",
+          "ask": "这个单词怎么拼？",
+          "expect": "apple",
+          "explain": "两个 p。"
+        }
+      ],
+      "saids": [
+        "is",
+        "are",
+        "be",
+        "apple"
+      ],
+      "note": null,
+      "raises": false,
+      "checkPassed": true,
+      "checkReasons": [],
+      "events": [
+        {
+          "stepId": "s1",
+          "said": "is",
+          "result": "miss",
+          "hintUsed": 1
+        },
+        {
+          "stepId": "s1",
+          "said": "are",
+          "result": "miss",
+          "hintUsed": 2
+        },
+        {
+          "stepId": "s1",
+          "said": "be",
+          "result": "assisted",
+          "hintUsed": 2
+        }
+      ]
+    },
+    {
+      "sessionId": "syn_edge",
+      "childId": "child_01",
+      "planVersion": 1,
+      "source": "photo",
+      "recognizedText": "I ___ a student. (am / is / are)",
+      "confirmed": true,
+      "offline": true,
+      "startedAt": "2026-11-02T19:20:00+08:00",
+      "endedAt": "2026-11-02T19:21:00+08:00",
+      "name": "没有 steps 也要有兜底才收",
+      "steps": null,
+      "saids": [],
+      "note": "这道题还没有问。",
+      "raises": false,
+      "checkPassed": false,
+      "checkReasons": [
+        "empty_steps"
+      ],
+      "events": [
+        {
+          "stepId": "",
+          "said": "这道题还没有问。",
+          "result": "note",
+          "hintUsed": 0
+        }
+      ]
+    }
+  ]
+}

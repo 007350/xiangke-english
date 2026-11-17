@@ -1,0 +1,1755 @@
+{
+ "summary": {
+  "total": 60,
+  "source": {
+   "model_try": 31,
+   "model": 24,
+   "none": 1,
+   "program": 4
+  },
+  "byKind": {
+   "base": {
+    "model": 7,
+    "model_try": 5
+   },
+   "be_noun": {
+    "model": 4
+   },
+   "gap": {
+    "model_try": 10,
+    "none": 1,
+    "model": 3
+   },
+   "noun3s": {
+    "model": 5,
+    "program": 2,
+    "model_try": 1
+   },
+   "plural": {
+    "program": 2,
+    "model": 2
+   },
+   "pron": {
+    "model_try": 7,
+    "model": 3
+   },
+   "spell": {
+    "model_try": 8
+   }
+  },
+  "judgedWrong": [],
+  "tryRight": 30,
+  "tryTotal": 31,
+  "refusedReasons": [
+   [
+    "把加",
+    3
+   ],
+   [
+    "把主语说成了我",
+    1
+   ],
+   [
+    "最后的解释没有说出答案",
+    1
+   ],
+   [
+    "解释讲成了",
+    1
+   ]
+  ],
+  "avgSeconds": 5.2
+ },
+ "rows": [
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：She are my aunt.",
+   "answer": "is",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "are",
+     "explain": "这句话里用错的是 are，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 She 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "She 说的是「她」，是一个人，不是「我」，也不是好几个人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "are 要改成哪个词？请说出来。",
+     "expect": "is",
+     "explain": "口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。She 是一个人，所以 are 要改成 is。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.7
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：He am my uncle.",
+   "answer": "is",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "am",
+     "explain": "这句话里用错的是 am，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 He 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "He 说的是「他」，是一个人，不是「我」，也不是好几个人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 am 应该改成什么？",
+     "expect": "is",
+     "explain": "口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。He 是一个人，所以 am 要改成 is。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.9
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：It are my cup.",
+   "answer": "is",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "are",
+     "explain": "这句话里用错的是 are，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 It 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "It 说的是「它」，是一样东西，不是「我」，也不是好几个人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 are 应该改成什么？",
+     "expect": "is",
+     "explain": "口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。It 是一样东西，所以 are 要改成 is。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 6.0
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：We is cousins.",
+   "answer": "are",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "is",
+     "explain": "这句话里用错的是 is，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 We 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "多个",
+     "explain": "We 说的是「我们」，是两个或更多的人，不是只有「我」一个。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "is 要改成哪个词？请说出来。",
+     "expect": "are",
+     "explain": "口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。We 是两个或更多的人，所以 is 要改成 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.8
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：They am good cooks.",
+   "answer": "are",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "am",
+     "explain": "这句话里用错的是 am，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 They 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "多个",
+     "explain": "They 说的是「他们」，是两个或更多的人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 am 应该改成什么？",
+     "expect": "are",
+     "explain": "口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。They 是两个或更多的人，所以 am 要改成 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.5
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：You is my cousin.",
+   "answer": "are",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "仔细读一读，哪个英文词写错了？",
+     "expect": "is",
+     "explain": "这句话里用错的是 is，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 You 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "你",
+     "explain": "You 说的是「你」。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "is 要改成哪个词？请说出来。",
+     "expect": "are",
+     "explain": "口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。You 说的是「你」，所以 is 要改成 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.7
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：She eat noodles.",
+   "answer": "eats",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "eat",
+     "explain": "这句话里用错的是 eat，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 She 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "She 说的是「她」，是一个人，不是「我」，也不是好几个人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 eat 应该改成什么？",
+     "expect": "eats",
+     "explain": "She 是一个人，现在常做的事，动词要变，一般直接加 s：eat → eats。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.2
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：He drink juice.",
+   "answer": "drinks",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "drink",
+     "explain": "这句话里用错的是 drink，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 He 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "He 说的是「他」，是一个人，不是「我」，也不是好几个人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 drink 应该改成什么？",
+     "expect": "drinks",
+     "explain": "He 是一个人，现在常做的事，动词要变，一般直接加 s：drink → drinks。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.3
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：It eat leaves.",
+   "answer": "eats",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "eat",
+     "explain": "这句话里用错的是 eat，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 It 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "It 说的是「它」，是一样东西，不是「我」，也不是好几个人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 eat 应该改成什么？",
+     "expect": "eats",
+     "explain": "It 是一样东西，现在常做的事，动词要变，一般直接加 s：eat → eats。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.3
+  },
+  {
+   "kind": "pron",
+   "text": "改错（只改一个词）：We goes to the zoo.",
+   "answer": "go",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "goes",
+     "explain": "这句话里用错的是 goes，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 We 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "多个",
+     "explain": "We 说的是「我们」，是两个或更多的人，不是只有「我」一个。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 goes 应该改成什么？",
+     "expect": "go",
+     "explain": "We 是两个或更多的人，动词用原来的样子，不用变：goes → go。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.3
+  },
+  {
+   "kind": "base",
+   "text": "Lucy can ___ the song. (sing / sings)",
+   "answer": "sing",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格前面紧挨着的那个英文词是什么？",
+     "expect": "can",
+     "explain": "空格前面紧挨着的是 can。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "can 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "can 后面的动词总是用原来的样子，不管主语是谁，都不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 sing 还是 sings？",
+     "expect": "sing",
+     "explain": "can 后面的动词总是用原来的样子，不管主语是谁，都不加 s。所以填 sing。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.0
+  },
+  {
+   "kind": "base",
+   "text": "My uncle must ___ the door. (open / opens)",
+   "answer": "open",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格前面紧挨着的那个英文词是什么？",
+     "expect": "must",
+     "explain": "空格前面紧挨着的是 must。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "must 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "must 后面的动词总是用原来的样子，不管主语是谁，都不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 open 还是 opens？",
+     "expect": "open",
+     "explain": "must 后面的动词总是用原来的样子，不管主语是谁，都不加 s。所以填 open。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.2
+  },
+  {
+   "kind": "base",
+   "text": "He wants to ___ the window. (close / closes)",
+   "answer": "close",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格前面紧挨着的那个英文词是什么？",
+     "expect": "to",
+     "explain": "空格前面紧挨着的是 to。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "to 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "to 后面的动词用原来的样子，不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 close 还是 closes？",
+     "expect": "close",
+     "explain": "to 后面的动词用原来的样子，不加 s。所以填 close。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.8
+  },
+  {
+   "kind": "base",
+   "text": "Does your aunt ___ noodles? (cook / cooks)",
+   "answer": "cook",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "句子开头的那个英文词是什么？",
+     "expect": "Does",
+     "explain": "句子开头的词是 Does。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "句子里有 Does，空里的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "句子里已经有 Does 了，后面的动词就用原来的样子，不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 cook 还是 cooks？",
+     "expect": "cook",
+     "explain": "句子里已经有 Does 了，后面的动词就用原来的样子，不加 s。所以填 cook。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.9
+  },
+  {
+   "kind": "base",
+   "text": "Does the baby ___ a lot? (cry / cries)",
+   "answer": "cry",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "句子开头的那个英文词是什么？",
+     "expect": "Does",
+     "explain": "句子开头的词是 Does。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "句子里有 Does，空里的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "句子里已经有 Does 了，后面的动词就用原来的样子，不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 cry 还是 cries？",
+     "expect": "cry",
+     "explain": "句子里已经有 Does 了，后面的动词就用原来的样子，不加 s。所以填 cry。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.8
+  },
+  {
+   "kind": "base",
+   "text": "My aunt doesn't ___ coffee. (drink / drinks)",
+   "answer": "drink",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格前面紧挨着的那个英文词是什么？",
+     "expect": "doesn't",
+     "explain": "空格前面紧挨着的是 doesn't。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "doesn't 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "doesn't 后面的动词用原来的样子，不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 drink 还是 drinks？",
+     "expect": "drink",
+     "explain": "doesn't 后面的动词用原来的样子，不加 s。所以填 drink。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.9
+  },
+  {
+   "kind": "base",
+   "text": "Mary will ___ a picture. (paint / paints)",
+   "answer": "paint",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格前面紧挨着的那个英文词是什么？",
+     "expect": "will",
+     "explain": "空格前面紧挨着的是 will。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "will 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "will 后面的动词总是用原来的样子，不管主语是谁，都不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 paint 还是 paints？",
+     "expect": "paint",
+     "explain": "will 后面的动词总是用原来的样子，不管主语是谁，都不加 s。所以填 paint。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.9
+  },
+  {
+   "kind": "base",
+   "text": "改错（只改一个词）：Lucy can sings well.",
+   "answer": "sing",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "sings",
+     "explain": "这句话里用错的是 sings，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "sings 前面紧挨着的那个英文词是什么？",
+     "expect": "can",
+     "explain": "sings 前面紧挨着的是 can。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "sings 要改成哪个词？请说出来。",
+     "expect": "sing",
+     "explain": "can 后面的动词总是用原来的样子，不管主语是谁，都不加 s。所以 sings 要改成 sing。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.9
+  },
+  {
+   "kind": "base",
+   "text": "改错（只改一个词）：He wants to buys a hat.",
+   "answer": "buy",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "buys",
+     "explain": "这句话里用错的是 buys，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "buys 前面紧挨着的那个英文词是什么？",
+     "expect": "to",
+     "explain": "buys 前面紧挨着的是 to。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 buys 应该改成什么？",
+     "expect": "buy",
+     "explain": "to 后面的动词用原来的样子，不加 s。所以 buys 要改成 buy。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.7
+  },
+  {
+   "kind": "base",
+   "text": "改错（只改一个词）：Does your uncle knows her?",
+   "answer": "know",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "knows",
+     "explain": "这句话里用错的是 knows，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "句子开头的那个英文词是什么？",
+     "expect": "Does",
+     "explain": "句子开头的词是 Does。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "knows 要改成哪个词？请说出来。",
+     "expect": "know",
+     "explain": "句子里已经有 Does 了，后面的动词就用原来的样子，不加 s。所以 knows 要改成 know。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.7
+  },
+  {
+   "kind": "base",
+   "text": "改错（只改一个词）：My aunt doesn't teaches math.",
+   "answer": "teach",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "teaches",
+     "explain": "这句话里用错的是 teaches，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "teaches 前面紧挨着的那个英文词是什么？",
+     "expect": "doesn't",
+     "explain": "teaches 前面紧挨着的是 doesn't。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 teaches 应该改成什么？",
+     "expect": "teach",
+     "explain": "doesn't 后面的动词用原来的样子，不加 s。所以 teaches 要改成 teach。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.0
+  },
+  {
+   "kind": "base",
+   "text": "改错（只改一个词）：She should drinks more water.",
+   "answer": "drink",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "drinks",
+     "explain": "这句话里用错的是 drinks，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "drinks 前面紧挨着的那个英文词是什么？",
+     "expect": "should",
+     "explain": "drinks 前面紧挨着的是 should。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 drinks 应该改成什么？",
+     "expect": "drink",
+     "explain": "should 后面的动词总是用原来的样子，不管主语是谁，都不加 s。所以 drinks 要改成 drink。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.1
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：I has a red hat.",
+   "answer": "have",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "has",
+     "explain": "这句话里用错的是 has，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 I 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "我",
+     "explain": "I 就是「我」自己。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 has 应该改成什么？",
+     "expect": "have",
+     "explain": "主语 I 说的是「我」，要用 have，不用 has：has → have。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.9
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：I goes to bed early.",
+   "answer": "go",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "goes",
+     "explain": "这句话里用错的是 goes，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 I 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "我",
+     "explain": "I 就是「我」自己。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 goes 应该改成什么？",
+     "expect": "go",
+     "explain": "主语 I 说的是「我」，动词用原来的样子，不加 s：goes → go。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.0
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：I watches the news.",
+   "answer": "watch",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "watches",
+     "explain": "这句话里用错的是 watches，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 I 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "我",
+     "explain": "I 就是「我」自己。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 watches 应该改成什么？",
+     "expect": "watch",
+     "explain": "主语 I 说的是「我」，动词用原来的样子，不加 s：watches → watch。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.0
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：Mary don't eat meat.",
+   "answer": "doesn't",
+   "source": "none",
+   "judged": false,
+   "errors": [
+    "把主语说成了我"
+   ],
+   "steps": null,
+   "finalRight": false,
+   "seconds": 6.2
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：My uncle don't drive.",
+   "answer": "doesn't",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "don't",
+     "explain": "这句话里用错的是 don't，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 My uncle 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "My uncle 是一个人，不是「我」，也不是好几个人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 don't 应该改成什么？只说改好的这一个词。",
+     "expect": "doesn't",
+     "explain": "主语 My uncle 是一个，否定要用 doesn't，不用 don't。后面的 drive 不用动，只改这一个词。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.6
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：My cousins doesn't swim.",
+   "answer": "don't",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "doesn't",
+     "explain": "这句话里用错的是 doesn't，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 My cousins 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "多个",
+     "explain": "My cousins 是两个或更多的人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 doesn't 应该改成什么？只说改好的这一个词。",
+     "expect": "don't",
+     "explain": "主语 My cousins 不是一个别人，否定要用 don't，不用 doesn't。后面的 swim 不用动，只改这一个词。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.9
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：She were late last Monday.",
+   "answer": "was",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "仔细读一读，哪个英文词写错了？",
+     "expect": "were",
+     "explain": "这句话里用错的是 were，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 She 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "She 说的是「她」，是一个人，不是「我」，也不是好几个人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 were 应该改成什么？",
+     "expect": "was",
+     "explain": "说过去的事：「我」、一个人或一样东西用 was，「你」和两个或更多用 were。She 是一个人，所以 were 要改成 was。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.9
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：They was late last Monday.",
+   "answer": "were",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "was",
+     "explain": "这句话里用错的是 was，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 They 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "多个",
+     "explain": "They 说的是「他们」，是两个或更多的人。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 was 应该改成什么？",
+     "expect": "were",
+     "explain": "说过去的事：「我」、一个人或一样东西用 was，「你」和两个或更多用 were。They 是两个或更多的人，所以 was 要改成 were。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.5
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：I were sick last Friday.",
+   "answer": "was",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "were",
+     "explain": "这句话里用错的是 were，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 I 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "我",
+     "explain": "I 就是「我」自己。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 were 应该改成什么？",
+     "expect": "was",
+     "explain": "说过去的事：「我」、一个人或一样东西用 was，「你」和两个或更多用 were。I 说的是「我」，所以 were 要改成 was。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.4
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：There is three cups on the shelf.",
+   "answer": "are",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "is",
+     "explain": "这句话里用错的是 is，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "句子里说的 three cups 是一个还是多个？说「一个」或「多个」。",
+     "expect": "多个",
+     "explain": "three cups 说的是两个或更多。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "is 要改成哪个词？请说出来。",
+     "expect": "are",
+     "explain": "There 开头的句子要看后面的东西：一个用 is，两个或更多用 are。three cups 是多个，所以 is 要改成 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.6
+  },
+  {
+   "kind": "gap",
+   "text": "改错（只改一个词）：There are a spoon in the bowl.",
+   "answer": "is",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "are",
+     "explain": "这句话里用错的是 are，其他词都没问题。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "句子里说的 a spoon 是一个还是多个？说「一个」或「多个」。",
+     "expect": "一个",
+     "explain": "a spoon 说的是一个。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那 are 应该改成什么？",
+     "expect": "is",
+     "explain": "There 开头的句子要看后面的东西：一个用 is，两个或更多用 are。a spoon 是一个，所以 are 要改成 is。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.8
+  },
+  {
+   "kind": "gap",
+   "text": "There ___ a spoon in the bowl. (is / are)",
+   "answer": "is",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格后面说的是什么东西？用英文整个说出来。",
+     "expect": "a spoon",
+     "explain": "There 开头的句子，要看空格后面的东西，这里是 a spoon。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "a spoon 是一个还是多个？说「一个」或「多个」。",
+     "expect": "一个",
+     "explain": "a spoon 说的是一个。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里填 is 还是 are？",
+     "expect": "is",
+     "explain": "There 开头的句子要看空格后面的东西：一个用 is，两个或更多用 are。a spoon 是一个，所以填 is。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.1
+  },
+  {
+   "kind": "gap",
+   "text": "There ___ six cups on the shelf. (is / are)",
+   "answer": "are",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格后面说的是什么东西？用英文整个说出来。",
+     "expect": "six cups",
+     "explain": "There 开头的句子，要看空格后面的东西，这里是 six cups。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "six cups 是一个还是多个？说「一个」或「多个」。",
+     "expect": "多个",
+     "explain": "six cups 说的是两个或更多。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里填 is 还是 are？",
+     "expect": "are",
+     "explain": "There 开头的句子要看空格后面的东西：一个用 is，两个或更多用 are。six cups 是多个，所以填 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.3
+  },
+  {
+   "kind": "gap",
+   "text": "There ___ many people in the shop. (is / are)",
+   "answer": "are",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格后面说的是什么东西？用英文整个说出来。",
+     "expect": "many people",
+     "explain": "There 开头的句子，要看空格后面的东西，这里是 many people。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "many people 是一个还是多个？说「一个」或「多个」。",
+     "expect": "多个",
+     "explain": "many people 说的是两个或更多。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里填 is 还是 are？",
+     "expect": "are",
+     "explain": "There 开头的句子要看后面的东西：一个用 is，两个或更多用 are。many people 是多个，所以填 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.2
+  },
+  {
+   "kind": "noun3s",
+   "text": "The goose ___ in the lake. (swim / swims)",
+   "answer": "swims",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "The goose",
+     "explain": "主语一般在句子开头，这句话的主语是 The goose。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "The goose 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "要",
+     "explain": "The goose 是一只动物，只有一只，现在常做的事，动词要变。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 swim 还是 swims？",
+     "expect": "swims",
+     "explain": "The goose 是一只动物，只有一只，现在常做的事，动词要变，一般直接加 s：swim → swims。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.6
+  },
+  {
+   "kind": "noun3s",
+   "text": "My uncle ___ a truck. (drive / drives)",
+   "answer": "drives",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "My uncle",
+     "explain": "主语一般在句子开头，这句话的主语是 My uncle。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "My uncle 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "要",
+     "explain": "My uncle 是一个别人（不是我、不是你，也不是好几个人），每天、经常做的事，动词要加 s 或 es。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 drive 还是 drives？",
+     "expect": "drives",
+     "explain": "主语 My uncle 是「一个别人」，动词要变：一般直接加 s。drive → drives。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.5
+  },
+  {
+   "kind": "noun3s",
+   "text": "Mary ___ the floor every day. (sweep / sweeps)",
+   "answer": "sweeps",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是哪个词？请用英文说。",
+     "expect": "Mary",
+     "explain": "主语一般在句子开头，这句话的主语是 Mary。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "Mary 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "要",
+     "explain": "Mary 是一个别人（不是我、不是你，也不是好几个人），每天、经常做的事，动词要加 s 或 es。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 sweeps 还是 sweep？",
+     "expect": "sweeps",
+     "explain": "主语 Mary 是「一个别人」，动词要变：一般直接加 s。sweep → sweeps。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.5
+  },
+  {
+   "kind": "noun3s",
+   "text": "The baby ___ at night. (cry / cries)",
+   "answer": "cries",
+   "source": "program",
+   "judged": true,
+   "errors": [
+    "把加 es 说成了直接加 s"
+   ],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "想一想，空里选 cry 还是 cries？",
+     "expect": "cries",
+     "explain": "主语是一个，现在常做的事，动词要变。所以填 cries。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.7
+  },
+  {
+   "kind": "noun3s",
+   "text": "My aunt ___ the windows. (wash / washes)",
+   "answer": "washes",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "My aunt",
+     "explain": "主语一般在句子开头，这句话的主语是 My aunt。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "My aunt 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "要",
+     "explain": "My aunt 是一个别人（不是我、不是你，也不是好几个人），每天、经常做的事，动词要加 s 或 es。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 wash 还是 washes？",
+     "expect": "washes",
+     "explain": "主语 My aunt 是「一个别人」，动词要变：以 o、s、x、ch、sh 结尾的动词加 es。wash → washes。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 6.0
+  },
+  {
+   "kind": "noun3s",
+   "text": "Mr Li ___ science. (teach / teaches)",
+   "answer": "teaches",
+   "source": "program",
+   "judged": true,
+   "errors": [
+    "把加 es 说成了直接加 s"
+   ],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "想一想，空里选 teach 还是 teaches？",
+     "expect": "teaches",
+     "explain": "主语是一个，现在常做的事，动词要变。所以填 teaches。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.8
+  },
+  {
+   "kind": "noun3s",
+   "text": "The children ___ in the yard. (play / plays)",
+   "answer": "play",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "The children",
+     "explain": "主语一般在句子开头，这句话的主语是 The children。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "The children 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "The children 是好几个人，不是「一个别人」，动词用原形，不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 play 还是 plays？",
+     "expect": "play",
+     "explain": "主语 The children 是好几个人，动词用原形，不加 s，所以填 play。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.3
+  },
+  {
+   "kind": "noun3s",
+   "text": "My parents ___ in a village. (live / lives)",
+   "answer": "live",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "My parents",
+     "explain": "主语一般在句子开头，这句话的主语是 My parents。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "My parents 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "My parents 是好几个人，不是「一个别人」，动词用原形，不加 s。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 live 还是 lives？",
+     "expect": "live",
+     "explain": "主语 My parents 是好几个人，动词用原形，不加 s，所以填 live。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.3
+  },
+  {
+   "kind": "spell",
+   "text": "看中文写单词：帽子 h_t",
+   "answer": "hat",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "「帽子」这个词里，空格缺的是什么字母？",
+     "expect": "a",
+     "explain": "这个空是整个词的第二个字母，这里要写 a。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "很好！现在把「帽子」这个词完整地拼出来。",
+     "expect": "hat",
+     "explain": "「帽子」的英文是 hat，一共 3 个字母：h a t。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 3.8
+  },
+  {
+   "kind": "spell",
+   "text": "看中文写单词：裙子 dr_ss",
+   "answer": "dress",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "「裙子」这个词里，空格缺的是什么字母？",
+     "expect": "e",
+     "explain": "这个空是整个词的第三个字母，这里要写 e。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "很好！现在把「裙子」这个词完整地拼出来。",
+     "expect": "dress",
+     "explain": "「裙子」的英文是 dress，一共 5 个字母：d r e s s。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.0
+  },
+  {
+   "kind": "spell",
+   "text": "看中文写单词：牙齿 t__th",
+   "answer": "teeth",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "「牙齿」这个词里，第一个空格缺的是什么字母？",
+     "expect": "e",
+     "explain": "这个空是整个词的第二个字母，这里要写 e。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "「牙齿」这个词里，第二个空格缺的是什么字母？",
+     "expect": "e",
+     "explain": "这个空是整个词的第三个字母，这里要写 e。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "很好！现在把「牙齿」这个词完整地拼出来。",
+     "expect": "tooth",
+     "explain": "「牙齿」的英文是 tooth，一共 5 个字母：t o o t h。"
+    }
+   ],
+   "finalRight": false,
+   "seconds": 5.0
+  },
+  {
+   "kind": "spell",
+   "text": "看中文写单词：老鼠 m__se",
+   "answer": "mouse",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "「老鼠」这个词里，第一个空格缺的是什么字母？",
+     "expect": "o",
+     "explain": "这个空是整个词的第二个字母，这里要写 o。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "「老鼠」这个词里，第二个空格缺的是什么字母？",
+     "expect": "l",
+     "explain": "这个空是整个词的第三个字母，这里要写 l。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "很好！现在把「老鼠」这个词完整地拼出来。",
+     "expect": "mouse",
+     "explain": "「老鼠」的英文是 mouse，一共 5 个字母：m o u s e。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.0
+  },
+  {
+   "kind": "spell",
+   "text": "看中文写单词：叶子 l__f",
+   "answer": "leaf",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "「叶子」这个词里，第一个空格缺的是什么字母？",
+     "expect": "e",
+     "explain": "这个空是整个词的第二个字母，这里要写 e。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "「叶子」这个词里，第二个空格缺的是什么字母？",
+     "expect": "a",
+     "explain": "这个空是整个词的第三个字母，这里要写 a。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "很好！现在把「叶子」这个词完整地拼出来。",
+     "expect": "leaf",
+     "explain": "「叶子」的英文是 leaf，一共 4 个字母：l e a f。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.1
+  },
+  {
+   "kind": "spell",
+   "text": "看中文写单词：雪 sn_w",
+   "answer": "snow",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "「雪」这个词里，空格缺的是什么字母？",
+     "expect": "o",
+     "explain": "这个空是整个词的第三个字母，这里要写 o。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "很好！现在把「雪」这个词完整地拼出来。",
+     "expect": "snow",
+     "explain": "「雪」的英文是 snow，一共 4 个字母：s n w o。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 3.9
+  },
+  {
+   "kind": "spell",
+   "text": "看中文写单词：星星 st_r",
+   "answer": "star",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "「星星」这个词里，空格缺的是什么字母？",
+     "expect": "a",
+     "explain": "这个空是整个词的第三个字母，这里要写 a。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "很好！现在把「星星」这个词完整地拼出来。",
+     "expect": "star",
+     "explain": "「星星」的英文是 star，一共 4 个字母：s t a r。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 3.8
+  },
+  {
+   "kind": "spell",
+   "text": "看中文写单词：蜡烛 c_ndle",
+   "answer": "candle",
+   "source": "model_try",
+   "judged": false,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "「蜡烛」这个词里，空格缺的是什么字母？",
+     "expect": "a",
+     "explain": "这个空是整个词的第二个字母，这里要写 a。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "很好！现在把「蜡烛」这个词完整地拼出来。",
+     "expect": "candle",
+     "explain": "「蜡烛」的英文是 candle，一共 6 个字母：c a n d l e。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 3.9
+  },
+  {
+   "kind": "be_noun",
+   "text": "Mary ___ my cousin. (am / is / are)",
+   "answer": "is",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是哪个词？请用英文说。",
+     "expect": "Mary",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 Mary。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 Mary 是一个人。从 am / is / are 里选一个填进空里。",
+     "expect": "is",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语 Mary 是一个人，所以填 is。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.0
+  },
+  {
+   "kind": "be_noun",
+   "text": "My parents ___ at work. (am / is / are)",
+   "answer": "are",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "My parents",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 My parents。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 My parents 是两个或更多人。从 am / is / are 里选一个填进空里。",
+     "expect": "are",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语 My parents 是两个或更多人，所以填 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.3
+  },
+  {
+   "kind": "be_noun",
+   "text": "The pears ___ sweet. (am / is / are)",
+   "answer": "are",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "The pears",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 The pears。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 The pears 是两个或更多。那空里填 am、is 还是 are？",
+     "expect": "are",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语 The pears 是两个或更多，所以填 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.3
+  },
+  {
+   "kind": "be_noun",
+   "text": "Mr Li and I ___ neighbors. (am / is / are)",
+   "answer": "are",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "Mr Li and I",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 Mr Li and I。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "主语 Mr Li and I 是两个或更多人。从 am / is / are 里选一个填进空里。",
+     "expect": "are",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语 Mr Li and I 是两个或更多人，所以填 are。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.4
+  },
+  {
+   "kind": "plural",
+   "text": "I have three ___. (hat / hats)",
+   "answer": "hats",
+   "source": "program",
+   "judged": true,
+   "errors": [
+    "把加 s 说成了加 es"
+   ],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "想一想，空里选 hat 还是 hats？",
+     "expect": "hats",
+     "explain": "数量是两个或更多，用复数。所以填 hats。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 5.2
+  },
+  {
+   "kind": "plural",
+   "text": "She has two ___. (cup / cups)",
+   "answer": "cups",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格前面表示数量的词是什么？",
+     "expect": "two",
+     "explain": "空格前面的 two 表示数量。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "two 表示一个还是多个？",
+     "expect": "多个",
+     "explain": "two 是不止一个，所以是多个。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 cup 还是 cups？",
+     "expect": "cups",
+     "explain": "数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。cup → cups，所以填 cups。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.6
+  },
+  {
+   "kind": "plural",
+   "text": "There is one ___ here. (cup / cups)",
+   "answer": "cup",
+   "source": "model",
+   "judged": true,
+   "errors": [],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "空格前面表示数量的词是什么？",
+     "expect": "one",
+     "explain": "空格前面的 one 表示数量。"
+    },
+    {
+     "stepId": "s2",
+     "ask": "one 表示一个还是多个？",
+     "expect": "一个",
+     "explain": "one 是只有一个，所以是一个。"
+    },
+    {
+     "stepId": "s3",
+     "ask": "那空里选 cup 还是 cups？",
+     "expect": "cup",
+     "explain": "只有一个，名词用单数，不加 s，所以填 cup。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.2
+  },
+  {
+   "kind": "plural",
+   "text": "Those are my ___. (shoe / shoes)",
+   "answer": "shoes",
+   "source": "program",
+   "judged": true,
+   "errors": [
+    "最后的解释没有说出答案",
+    "解释讲成了 shoe"
+   ],
+   "steps": [
+    {
+     "stepId": "s1",
+     "ask": "想一想，空里选 shoe 还是 shoes？",
+     "expect": "shoes",
+     "explain": "前面说的是两个或更多，用复数。所以填 shoes。"
+    }
+   ],
+   "finalRight": true,
+   "seconds": 4.4
+  }
+ ]
+}

@@ -1,0 +1,14 @@
+{
+  "previousVersion": 1,
+  "plan": {
+    "childId": "child_01",
+    "planVersion": 4,
+    "basedOnSessionId": "s_01",
+    "voice": "  ",
+    "reminders": ["一句", "两句", "三句", "四句"],
+    "examples": [{}, {}, {}, {}],
+    "forbid": "不要直接说出标准答案。",
+    "checkPassed": false,
+    "checkReasons": ["version_gap", "empty_voice", "too_many_reminders", "too_many_examples"]
+  }
+}

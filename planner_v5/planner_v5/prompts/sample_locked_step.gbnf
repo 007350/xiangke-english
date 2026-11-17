@@ -1,0 +1,6 @@
+root ::= "{" space "\"steps\"" space ":" space "[" space step0 "," space step1 space "]" space "}"
+step0 ::= "{" space "\"ask\"" space ":" space string "," space "\"expect\"" space ":" space "\"多个\"" "," space "\"explain\"" space ":" space string space "}"
+step1 ::= "{" space "\"ask\"" space ":" space string "," space "\"expect\"" space ":" space "\"are\"" "," space "\"explain\"" space ":" space string space "}"
+string ::= "\"" char* "\""
+char ::= [^"\\\x7F\x00-\x1F] | "\\" (["\\bfnrt] | "u" [0-9a-fA-F]{4})
+space ::= | " " | "\n" [ \t]{0,20}

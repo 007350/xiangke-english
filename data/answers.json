@@ -1,0 +1,18 @@
+[
+  {"said": " Apple ", "expect": "apple", "result": "hit"},
+  {"said": "apples", "expect": "apple", "result": "miss"},
+  {"said": "am.", "expect": "am", "result": "hit"},
+  {"said": "（am）", "expect": "am", "result": "hit"},
+  {"said": "是am", "expect": "am", "result": "hit"},
+  {"said": "选 am", "expect": "am", "result": "hit"},
+  {"said": "用：apple", "expect": "apple", "result": "hit"},
+  {"said": "I am", "expect": "am", "result": "miss"},
+  {"said": "a m", "expect": "am", "result": "miss"},
+  {"said": "ａｍ", "expect": "am", "result": "hit"},
+  {"said": "is", "expect": "am", "result": "miss"},
+  {"said": "don\u2019t", "expect": "don't", "result": "hit"},
+  {"said": "can\u2019t", "expect": "can't", "result": "hit"},
+  {"said": "it\u2019s", "expect": "it's", "result": "hit"},
+  {"said": "I'm", "expect": "am", "result": "miss"},
+  {"said": "a.m", "expect": "am", "result": "miss"}
+]

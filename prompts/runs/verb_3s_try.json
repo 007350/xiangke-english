@@ -1,0 +1,226 @@
+[
+ {
+  "item": "改错（只改一个词）：She like cats.",
+  "source": "template_patch",
+  "steps": [
+   {
+    "stepId": "s1",
+    "ask": "这句话里有一个词用错了，是哪个词？说出那个英文词。",
+    "expect": "like",
+    "explain": "She 是她，一个人，后面的动词要变样子，所以 like 不对。"
+   },
+   {
+    "stepId": "s2",
+    "ask": "主语是 She，like 应该改成什么？写出改好的词。",
+    "expect": "likes",
+    "explain": "主语 She 是她，句子里还有 cats，说明是复数。动词要变，一般直接加 s。like → likes。"
+   }
+  ],
+  "attempts": [
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“likes”"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 like，其他词都没问题。主语 She 是她，句子里还有 cats，说明是一般现在时，动词要用原形，不加 s。like 要改成 likes。\"}, {\"explain\": \"主语 She 是她，句子里还有 cats，说明是一般现在时，动词要用原形，不加 s。like 要改成 likes。\"}]}"
+   },
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“likes”"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 like，其他词都没问题。主语 She 是她，句子里还有 cats，说明是复数。从动词变复数：一般直接加 s。like → likes。\"}, {\"explain\": \"主语 She 是她，句子里还有 cats，说明是复数。动词要变，一般直接加 s。like → likes。\"}]}"
+   }
+  ]
+ },
+ {
+  "item": "改错（只改一个词）：He play football.",
+  "source": "template_patch",
+  "steps": [
+   {
+    "stepId": "s1",
+    "ask": "这句话里有一个词用错了，是哪个词？说出那个英文词。",
+    "expect": "play",
+    "explain": "He 是他，一个人，后面的动词要变样子，所以 play 不对。"
+   },
+   {
+    "stepId": "s2",
+    "ask": "主语是 He，play 应该改成什么？写出改好的词。",
+    "expect": "plays",
+    "explain": "主语是 he、she、it，动词要加 s。所以改成 plays。"
+   }
+  ],
+  "attempts": [
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“plays”",
+     "第1问用了孩子听不懂的术语：过去式"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 play，其他词都没问题。主语 He 是他，句子里还有动词的过去样子，要用过去式。play 直接加 s，变成 plays。\"}, {\"explain\": \"主语 He 是他，动词要变：一般直接加 s。play → plays，改好以后是 He plays football。\"}]}"
+   },
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“plays”",
+     "第1问用了孩子听不懂的术语：过去式",
+     "第2问用了孩子听不懂的术语：过去式"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 play，其他词都没问题。主语 He 是他，句子里没有 than、after 这样表示比较的词，动词不能用过去式或过去的样子。规则动词直接加 s：play → plays。\"}, {\"explain\": \"主语 He 是他，句子里没有 than、after 这样表示比较的词，动词不能用过去式或过去的样子。规则动词直接加 s：play → plays。\"}]}"
+   }
+  ]
+ },
+ {
+  "item": "改错（只改一个词）：It look nice.",
+  "source": "template_patch",
+  "steps": [
+   {
+    "stepId": "s1",
+    "ask": "这句话里有一个词用错了，是哪个词？说出那个英文词。",
+    "expect": "look",
+    "explain": "It 是它，一样东西，后面的动词要变样子，所以 look 不对。"
+   },
+   {
+    "stepId": "s2",
+    "ask": "主语是 It，look 应该改成什么？写出改好的词。",
+    "expect": "looks",
+    "explain": "主语是 he、she、it，动词要加 s。所以改成 looks。"
+   }
+  ],
+  "attempts": [
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“looks”"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 look，其他词都没问题。主语 It 是它，动词要加 s。看后面动词：look 要变成 looks。改好以后：It looks nice。\"}, {\"explain\": \"主语 It 是它，动词要变：一般直接加 s。look → looks。改好以后：It looks nice。\"}]}"
+   },
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“looks”",
+     "第1问用了孩子听不懂的术语：第三人称、单数",
+     "第1问拿别的主语举例，容易讲反规则",
+     "第2问用了孩子听不懂的术语：第三人称、单数",
+     "第2问拿别的主语举例，容易讲反规则"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 look，其他词都没问题。主语 It 是它，动词要用第三人称单数：I 说 I look，he 说 he looks，she 说 she looks，we 说 we look，they 说 they look。所以 look 要改成 looks。\"}, {\"explain\": \"主语 It 是它，动词要用第三人称单数：I 说 I look，he 说 he looks，she 说 she looks，we 说 we look，they 说 they look。所以 look 要改成 looks。\"}]}"
+   }
+  ]
+ },
+ {
+  "item": "改错（只改一个词）：She watch TV.",
+  "source": "template_patch",
+  "steps": [
+   {
+    "stepId": "s1",
+    "ask": "这句话里有一个词用错了，是哪个词？说出那个英文词。",
+    "expect": "watch",
+    "explain": "She 是她，一个人，后面的动词要变样子，所以 watch 不对。"
+   },
+   {
+    "stepId": "s2",
+    "ask": "主语是 She，watch 应该改成什么？写出改好的词。",
+    "expect": "watches",
+    "explain": "主语是 he、she、it，这个动词要加 es。所以改成 watches。"
+   }
+  ],
+  "attempts": [
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“watches”",
+     "第1问把变化说成了只加 s",
+     "第2问把变化说成了只加 s"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 watch，其他词都没问题。主语 She 是她，句子里没有 and、or 这样表示两个的词。watch 以 o 结尾，直接加 s：watch → watches。\"}, {\"explain\": \"主语 She 是她，句子里没有 and、or 这样表示两个的词。watch 以 o 结尾，直接加 s：watch → watches。句子里另一个动词要双写再加 ed：watch → watching。\"}]}"
+   },
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“watches”",
+     "第1问用了孩子听不懂的术语：单数",
+     "第2问用了孩子听不懂的术语：单数"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 watch，其他词都没问题。主语 She 是她，句子里没有 and、or 这样表示两个的词，动词用单数。watch 要改成 watches。\"}, {\"explain\": \"主语 She 是她，句子里没有 and、or 这样表示两个的词，动词用单数。watch 要改成 watches。\"}]}"
+   }
+  ]
+ },
+ {
+  "item": "改错（只改一个词）：He study English.",
+  "source": "template_patch",
+  "steps": [
+   {
+    "stepId": "s1",
+    "ask": "读一读这句话，哪个英文词用得不对？",
+    "expect": "study",
+    "explain": "He 是他，一个人，后面的动词要变样子，所以 study 不对。"
+   },
+   {
+    "stepId": "s2",
+    "ask": "He 后面的 study 要变个样子，应该怎么写？",
+    "expect": "studies",
+    "explain": "主语 He 是他，动词要用现在式。以「辅音字母 + y」结尾的，把 y 变成 i 再加 es。study → studies。改好以后：He studies English。"
+   }
+  ],
+  "attempts": [
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“studies”",
+     "第1问出现了和这道题无关的 am/is",
+     "第2问出现了和这道题无关的 am/is"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 study，其他词都没问题。主语 He 是他，句子里还有 am、is 这样的动词词尾样子。 study 要改成 studies。\"}, {\"explain\": \"主语 He 是他，句子里还有 am、is 这样的动词词尾样子。以「辅音字母 + y」结尾的动词，把 y 变成 i 再加 es。study → studies。\"}]}"
+   },
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“studies”",
+     "第1问用了孩子听不懂的术语：过去式"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 study，其他词都没问题。主语 He 是他，句子里还有动词的过去式或现在式变化。 study 的复数或进行时要变：以「辅音字母 + y」结尾的，把 y 变成 i 再加 es，study → studies。\"}, {\"explain\": \"主语 He 是他，动词要用现在式。以「辅音字母 + y」结尾的，把 y 变成 i 再加 es。study → studies。改好以后：He studies English。\"}]}"
+   }
+  ]
+ },
+ {
+  "item": "改错（只改一个词）：He go to school.",
+  "source": "template_patch",
+  "steps": [
+   {
+    "stepId": "s1",
+    "ask": "这句话里有一个词用错了，是哪个词？说出那个英文词。",
+    "expect": "go",
+    "explain": "He 是他，一个人，后面的动词要变样子，所以 go 不对。"
+   },
+   {
+    "stepId": "s2",
+    "ask": "主语是 He，go 应该改成什么？写出改好的词。",
+    "expect": "goes",
+    "explain": "主语是 he、she、it，这个动词有特殊变化。所以改成 goes。"
+   }
+  ],
+  "attempts": [
+   {
+    "ok": false,
+    "errors": [
+     "第1问出现了和这道题无关的 is/am",
+     "第1问拿别的主语举例，容易讲反规则",
+     "第2问的解释没有说出答案“goes”",
+     "第2问出现了和这道题无关的 is/am",
+     "第2问拿别的主语举例，容易讲反规则"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 go，其他词都没问题。主语 He 是他，句子里还有 is，说的是现在的事。从现在时动词变：I → am，he → is。go 要改成 is。\"}, {\"explain\": \"主语 He 是他，句子里还有 is，说的是现在的事。从现在时动词变：I → am，he → is。go 要改成 is。\"}]}"
+   },
+   {
+    "ok": false,
+    "errors": [
+     "第1问提前说出了后面的答案“goes”",
+     "第1问用了孩子听不懂的术语：第三人称、单数",
+     "第2问用了孩子听不懂的术语：第三人称、单数"
+    ],
+    "raw": "{\"steps\": [{\"explain\": \"这句话里用错的是 go，其他词都没问题。主语 He 是他，句子里还有 and、after 这样的词，都是在说一件事，所以动词要用第三人称单数。go 要改成 goes。\"}, {\"explain\": \"主语 He 是他，句子里还有 and、after 这样的词，都是在说一件事，所以动词要用第三人称单数。go 要改成 goes。\"}]}"
+   }
+  ]
+ }
+]

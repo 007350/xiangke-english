@@ -1,0 +1,451 @@
+[
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 They 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "多个",
+     "explain": "They 说的是两个或更多。"
+    },
+    {
+     "ask": "那空里填 am、is 还是 are？",
+     "expect": "are",
+     "explain": "口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。They 是多个人，所以填 are。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 They 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"多个\", \"explain\": \"They 说的是两个或更多。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"are\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。They 是多个人，所以填 are。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 4.5,
+    "tokens": 107
+   }
+  ],
+  "cfg": "A_trainSys+steps.gbnf",
+  "item": "They ___ my friends. (am / is / are)",
+  "gold": "are"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "空格前面紧挨着的那个英文词是什么？",
+     "expect": "an",
+     "explain": "空格前面紧挨着的是 an。"
+    },
+    {
+     "ask": "an 后面选 apple 还是 apples？",
+     "expect": "apple",
+     "explain": "an 后面说的是一个东西，名词用原来的样子，不加 s，所以填 apple。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"空格前面紧挨着的那个英文词是什么？\", \"expect\": \"an\", \"explain\": \"空格前面紧挨着的是 an。\"}, {\"ask\": \"an 后面选 apple 还是 apples？\", \"expect\": \"apple\", \"explain\": \"an 后面说的是一个东西，名词用原来的样子，不加 s，所以填 apple。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.8,
+    "tokens": 86
+   }
+  ],
+  "cfg": "A_trainSys+steps.gbnf",
+  "item": "This is an ___. (apple / apples)",
+  "gold": "apple"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "这句话里哪个词用错了？说出那个英文词。",
+     "expect": "like",
+     "explain": "这句话里用错的是 like，其他词都没问题。"
+    },
+    {
+     "ask": "like 应该改成什么？说出改好的那个词。",
+     "expect": "likes",
+     "explain": "主语 She（她） 说的是一个（一个人或一样东西）。主语是一个人或一样东西（he、she、it、Tom……），说平时经常做的事，动词后面加 s。所以是 likes。"
+    }
+   ]
+  },
+  "source": "model+template_patch(steps [2])",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里哪个词用错了？说出那个英文词。\", \"expect\": \"like\", \"explain\": \"主语 She（她）说的是一个（一个人或一样东西），动词后面加 s。like 要改成 likes。\"}]}",
+    "ok": false,
+    "errors": [
+     "步数不对：应该 2 步，输出了 1 步",
+     "第1步 explain 提前说出了后面的答案“likes”"
+    ],
+    "latency_s": 2.8,
+    "tokens": 59
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里哪个词用错了？说出那个英文词。\", \"expect\": \"like\", \"explain\": \"这句话里用错的是 like，其他词都没问题。\"}, {\"ask\": \"主语 She（她） 说的是一个（一个人或一样东西）。那 like 应该改成什么？\", \"expect\": \"likes\", \"explain\": \"口诀：I 用 am，you 用 are，一个人或一样东西用 is，两个或更多用 are。主语 She（她） 说的是一个（一个人或一样东西），动词要用第三人称单数：I am，you are，he is，she is，we are，they are。所以 like 要改成 likes。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步用了孩子听不懂的术语：第三人称、单数",
+     "第2步 explain 出现了和本题无关的 are/am/is"
+    ],
+    "latency_s": 6.0,
+    "tokens": 157
+   }
+  ],
+  "cfg": "A_trainSys+steps.gbnf",
+  "item": "改错（只改一个词）：She like cats.",
+  "gold": "likes"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "「书」的英文以 b 开头，第二个字母是什么？",
+     "expect": "o",
+     "explain": "「书」的英文是 b 开头的，第二个字母是 o。"
+    },
+    {
+     "ask": "看 bo_k，第2个空格里填哪个字母？",
+     "expect": "o",
+     "explain": "先想想“书”的英文怎么读，再按读音一个字母一个字母地拼。这里有两个一样的字母 oo 挨在一起，拼的时候别漏掉一个。这一格是字母 o。"
+    },
+    {
+     "ask": "把空填好后，整个单词是什么？请说出来。",
+     "expect": "book",
+     "explain": "「书」的英文是 book，一共 4 个字母：b o o k。"
+    }
+   ]
+  },
+  "source": "model+template_patch(steps [2])",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"「书」这个词里，第一个空格（单词第2个字母）是哪个字母？\", \"expect\": \"o\", \"explain\": \"这个空是整个词的第二个字母，这里写 o。\"}, {\"ask\": \"「书」这个词里，第二个空格（单词第3个字母）是哪个字母？\", \"expect\": \"k\", \"explain\": \"这个空是整个词的第三个字母，这里写 k。\"}, {\"ask\": \"把空填好后，整个单词是什么？请说出来。\", \"expect\": \"book\", \"explain\": \"「书」的英文是 book，一共 4 个字母：b o o k。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步 expect 应该是“o”，不能写成“k”"
+    ],
+    "latency_s": 5.8,
+    "tokens": 149
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"「书」的英文以 b 开头，第二个字母是什么？\", \"expect\": \"o\", \"explain\": \"「书」的英文是 b 开头的，第二个字母是 o。\"}, {\"ask\": \"「书」的英文第三个字母是什么？\", \"expect\": \"k\", \"explain\": \"「书」的英文是 b 开头的，第三个字母是 k。\"}, {\"ask\": \"把空填好后，整个单词是什么？请说出来。\", \"expect\": \"book\", \"explain\": \"「书」的英文是 book，一共 4 个字母：b o o k。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步 expect 应该是“o”，不能写成“k”"
+    ],
+    "latency_s": 5.5,
+    "tokens": 144
+   }
+  ],
+  "cfg": "A_trainSys+steps.gbnf",
+  "item": "看中文写单词：书 b__k",
+  "gold": "book"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 They 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "多个",
+     "explain": "They 说的是两个或更多。"
+    },
+    {
+     "ask": "那空里填 am、is 还是 are？",
+     "expect": "are",
+     "explain": "口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。They 是多个人，所以填 are。"
+    }
+   ]
+  },
+  "source": "model_try2",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 They 说的是一个还是多个？说「一个」或「多个」。They 是「他们（她们、它们）」，说的是多个。\", \"expect\": \"多个\", \"explain\": \"They 说的是两个或更多。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"are\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。They 是多个人，所以填 are。\"}]}",
+    "ok": false,
+    "errors": [
+     "第1步 ask 直接说出了本步答案“多个”"
+    ],
+    "latency_s": 4.2,
+    "tokens": 121
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"主语 They 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"多个\", \"explain\": \"They 说的是两个或更多。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"are\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。They 是多个人，所以填 are。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.7,
+    "tokens": 107
+   }
+  ],
+  "cfg": "B_shortSys+steps.gbnf",
+  "item": "They ___ my friends. (am / is / are)",
+  "gold": "are"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "空格前面紧挨着的那个英文词是什么？",
+     "expect": "an",
+     "explain": "空格前面紧挨着的是 an。"
+    },
+    {
+     "ask": "an 后面选 apple 还是 apples？",
+     "expect": "apple",
+     "explain": "an 后面说的是一个东西，名词用原来的样子，不加 s，所以选 apple。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"空格前面紧挨着的那个英文词是什么？\", \"expect\": \"an\", \"explain\": \"空格前面紧挨着的是 an。\"}, {\"ask\": \"an 后面选 apple 还是 apples？\", \"expect\": \"apple\", \"explain\": \"an 后面说的是一个东西，名词用原来的样子，不加 s，所以选 apple。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.1,
+    "tokens": 86
+   }
+  ],
+  "cfg": "B_shortSys+steps.gbnf",
+  "item": "This is an ___. (apple / apples)",
+  "gold": "apple"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "这句话里用错的词是什么？说出那个英文词。",
+     "expect": "like",
+     "explain": "这句话里用错的是 like，其他词都没问题。"
+    },
+    {
+     "ask": "like 应该改成什么？说出改好的那个词。",
+     "expect": "likes",
+     "explain": "主语 She（她） 说的是一个（一个人或一样东西）。主语是一个人或一样东西（he、she、it、Tom……），说平时经常做的事，动词后面加 s。所以是 likes。"
+    }
+   ]
+  },
+  "source": "model+template_patch(steps [2])",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 She（她）说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"一个\", \"explain\": \"She（她）说的是一个人或一样东西。\"}, {\"ask\": \"那这个词要改成什么？\", \"expect\": \"likes\", \"explain\": \"口诀：I 用 am，you 用 are，一个人或一样东西用 is，两个或更多用 are。She（她）是一个人，句子里另一个动词也要用 is：She is。那这个词应该改成 likes。\"}]}",
+    "ok": false,
+    "errors": [
+     "第1步 expect 应该是“like”，不能写成“一个”",
+     "第2步 explain 出现了和本题无关的 are/am/is"
+    ],
+    "latency_s": 4.3,
+    "tokens": 124
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里用错的词是什么？说出那个英文词。\", \"expect\": \"like\", \"explain\": \"这句话里用错的是 like，其他词都没问题。\"}, {\"ask\": \"主语 She（她） 说的是一个（一个人或一样东西）。那 like 应该改成什么？\", \"expect\": \"likes\", \"explain\": \"口诀：I 用 am，you 用 are，一个人或一样东西用 is，两个或更多用 are。主语 She（她） 说的是一个（一个人或一样东西），动词要用第三人称单数：I am，you are，he is，she is，we are，they are。所以 like 要改成 likes。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步用了孩子听不懂的术语：第三人称、单数",
+     "第2步 explain 出现了和本题无关的 are/am/is"
+    ],
+    "latency_s": 5.5,
+    "tokens": 157
+   }
+  ],
+  "cfg": "B_shortSys+steps.gbnf",
+  "item": "改错（只改一个词）：She like cats.",
+  "gold": "likes"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "「书」的英文以 b 开头，第二个字母是什么？",
+     "expect": "o",
+     "explain": "「书」的英文是 b 开头的，第二个字母是 o。"
+    },
+    {
+     "ask": "「书」的英文第三个字母是什么？",
+     "expect": "o",
+     "explain": "「书」的英文是 b 开头的，第三个字母是 o。"
+    },
+    {
+     "ask": "很好！现在把「书」的英文单词完整地拼出来。",
+     "expect": "book",
+     "explain": "「书」的英文是 book，一共 4 个字母：b o o k。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"「书」的英文以 b 开头，第二个字母是什么？\", \"expect\": \"o\", \"explain\": \"「书」的英文是 b 开头的，第二个字母是 o。\"}, {\"ask\": \"「书」的英文第三个字母是什么？\", \"expect\": \"o\", \"explain\": \"「书」的英文是 b 开头的，第三个字母是 o。\"}, {\"ask\": \"很好！现在把「书」的英文单词完整地拼出来。\", \"expect\": \"book\", \"explain\": \"「书」的英文是 book，一共 4 个字母：b o o k。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 5.3,
+    "tokens": 147
+   }
+  ],
+  "cfg": "B_shortSys+steps.gbnf",
+  "item": "看中文写单词：书 b__k",
+  "gold": "book"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "主语 They 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "多个",
+     "explain": "They 说的是多个，前面的词和后面的名词都说明是两个或更多。"
+    },
+    {
+     "ask": "那空里填 am、is 还是 are？",
+     "expect": "are",
+     "explain": "口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。They 是多个人，所以填 are。"
+    }
+   ]
+  },
+  "source": "model_try2",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"主语 They 说的是一个还是多个？说「一个」或「多个」。They 是「他们（她们、它们）」，说的是多个。\", \"expect\": \"多个\", \"explain\": \"They 说的是多个，前面的词和后面的名词也说明是多个。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"are\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。They 是多个人，所以填 are。\"}]}",
+    "ok": false,
+    "errors": [
+     "第1步 ask 直接说出了本步答案“多个”"
+    ],
+    "latency_s": 4.5,
+    "tokens": 129
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"主语 They 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"多个\", \"explain\": \"They 说的是多个，前面的词和后面的名词都说明是两个或更多。\"}, {\"ask\": \"那空里填 am、is 还是 are？\", \"expect\": \"are\", \"explain\": \"口诀：I 用 am，you 用 are，一个东西用 is，两个或更多用 are。They 是多个人，所以填 are。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 4.2,
+    "tokens": 116
+   }
+  ],
+  "cfg": "C_shortSys+planLockedGBNF",
+  "item": "They ___ my friends. (am / is / are)",
+  "gold": "are"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "空格前面紧挨着的那个英文词是什么？",
+     "expect": "an",
+     "explain": "空格前面紧挨着的是 an。"
+    },
+    {
+     "ask": "an 后面选 apple 还是 apples？",
+     "expect": "apple",
+     "explain": "an 后面说的是一个东西，名词用原来的样子，不加 s，所以选 apple。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"空格前面紧挨着的那个英文词是什么？\", \"expect\": \"an\", \"explain\": \"空格前面紧挨着的是 an。\"}, {\"ask\": \"an 后面选 apple 还是 apples？\", \"expect\": \"apple\", \"explain\": \"an 后面说的是一个东西，名词用原来的样子，不加 s，所以选 apple。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 3.2,
+    "tokens": 86
+   }
+  ],
+  "cfg": "C_shortSys+planLockedGBNF",
+  "item": "This is an ___. (apple / apples)",
+  "gold": "apple"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "这句话里用错的词是什么？说出那个英文词。",
+     "expect": "like",
+     "explain": "这句话里用错的是 like，其他词都没问题。"
+    },
+    {
+     "ask": "like 应该改成什么？说出改好的那个词。",
+     "expect": "likes",
+     "explain": "主语 She（她） 说的是一个（一个人或一样东西）。主语是一个人或一样东西（he、she、it、Tom……），说平时经常做的事，动词后面加 s。所以是 likes。"
+    }
+   ]
+  },
+  "source": "model+template_patch(steps [2])",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里用错的词是什么？说出那个英文词。\", \"expect\": \"like\", \"explain\": \"这句话里用错的是 like，其他词都没问题。\"}, {\"ask\": \"主语 She（她） 说的是一个（一个人或一样东西）。那 like 应该改成什么？\", \"expect\": \"likes\", \"explain\": \"口诀：I 用 am，you 用 are，一个人或一样东西用 is，两个或更多用 are。主语 She（她） 说的是一个（一个人或一样东西），动词要用第三人称单数：I am，you are，he is，she is，we are，they are。所以 like 要改成 likes。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步用了孩子听不懂的术语：第三人称、单数",
+     "第2步 explain 出现了和本题无关的 are/am/is"
+    ],
+    "latency_s": 5.3,
+    "tokens": 157
+   },
+   {
+    "attempt": 2,
+    "raw": "{\"steps\": [{\"ask\": \"这句话里用错的词是什么？说出那个英文词。\", \"expect\": \"like\", \"explain\": \"这句话里用错的是 like，其他词都没问题。\"}, {\"ask\": \"主语 She（她）说的是一个（一个人或一样东西）。那 like 应该改成什么？\", \"expect\": \"likes\", \"explain\": \"口诀：I 用 am，you 用 are，一个人或一样东西用 is，两个或更多用 are。主语 She（她）是「一个」，句子里还有 cats 是「一个」，所以动词要用第三人称单数：like → likes。\"}]}",
+    "ok": false,
+    "errors": [
+     "第2步用了孩子听不懂的术语：第三人称、单数",
+     "第2步 explain 出现了和本题无关的 are/am/is"
+    ],
+    "latency_s": 4.7,
+    "tokens": 140
+   }
+  ],
+  "cfg": "C_shortSys+planLockedGBNF",
+  "item": "改错（只改一个词）：She like cats.",
+  "gold": "likes"
+ },
+ {
+  "final": {
+   "steps": [
+    {
+     "ask": "「书」的英文以 b 开头，第二个字母是什么？",
+     "expect": "o",
+     "explain": "「书」的英文是 b 开头的，第二个字母是 o。"
+    },
+    {
+     "ask": "「书」的英文第三个字母是什么？",
+     "expect": "o",
+     "explain": "「书」的英文是 b 开头的，第三个字母是 o。"
+    },
+    {
+     "ask": "很好！现在把「书」的英文单词完整地拼出来。",
+     "expect": "book",
+     "explain": "「书」的英文是 book，一共 4 个字母：b o o k。"
+    }
+   ]
+  },
+  "source": "model_try1",
+  "log": [
+   {
+    "attempt": 1,
+    "raw": "{\"steps\": [{\"ask\": \"「书」的英文以 b 开头，第二个字母是什么？\", \"expect\": \"o\", \"explain\": \"「书」的英文是 b 开头的，第二个字母是 o。\"}, {\"ask\": \"「书」的英文第三个字母是什么？\", \"expect\": \"o\", \"explain\": \"「书」的英文是 b 开头的，第三个字母是 o。\"}, {\"ask\": \"很好！现在把「书」的英文单词完整地拼出来。\", \"expect\": \"book\", \"explain\": \"「书」的英文是 book，一共 4 个字母：b o o k。\"}]}",
+    "ok": true,
+    "errors": [],
+    "latency_s": 5.1,
+    "tokens": 147
+   }
+  ],
+  "cfg": "C_shortSys+planLockedGBNF",
+  "item": "看中文写单词：书 b__k",
+  "gold": "book"
+ }
+]

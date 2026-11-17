@@ -1,0 +1,76 @@
+{
+ "coverage": {
+  "train": {
+   "other": {
+    "n": 3746,
+    "fallback": 3746,
+    "why:type_unknown:type_unknown": 3746
+   },
+   "be_verb": {
+    "n": 260,
+    "planned": 260,
+    "subject_in_gold_steps": 260
+   },
+   "plural_noun": {
+    "n": 750,
+    "planned": 747,
+    "fallback": 3,
+    "why:type_unknown:type_unknown": 3
+   },
+   "spelling": {
+    "n": 222,
+    "planned": 222
+   },
+   "verb_3s": {
+    "n": 145,
+    "planned": 145,
+    "wrong_word_matches_gold_step1": 145
+   }
+  },
+  "heldout": {
+   "be_verb": {
+    "n": 40,
+    "planned": 40,
+    "subject_in_gold_steps": 40
+   },
+   "other": {
+    "n": 532,
+    "fallback": 532,
+    "why:type_unknown:type_unknown": 532
+   },
+   "plural_noun": {
+    "n": 114,
+    "planned": 114
+   },
+   "verb_3s": {
+    "n": 22,
+    "planned": 22,
+    "wrong_word_matches_gold_step1": 22
+   },
+   "spelling": {
+    "n": 46,
+    "planned": 46
+   }
+  }
+ },
+ "problems": [],
+ "fallback_samples": {
+  "plural_noun": [
+   [
+    "The ___ likes fish. (cats / cat)",
+    "cat",
+    "type_unknown"
+   ],
+   [
+    "The ___ sing in the tree. (birds / bird)",
+    "birds",
+    "type_unknown"
+   ],
+   [
+    "The ___ like meat. (dog / dogs)",
+    "dogs",
+    "type_unknown"
+   ]
+  ]
+ }
+}

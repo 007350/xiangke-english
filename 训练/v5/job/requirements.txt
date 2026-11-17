@@ -1,0 +1,6 @@
+# torch: use the DSW image's preinstalled CUDA torch (not reinstalled)
+transformers==4.57.1
+peft==0.17.1
+huggingface_hub<1.0
+safetensors
+accelerate

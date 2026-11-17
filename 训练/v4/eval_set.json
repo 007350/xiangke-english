@@ -1,0 +1,418 @@
+{
+ "_note": "SELF-MADE EXAMPLE DATA for baseline eval (not the user's real data/). Grok Bot, 2026-11-02.",
+ "plans": {
+  "P1": {
+   "planId": "P1",
+   "voice": "用简短、温柔的中文，一次只问一个小问题，先找主语再选词。",
+   "reminders": [
+    "上次把 I is a student 当成对的。",
+    "常把 is 和 are 弄混，看到 they 也用 is。"
+   ],
+   "examples": [
+    {
+     "recognizedText": "She ___ my sister. (am / is / are)",
+     "steps": [
+      {
+       "ask": "先找主语：这句话里是谁是我的姐姐？说出那个英文词。",
+       "expect": "She"
+      },
+      {
+       "ask": "She 是一个人，不是 I 也不是 you。从 am / is / are 里选一个填空。",
+       "expect": "is"
+      }
+     ]
+    },
+    {
+     "recognizedText": "改错：We is good friends.",
+     "steps": [
+      {
+       "ask": "这句话的主语是哪个词？",
+       "expect": "We"
+      },
+      {
+       "ask": "We 是好几个人。句子里哪个词用错了？",
+       "expect": "is"
+      },
+      {
+       "ask": "那它应该改成哪个词？",
+       "expect": "are"
+      }
+     ]
+    }
+   ],
+   "forbid": "不要直接说出标准答案。"
+  },
+  "P2": {
+   "planId": "P2",
+   "voice": "像小老师一样，用孩子熟悉的东西举例，每次只问一点。",
+   "reminders": [
+    "写过 a apple，没注意 apple 开头是元音。",
+    "写过 two book，复数忘了加 s。",
+    "把 on 和 in 混用。"
+   ],
+   "examples": [
+    {
+     "recognizedText": "This is ___ egg. (a / an)",
+     "steps": [
+      {
+       "ask": "egg 这个词开头的字母是什么？",
+       "expect": "e"
+      },
+      {
+       "ask": "e 是元音字母。元音开头的词前面，从 a / an 里选哪一个？",
+       "expect": "an"
+      }
+     ]
+    },
+    {
+     "recognizedText": "I have three ___. (cat / cats)",
+     "steps": [
+      {
+       "ask": "three 是几？",
+       "expect": "三"
+      },
+      {
+       "ask": "三只猫是不是多于一只？是就说「是」，不是就说「不是」。",
+       "expect": "是"
+      }
+     ]
+    }
+   ],
+   "forbid": "不要在提问里写出正确的单词。"
+  },
+  "P3": {
+   "planId": "P3",
+   "voice": "先抓时间词，再想动词怎么变，语气鼓励。",
+   "reminders": [
+    "看到 yesterday 还写 go。",
+    "忘记第三人称单数要加 s。"
+   ],
+   "examples": [
+    {
+     "recognizedText": "Last Sunday we ___ (play) football.",
+     "steps": [
+      {
+       "ask": "句子里表示时间的词组是什么？",
+       "expect": "Last Sunday"
+      },
+      {
+       "ask": "Last Sunday 是过去的时间，括号里的 play 要变成什么形式？",
+       "expect": "played"
+      }
+     ]
+    }
+   ],
+   "forbid": "不要直接说出标准答案。"
+  },
+  "P4": {
+   "planId": "P4",
+   "voice": "拼写时一个字母一个字母地引导，多夸奖。",
+   "reminders": [
+    "把 apple 拼成 aple，少了一个 p。",
+    "把 school 拼成 scool。"
+   ],
+   "examples": [
+    {
+     "recognizedText": "看中文写单词：猫 c_t",
+     "steps": [
+      {
+       "ask": "猫的英文有几个字母？看横线一共几个位置。",
+       "expect": "3"
+      },
+      {
+       "ask": "c 和 t 中间缺的是哪个字母？",
+       "expect": "a"
+      },
+      {
+       "ask": "把整个单词拼出来说给我听。",
+       "expect": "cat"
+      }
+     ]
+    }
+   ],
+   "forbid": "不要把单词完整拼出来给孩子看。"
+  }
+ },
+ "questions": [
+  {
+   "id": "q01",
+   "type": "choose_be",
+   "recognizedText": "I ___ a student. (am / is / are)",
+   "gold": "am",
+   "planId": "P1"
+  },
+  {
+   "id": "q02",
+   "type": "choose_be",
+   "recognizedText": "They ___ in the classroom. (am / is / are)",
+   "gold": "are",
+   "planId": "P1"
+  },
+  {
+   "id": "q03",
+   "type": "choose_be",
+   "recognizedText": "My mother ___ a teacher. (am / is / are)",
+   "gold": "is",
+   "planId": "P1"
+  },
+  {
+   "id": "q04",
+   "type": "choose_be",
+   "recognizedText": "You ___ my good friend. (am / is / are)",
+   "gold": "are",
+   "planId": "P1"
+  },
+  {
+   "id": "q05",
+   "type": "choose_be",
+   "recognizedText": "The cat ___ under the chair. (am / is / are)",
+   "gold": "is",
+   "planId": "P1"
+  },
+  {
+   "id": "q06",
+   "type": "choose_article",
+   "recognizedText": "I have ___ apple. (a / an)",
+   "gold": "an",
+   "planId": "P2"
+  },
+  {
+   "id": "q07",
+   "type": "choose_article",
+   "recognizedText": "This is ___ book. (a / an)",
+   "gold": "a",
+   "planId": "P2"
+  },
+  {
+   "id": "q08",
+   "type": "choose_article",
+   "recognizedText": "He is ___ English teacher. (a / an)",
+   "gold": "an",
+   "planId": "P2"
+  },
+  {
+   "id": "q09",
+   "type": "choose_article",
+   "recognizedText": "There is ___ orange on the desk. (a / an)",
+   "gold": "an",
+   "planId": "P2"
+  },
+  {
+   "id": "q10",
+   "type": "choose_plural",
+   "recognizedText": "I can see five ___. (bird / birds)",
+   "gold": "birds",
+   "planId": "P2"
+  },
+  {
+   "id": "q11",
+   "type": "choose_plural",
+   "recognizedText": "There are two ___ in the box. (box / boxes)",
+   "gold": "boxes",
+   "planId": "P2"
+  },
+  {
+   "id": "q12",
+   "type": "choose_plural",
+   "recognizedText": "Look at the ___! They are big. (bus / buses)",
+   "gold": "buses",
+   "planId": "P2"
+  },
+  {
+   "id": "q13",
+   "type": "choose_plural",
+   "recognizedText": "She has one ___. (pen / pens)",
+   "gold": "pen",
+   "planId": "P2"
+  },
+  {
+   "id": "q14",
+   "type": "choose_past",
+   "recognizedText": "Yesterday I ___ to the park. (go / went)",
+   "gold": "went",
+   "planId": "P3"
+  },
+  {
+   "id": "q15",
+   "type": "choose_past",
+   "recognizedText": "He ___ his homework last night. (does / did)",
+   "gold": "did",
+   "planId": "P3"
+  },
+  {
+   "id": "q16",
+   "type": "choose_past",
+   "recognizedText": "We ___ a film yesterday. (watch / watched)",
+   "gold": "watched",
+   "planId": "P3"
+  },
+  {
+   "id": "q17",
+   "type": "choose_past",
+   "recognizedText": "Last week my father ___ a new bike. (buy / bought)",
+   "gold": "bought",
+   "planId": "P3"
+  },
+  {
+   "id": "q18",
+   "type": "choose_prep",
+   "recognizedText": "The ball is ___ the box. 球在盒子里。(in / on / under)",
+   "gold": "in",
+   "planId": "P2"
+  },
+  {
+   "id": "q19",
+   "type": "choose_prep",
+   "recognizedText": "I get up ___ seven o'clock. (at / in / on)",
+   "gold": "at",
+   "planId": "P2"
+  },
+  {
+   "id": "q20",
+   "type": "choose_prep",
+   "recognizedText": "My birthday is ___ May. (at / in / on)",
+   "gold": "in",
+   "planId": "P2"
+  },
+  {
+   "id": "q21",
+   "type": "choose_prep",
+   "recognizedText": "We have no school ___ Sunday. (at / in / on)",
+   "gold": "on",
+   "planId": "P2"
+  },
+  {
+   "id": "q22",
+   "type": "fill_blank",
+   "recognizedText": "Yesterday she ___ (eat) an apple.",
+   "gold": "ate",
+   "planId": "P3"
+  },
+  {
+   "id": "q23",
+   "type": "fill_blank",
+   "recognizedText": "My brother ___ (like) bananas.",
+   "gold": "likes",
+   "planId": "P3"
+  },
+  {
+   "id": "q24",
+   "type": "fill_blank",
+   "recognizedText": "I have two ___ (book).",
+   "gold": "books",
+   "planId": "P2"
+  },
+  {
+   "id": "q25",
+   "type": "fill_blank",
+   "recognizedText": "This is ___ (我的) bag.",
+   "gold": "my",
+   "planId": "P3"
+  },
+  {
+   "id": "q26",
+   "type": "fill_blank",
+   "recognizedText": "Tom ___ (have) a dog.",
+   "gold": "has",
+   "planId": "P3"
+  },
+  {
+   "id": "q27",
+   "type": "fill_blank",
+   "recognizedText": "Last summer we ___ (swim) in the river.",
+   "gold": "swam",
+   "planId": "P3"
+  },
+  {
+   "id": "q28",
+   "type": "fix_word",
+   "recognizedText": "改错（只改一个词）：She go to school every day.",
+   "gold": "goes",
+   "planId": "P1"
+  },
+  {
+   "id": "q29",
+   "type": "fix_word",
+   "recognizedText": "改错（只改一个词）：I is ten years old.",
+   "gold": "am",
+   "planId": "P1"
+  },
+  {
+   "id": "q30",
+   "type": "fix_word",
+   "recognizedText": "改错（只改一个词）：They is my classmates.",
+   "gold": "are",
+   "planId": "P1"
+  },
+  {
+   "id": "q31",
+   "type": "fix_word",
+   "recognizedText": "改错（只改一个词）：He have a red pen.",
+   "gold": "has",
+   "planId": "P3"
+  },
+  {
+   "id": "q32",
+   "type": "fix_word",
+   "recognizedText": "改错（只改一个词）：I see three dog.",
+   "gold": "dogs",
+   "planId": "P2"
+  },
+  {
+   "id": "q33",
+   "type": "fix_word",
+   "recognizedText": "改错（只改一个词）：Yesterday we play basketball.",
+   "gold": "played",
+   "planId": "P3"
+  },
+  {
+   "id": "q34",
+   "type": "fix_word",
+   "recognizedText": "改错（只改一个词）：This is a egg.",
+   "gold": "an",
+   "planId": "P2"
+  },
+  {
+   "id": "q35",
+   "type": "spell",
+   "recognizedText": "看中文写单词：苹果 a_ple",
+   "gold": "apple",
+   "planId": "P4"
+  },
+  {
+   "id": "q36",
+   "type": "spell",
+   "recognizedText": "看中文写单词：学校 sch__l",
+   "gold": "school",
+   "planId": "P4"
+  },
+  {
+   "id": "q37",
+   "type": "spell",
+   "recognizedText": "看中文写单词：老师 t_ach_r",
+   "gold": "teacher",
+   "planId": "P4"
+  },
+  {
+   "id": "q38",
+   "type": "spell",
+   "recognizedText": "看中文写单词：书 b__k",
+   "gold": "book",
+   "planId": "P4"
+  },
+  {
+   "id": "q39",
+   "type": "spell",
+   "recognizedText": "根据中文拼写单词：星期一 ___ (首字母 M)",
+   "gold": "Monday",
+   "planId": "P4"
+  },
+  {
+   "id": "q40",
+   "type": "spell",
+   "recognizedText": "根据中文拼写单词：绿色 ___ (首字母 g)",
+   "gold": "green",
+   "planId": "P4"
+  }
+ ]
+}

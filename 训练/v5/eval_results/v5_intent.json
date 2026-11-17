@@ -1,0 +1,507 @@
+{
+ "summary": {
+  "right": 57,
+  "total": 60,
+  "byLabel": {
+   "答题": [
+    15,
+    15
+   ],
+   "不会": [
+    15,
+    15
+   ],
+   "提问": [
+    14,
+    15
+   ],
+   "其他": [
+    13,
+    15
+   ]
+  },
+  "avgSeconds": 0.56
+ },
+ "rows": [
+  {
+   "question": "主语是 She，walk 应该改成什么？写出改好的词。",
+   "reply": "walks",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.64
+  },
+  {
+   "question": "主语是 She，walk 应该改成什么？写出改好的词。",
+   "reply": "我想是 walked",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.58
+  },
+  {
+   "question": "那空里选 sing 还是 sings？",
+   "reply": "sings 吧",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.6
+  },
+  {
+   "question": "那空里选 sing 还是 sings？",
+   "reply": "选第一个 sing",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.56
+  },
+  {
+   "question": "这句话的主语是哪个词？请用英文说。",
+   "reply": "Mary",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "这句话的主语是哪个词？请用英文说。",
+   "reply": "可能是 my uncle",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "「帽子」这个词里，空格缺的是什么字母？",
+   "reply": "u",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.53
+  },
+  {
+   "question": "「帽子」这个词里，空格缺的是什么字母？",
+   "reply": "字母 e",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "three 表示一个还是多个？",
+   "reply": "是好多个",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "three 表示一个还是多个？",
+   "reply": "应该是一个",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.56
+  },
+  {
+   "question": "那 walk 应该改成什么？",
+   "reply": "walkes",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "那 walk 应该改成什么？",
+   "reply": "walks 吗",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.56
+  },
+  {
+   "question": "must 后面的动词要不要变形？说「要」或「不要」。",
+   "reply": "要吧",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.56
+  },
+  {
+   "question": "must 后面的动词要不要变形？说「要」或「不要」。",
+   "reply": "不要变",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.57
+  },
+  {
+   "question": "把 teach 改对，应该写成什么？",
+   "reply": "teachs",
+   "label": "答题",
+   "got": "答题",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "主语是 She，walk 应该改成什么？写出改好的词。",
+   "reply": "我真不知道",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.6
+  },
+  {
+   "question": "主语是 She，walk 应该改成什么？写出改好的词。",
+   "reply": "没想出来",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.6
+  },
+  {
+   "question": "那空里选 sing 还是 sings？",
+   "reply": "选不出来",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.57
+  },
+  {
+   "question": "那空里选 sing 还是 sings？",
+   "reply": "两个都不懂",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "这句话的主语是哪个词？请用英文说。",
+   "reply": "找不到",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "这句话的主语是哪个词？请用英文说。",
+   "reply": "我没学好",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "「帽子」这个词里，空格缺的是什么字母？",
+   "reply": "猜不出",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "「帽子」这个词里，空格缺的是什么字母？",
+   "reply": "这个词我不会拼",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "three 表示一个还是多个？",
+   "reply": "不太清楚",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "three 表示一个还是多个？",
+   "reply": "没印象",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.54
+  },
+  {
+   "question": "那 walk 应该改成什么？",
+   "reply": "我答不出",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.53
+  },
+  {
+   "question": "那 walk 应该改成什么？",
+   "reply": "太难了我不会",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.53
+  },
+  {
+   "question": "must 后面的动词要不要变形？说「要」或「不要」。",
+   "reply": "说不上来",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.56
+  },
+  {
+   "question": "must 后面的动词要不要变形？说「要」或「不要」。",
+   "reply": "没学过这个",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "把 teach 改对，应该写成什么？",
+   "reply": "写不对",
+   "label": "不会",
+   "got": "不会",
+   "ok": true,
+   "seconds": 0.58
+  },
+  {
+   "question": "主语是 She，walk 应该改成什么？写出改好的词。",
+   "reply": "为何要改呀",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.59
+  },
+  {
+   "question": "主语是 She，walk 应该改成什么？写出改好的词。",
+   "reply": "walk 啥意思",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.6
+  },
+  {
+   "question": "那空里选 sing 还是 sings？",
+   "reply": "这俩有啥区别",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.56
+  },
+  {
+   "question": "那空里选 sing 还是 sings？",
+   "reply": "sing 和 sings 哪里不一样",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.59
+  },
+  {
+   "question": "这句话的主语是哪个词？请用英文说。",
+   "reply": "主语到底是啥",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.58
+  },
+  {
+   "question": "这句话的主语是哪个词？请用英文说。",
+   "reply": "怎么找主语",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.61
+  },
+  {
+   "question": "「帽子」这个词里，空格缺的是什么字母？",
+   "reply": "帽子英语怎么说",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.6
+  },
+  {
+   "question": "「帽子」这个词里，空格缺的是什么字母？",
+   "reply": "要填几个字母",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.59
+  },
+  {
+   "question": "three 表示一个还是多个？",
+   "reply": "three 是几",
+   "label": "提问",
+   "got": "答题",
+   "ok": false,
+   "seconds": 0.63
+  },
+  {
+   "question": "three 表示一个还是多个？",
+   "reply": "这题在问什么",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "那 walk 应该改成什么？",
+   "reply": "为什么不能不改",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.54
+  },
+  {
+   "question": "那 walk 应该改成什么？",
+   "reply": "加什么呀",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.52
+  },
+  {
+   "question": "must 后面的动词要不要变形？说「要」或「不要」。",
+   "reply": "变形是什么东西",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.58
+  },
+  {
+   "question": "must 后面的动词要不要变形？说「要」或「不要」。",
+   "reply": "must 是啥",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.57
+  },
+  {
+   "question": "把 teach 改对，应该写成什么？",
+   "reply": "能告诉我规则吗",
+   "label": "提问",
+   "got": "提问",
+   "ok": true,
+   "seconds": 0.54
+  },
+  {
+   "question": "主语是 She，walk 应该改成什么？写出改好的词。",
+   "reply": "我要去喂鸡",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.58
+  },
+  {
+   "question": "主语是 She，walk 应该改成什么？写出改好的词。",
+   "reply": "我爸喊我",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "那空里选 sing 还是 sings？",
+   "reply": "今天不想学",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "那空里选 sing 还是 sings？",
+   "reply": "你吃饭了吗",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.53
+  },
+  {
+   "question": "这句话的主语是哪个词？请用英文说。",
+   "reply": "我去上厕所",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.55
+  },
+  {
+   "question": "这句话的主语是哪个词？请用英文说。",
+   "reply": "哈哈好玩",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.54
+  },
+  {
+   "question": "「帽子」这个词里，空格缺的是什么字母？",
+   "reply": "我有顶新帽子",
+   "label": "其他",
+   "got": "答题",
+   "ok": false,
+   "seconds": 0.56
+  },
+  {
+   "question": "「帽子」这个词里，空格缺的是什么字母？",
+   "reply": "外面下雨了",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.58
+  },
+  {
+   "question": "three 表示一个还是多个？",
+   "reply": "我家有三头牛",
+   "label": "其他",
+   "got": "答题",
+   "ok": false,
+   "seconds": 0.52
+  },
+  {
+   "question": "three 表示一个还是多个？",
+   "reply": "手机要没电了",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.54
+  },
+  {
+   "question": "那 walk 应该改成什么？",
+   "reply": "晚安",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.59
+  },
+  {
+   "question": "那 walk 应该改成什么？",
+   "reply": "等我一下下",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.57
+  },
+  {
+   "question": "must 后面的动词要不要变形？说「要」或「不要」。",
+   "reply": "你真聪明",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.57
+  },
+  {
+   "question": "must 后面的动词要不要变形？说「要」或「不要」。",
+   "reply": "我困了要睡了",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.57
+  },
+  {
+   "question": "把 teach 改对，应该写成什么？",
+   "reply": "明天要考试",
+   "label": "其他",
+   "got": "其他",
+   "ok": true,
+   "seconds": 0.52
+  }
+ ]
+}

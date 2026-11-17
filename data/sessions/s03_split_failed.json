@@ -1,0 +1,26 @@
+{
+  "session": {
+    "sessionId": "s_03",
+    "childId": "child_01",
+    "planVersion": 1,
+    "source": "photo",
+    "recognizedText": "She ___ happy. (am / is / are)",
+    "confirmed": true,
+    "offline": true,
+    "startedAt": "2026-11-01T19:30:00+08:00",
+    "endedAt": "2026-11-01T19:31:00+08:00",
+    "checkPassed": false,
+    "checkReasons": ["missing_expect"],
+    "steps": [
+      {
+        "stepId": "s1",
+        "ask": "空里填什么？",
+        "expect": "",
+        "explain": ""
+      }
+    ],
+    "events": [
+      {"stepId": "", "said": "题目里有 am、is、are，最后问她用哪个。", "result": "note", "hintUsed": 0}
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+ "train": 6573,
+ "answer_given": 4266,
+ "answer_not_given": 1807,
+ "intent": 500,
+ "now_clause_removed": 185,
+ "by_type": {
+  "fix": 1313,
+  "choose": 2715,
+  "fill": 1505,
+  "spell": 540,
+  "intent": 500
+ },
+ "md5": {
+  "train.jsonl": "7789363a1184b250017f2c5003dba993",
+  "heldout.jsonl": "1872da17e99a6a24b63051b86d6ae235",
+  "external_test.jsonl": "c02245b88c0c87e4d28dcf38d23c871e"
+ }
+}

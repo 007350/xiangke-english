@@ -1,0 +1,5 @@
+root ::= "{" space "\"steps\"" space ":" space "[" space step ("," space step)? ("," space step)? ("," space step)? space "]" space "}"
+step ::= "{" space "\"ask\"" space ":" space string "," space "\"expect\"" space ":" space string "," space "\"explain\"" space ":" space string space "}"
+string ::= "\"" char* "\""
+char ::= [^"\\\x7F\x00-\x1F] | "\\" (["\\bfnrt] | "u" [0-9a-fA-F]{4})
+space ::= | " " | "\n" [ \t]{0,20}

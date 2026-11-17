@@ -1,0 +1,142 @@
+{
+ "rounds": {
+  "she ___ apples. (like / likes)|错\nthey ___ my friends. (am / is / are)|对\n改错（只改一个词）：she like cats.|错": {
+   "plan": {
+    "voice": "每次先让孩子看清主语是一个人还是不止一个人，再决定动词要不要变。",
+    "reminders": [
+     "She 后面的动词，孩子容易写成原样，要提醒他加 s。",
+     "改错题里，孩子会说成 cats，先让他把整句读完再找错词。",
+     "孩子问过为什么要加 s，用“She 是一个，动词要加 s”就能讲清。"
+    ],
+    "examples": [
+     {
+      "recognizedText": "She ___ apples. (like / likes)",
+      "steps": [
+       {
+        "ask": "先看主语 She：这是「我」「你」「一个」还是「多个」？",
+        "expect": "一个"
+       },
+       {
+        "ask": "She 是「一个」，动词要加 s 吗？",
+        "expect": "要"
+       },
+       {
+        "ask": "空里填什么？",
+        "expect": "likes"
+       }
+      ]
+     },
+     {
+      "recognizedText": "改错（只改一个词）：She like cats.",
+      "steps": [
+       {
+        "ask": "这句话里哪个英文词用错了？",
+        "expect": "like"
+       },
+       {
+        "ask": "主语 She 是「我」「你」「一个」还是「多个」？",
+        "expect": "一个"
+       },
+       {
+        "ask": "那 like 要改成什么？",
+        "expect": "likes"
+       }
+      ]
+     }
+    ],
+    "forbid": "不要直接说出标准答案。",
+    "portrait": {
+     "judgement": "这几次看到他认得主语是“一个”还是“多个”，be 动词也都选对了；卡在 She 后面的动词忘了加 s。",
+     "focus": [
+      "She 后面动词加 s",
+      "改错时找准错词"
+     ]
+    }
+   },
+   "written": {
+    "teacherStuck": "She ___ apples 里知道主语是一个人，但选词时没选 likes；She like cats 里知道 like 用错了，也问过为什么要加s，但一开始改成了 like，后面才改成 likes。",
+    "teacherAdvice": "孩子能分清主语是一个还是多个，可以让他先看主语是谁，再补全后面的词，自己检查一遍，先观察。"
+   },
+   "drills": [
+    {
+     "text": "She ___ oranges. (like / likes)",
+     "answer": "likes",
+     "rule": "主语是她时，动词末尾要加 s",
+     "source": "cloud"
+    },
+    {
+     "text": "改错（只改一个词）：She like dogs.",
+     "answer": "likes",
+     "rule": "主语是她时，动词要加 s",
+     "source": "cloud"
+    },
+    {
+     "text": "She ___ English.（她喜欢英语）",
+     "answer": "likes",
+     "rule": "主语是她时，动词后加 s",
+     "source": "cloud"
+    }
+   ]
+  },
+  "she ___ apples. (like / likes)|对\nshe ___ english.（她喜欢英语）|对\nshe ___ oranges. (like / likes)|对\n改错（只改一个词）：she like cats.|对\n改错（只改一个词）：she like dogs.|对": {
+   "plan": {
+    "voice": "每次先让孩子看清主语是一个人还是不止一个人，再决定动词要不要变。",
+    "reminders": [
+     "She 后面的动词要加 s，像 likes，要提醒孩子别写成原样。",
+     "改错题先让孩子读完全句、找准错词，再决定怎么改。",
+     "孩子问过为什么要加 s，就说 She 是一个，动词要加 s。"
+    ],
+    "examples": [
+     {
+      "recognizedText": "She ___ apples. (like / likes)",
+      "steps": [
+       {
+        "ask": "先看主语 She：这是「我」「你」「一个」还是「多个」？",
+        "expect": "一个"
+       },
+       {
+        "ask": "She 是「一个」，动词要加 s 吗？",
+        "expect": "要"
+       },
+       {
+        "ask": "空里填什么？",
+        "expect": "likes"
+       }
+      ]
+     },
+     {
+      "recognizedText": "改错（只改一个词）：She like cats.",
+      "steps": [
+       {
+        "ask": "这句话里哪个英文词用错了？",
+        "expect": "like"
+       },
+       {
+        "ask": "主语 She 是「我」「你」「一个」还是「多个」？",
+        "expect": "一个"
+       },
+       {
+        "ask": "那 like 要改成什么？",
+        "expect": "likes"
+       }
+      ]
+     }
+    ],
+    "forbid": "不要直接说出标准答案。",
+    "portrait": {
+     "judgement": "这几次看到他已能找准 She 后该改的动词，改错和填空都连续做对了。",
+     "focus": [
+      "换主语后留心动词加 s",
+      "改错时先找准错词再改"
+     ]
+    }
+   },
+   "written": {
+    "parentStuck": "这几次看到，他知道句子说的是一个人，但写的时候容易忘了在后面多加一个字母，把结尾写成了另一个词。",
+    "teacherStuck": "She like cats 里没有把 like 改成 likes。他起初选 like，后来自己改成 likes，She ___ apples 里先说 like，随后也改成 likes。",
+    "teacherAdvice": "不用额外补练，先观察。他已经能分清主语是一个还是多个，也能说出 She 后动词要变；重点看他写 likes 时是否漏 s。"
+   },
+   "drills": []
+  }
+ }
+}

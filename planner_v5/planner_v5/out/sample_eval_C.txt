@@ -1,0 +1,27 @@
+spelling | 看中文写单词：窗户 wind_w -> model_try1 [[]]
+spelling | 看中文写单词：兔子 rabb__ -> model_try1 [[]]
+spelling | 看中文写单词：十月 Oct_b__ -> model_try1 [[]]
+spelling | 看中文写单词：娃娃 dol_ -> model_try1 [[]]
+spelling | 看中文写单词：星期五 Frid_y -> model_try1 [[]]
+plural_noun | I have four ___ (rabbit). -> model_try2 [['第1步 ask 直接说出了本步答案“four”'], []]
+plural_noun | The ___ is very big. (boxes / box) -> model_try1 [[]]
+plural_noun | My sister drew twelve ___. (horse / horses) -> model_try1 [[]]
+plural_noun | We need eight ___. (box / boxes) -> model_try1 [[]]
+plural_noun | There are seven ___ in our city. (libraries / library) -> model_try1 [[]]
+verb_3s | 改错（只改一个词）：Chen Jie fly kites in spring.（陈洁春天放风筝。） -> model+template_patch(steps [1, 2]) [['第2步用了孩子听不懂的术语：过去式'], ['第1步用了孩子听不懂的术语：第三人称、单数', '第2步用了孩子听不懂的术语：第三人称、单数']]
+verb_3s | 改错（只改一个词）：Sam fly kites in spring.（萨姆春天放风筝。） -> model_try2 [['第2步用了孩子听不懂的术语：第三人称、单数、过去式'], []]
+verb_3s | 改错（只改一个词）：Tom and Amy carries a big bag and get up early. -> model_try1 [[]]
+verb_3s | 改错（只改一个词）：He fly kites in spring.（他春天放风筝。） -> model+template_patch(steps [2]) [['第2步 explain 出现了和本题无关的 am/are/is'], ['第2步用了孩子听不懂的术语：第三人称、单数']]
+verb_3s | 改错（只改一个词）：They flies kites in spring.（他们春天放风筝。） -> model_try1 [[]]
+be_verb | Those rabbits ___ very cute. (am / is / are) -> model_try1 [[]]
+be_verb | He ___ in the library. (am / is / are) -> model_try1 [[]]
+be_verb | Lucy ___ very busy today. (am / is / are) -> model_try1 [[]]
+be_verb | Lucy ___ in the living room. (am / is / are) -> model_try1 [[]]
+be_verb | The rabbit ___ in the park. (am / is / are) -> model_try1 [[]]
+('be_verb', 'model_try1') 5
+('plural_noun', 'model_try1') 4
+('plural_noun', 'model_try2') 1
+('spelling', 'model_try1') 5
+('verb_3s', 'model+template_patch') 2
+('verb_3s', 'model_try1') 2
+('verb_3s', 'model_try2') 1

@@ -1,0 +1,31 @@
+{
+ "train": 6573,
+ "train_old": 5123,
+ "train_old_jargon_changed": 1107,
+ "train_new_steps": 950,
+ "train_new_intent": 500,
+ "new_by_template": {
+  "v5/fix_be_pron": 150,
+  "v5/fix_3s_pron": 150,
+  "v5/base_choose": 110,
+  "v5/animal_choose": 30,
+  "v5/base_fix": 110,
+  "v5/fix_i": 70,
+  "v5/fix_dont": 70,
+  "v5/fix_was": 60,
+  "v5/fix_there": 50,
+  "v5/choose_there": 50,
+  "v5/spell_double": 100,
+  "v5/intent/答题": 150,
+  "v5/intent/不会": 110,
+  "v5/intent/提问": 140,
+  "v5/intent/其他": 100
+ },
+ "heldout_unchanged_from_v4": true,
+ "external_test_unchanged_from_v4": true,
+ "md5": {
+  "train.jsonl": "492aa9ed4154ce4aa9296b2082c7c22e",
+  "heldout.jsonl": "98e822e7c2d9c29b3b0cab2e4d97763e",
+  "external_test.jsonl": "d81422c84ef1ab45372326d664823bc7"
+ }
+}

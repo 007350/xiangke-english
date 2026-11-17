@@ -1,0 +1,32 @@
+{
+  "session": {
+    "sessionId": "s_04",
+    "childId": "child_02",
+    "planVersion": 1,
+    "source": "photo",
+    "recognizedText": "apple",
+    "confirmed": true,
+    "offline": true,
+    "startedAt": "2026-11-01T19:40:00+08:00",
+    "endedAt": "2026-11-01T19:40:20+08:00",
+    "checkPassed": false,
+    "checkReasons": ["answer_leaked"],
+    "steps": [
+      {
+        "stepId": "s1",
+        "ask": "先看这个词 apple",
+        "expect": "cat",
+        "explain": "这是一只猫。"
+      },
+      {
+        "stepId": "s2",
+        "ask": "这个水果怎么拼？",
+        "expect": "apple",
+        "explain": "a-p-p-l-e。"
+      }
+    ],
+    "events": [
+      {"stepId": "", "said": "这道题我还拆不准。", "result": "note", "hintUsed": 0}
+    ]
+  }
+}

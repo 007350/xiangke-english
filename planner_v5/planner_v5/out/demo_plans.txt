@@ -1,0 +1,32 @@
+============================================================
+They ___ my friends. (am / is / are) | gold are | type be_verb | fallback False
+  1. [subject_number] expect='多个' rule=They 是“他们（她们、它们）”。They 说的是多个（两个或更多）。
+  2. [choose] expect='are' rule=说的是两个或更多（we、they、Mike and Amy、these birds……）时，用 are。口诀：I 用 am，you 用 are，一个用 is，多个用 are。
+  template: {"steps": [{"ask": "先看空格前面的 They，它说的是一个，还是多个？说“一个”或“多个”。", "expect": "多个", "explain": "They 是“他们（她们、它们）”。They 说的是多个（两个或更多）。所以是 多个。"}, {"ask": "那空里从 am / is / are 里选哪一个？", "expect": "are", "explain": "说的是两个或更多（we、they、Mike and Amy、these birds……）时，用 are。口诀：I 用 am，you 用 are，一个用 is，多个用 are。所以是 are。"}]}
+  template check: True []
+============================================================
+This is an ___. (apple / apples) | gold apple | type plural_noun | fallback False
+  1. [cue_word_before] expect='an' rule=an 后面说的是一个东西，名词用原来的样子，不加 s。
+  2. [choose] expect='apple' rule=an 后面说的是一个东西，名词用原来的样子，不加 s。
+  template: {"steps": [{"ask": "看看空格前面紧挨着的那个英文词，是哪个？", "expect": "an", "explain": "提示词是 an。an 后面说的是一个东西，名词用原来的样子，不加 s。"}, {"ask": "那空里从 apple / apples 里选哪一个？", "expect": "apple", "explain": "an 后面说的是一个东西，名词用原来的样子，不加 s。所以是 apple。"}]}
+  template check: True []
+============================================================
+改错（只改一个词）：She like cats. | gold likes | type verb_3s | fallback False
+  1. [find_wrong_word] expect='like' rule=改错题：从主语 She（她） 开始一个词一个词读，找和主语不搭配的那个词。
+  2. [correct_word] expect='likes' rule=主语 She（她） 说的是一个（一个人或一样东西）。主语是一个人或一样东西（he、she、it、Tom……），说平时经常做的事，动词后面加 s。
+  template: {"steps": [{"ask": "慢慢读这句话，哪一个英文词用错了？", "expect": "like", "explain": "改错题：从主语 She（她） 开始一个词一个词读，找和主语不搭配的那个词。用错的是 like。"}, {"ask": "like 应该改成什么？说出改好的那个词。", "expect": "likes", "explain": "主语 She（她） 说的是一个（一个人或一样东西）。主语是一个人或一样东西（he、she、it、Tom……），说平时经常做的事，动词后面加 s。所以是 likes。"}]}
+  template check: True []
+============================================================
+看中文写单词：书 b__k | gold book | type spelling | fallback False
+  1. [spell_letter] expect='o' rule=先想想“书”的英文怎么读，再按读音一个字母一个字母地拼。这里有两个一样的字母 oo 挨在一起，拼的时候别漏掉一个。
+  2. [spell_letter] expect='o' rule=先想想“书”的英文怎么读，再按读音一个字母一个字母地拼。这里有两个一样的字母 oo 挨在一起，拼的时候别漏掉一个。
+  3. [spell_whole] expect='book' rule=把填好的字母放回空格里，从头到尾拼一遍、读一遍。
+  template: {"steps": [{"ask": "看 b__k，第1个空格里填哪个字母？", "expect": "o", "explain": "先想想“书”的英文怎么读，再按读音一个字母一个字母地拼。这里有两个一样的字母 oo 挨在一起，拼的时候别漏掉一个。这一格是字母 o。"}, {"ask": "看 bo_k，第2个空格里填哪个字母？", "expect": "o", "explain": "先想想“书”的英文怎么读，再按读音一个字母一个字母地拼。这里有两个一样的字母 oo 挨在一起，拼的时候别漏掉一个。这一格是字母 o。"}, {"ask": "把字母都填进空格，整个单词怎么拼？一个字母一个字母说出来。", "expect": "book", "explain": "把填好的字母放回空格里，从头到尾拼一遍、读一遍。所以是 book。"}]}
+  template check: True []
+题目：They ___ my friends. (am / is / are)
+步骤已由程序定好，共 2 步，不要增删，expect 照抄：
+1. 目的：让孩子看主语说的是一个还是多个｜expect：多个｜规则：They 是“他们（她们、它们）”。They 说的是多个（两个或更多）。
+2. 目的：让孩子从选项里选｜expect：are｜规则：说的是两个或更多（we、they、Mike and Amy、these birds……）时，用 are。口诀：I 用 am，you 用 are，一个用 is，多个用 are。
+你只写每步的 ask（问孩子的一句中文，一次只问一件事）和 explain（按上面的规则，用温暖、简单的中文讲清楚）。
+不要说出后面步骤的 expect；不要讲和规则无关的内容；不要用“第三人称单数”这类术语。
+只输出 {"steps":[{"ask":"...","expect":"...","explain":"..."}]}

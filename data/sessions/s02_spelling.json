@@ -1,0 +1,27 @@
+{
+  "session": {
+    "sessionId": "s_02",
+    "childId": "child_01",
+    "planVersion": 1,
+    "source": "pack",
+    "recognizedText": "Spell the word: apple",
+    "confirmed": true,
+    "offline": true,
+    "startedAt": "2026-11-01T19:20:00+08:00",
+    "endedAt": "2026-11-01T19:22:10+08:00",
+    "checkPassed": true,
+    "checkReasons": [],
+    "steps": [
+      {
+        "stepId": "s1",
+        "ask": "apple 怎么拼？",
+        "expect": "apple",
+        "explain": "a-p-p-l-e，有两个 p。"
+      }
+    ],
+    "events": [
+      {"stepId": "s1", "said": "apples", "result": "miss", "hintUsed": 1},
+      {"stepId": "s1", "said": " Apple ", "result": "hit", "hintUsed": 1}
+    ]
+  }
+}

@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2f6f57">
+<title>学情反馈</title>
+<style>
+:root {
+  --paper: #f7f3ea;
+  --card: #fffdf8;
+  --ink: #1f2d27;
+  --muted: #5f6d66;
+  --line: #e2dccd;
+  --green: #2f6f57;
+  --green-dark: #235543;
+  --green-soft: #e3f0e9;
+  --amber: #8f5208;
+  --amber-soft: #fbefd9;
+  --cn: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --en: Georgia, "Times New Roman", serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--cn); font-size: 17px; line-height: 1.6; }
+header { background: var(--green); color: #fff; padding: 14px 16px; }
+header h1 { font-size: 19px; font-weight: 600; margin: 0 auto; max-width: 680px; }
+main { max-width: 680px; margin: 0 auto; padding: 16px; }
+button, select { font: inherit; color: inherit; }
+.bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+.bar label { color: var(--muted); font-size: 15px; }
+select { min-height: 44px; padding: 6px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); }
+.tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+.tab { flex: 1; min-height: 48px; border: 1.5px solid var(--green); border-radius: 12px; background: transparent; color: var(--green-dark); font-weight: 600; cursor: pointer; }
+.tab[aria-selected="true"] { background: var(--green); color: #fff; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+.card h2 { font-size: 15px; font-weight: 600; color: var(--muted); margin: 0 0 8px; }
+.card p { margin: 0 0 8px; }
+.card p:last-child { margin-bottom: 0; }
+.lead { font-size: 19px; }
+.alert { background: var(--amber-soft); border-color: #eed9b0; }
+.alert h2 { color: var(--amber); }
+.note { color: var(--muted); font-size: 14px; }
+.en { font-family: var(--en); }
+.answer-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+ul { margin: 0; padding: 0; list-style: none; }
+li { padding: 7px 0; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+li:first-child { border-top: 0; padding-top: 0; }
+li:last-child { padding-bottom: 0; }
+.nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+.num { background: var(--green-soft); border-radius: 10px; padding: 10px 12px; }
+.num b { display: block; font-size: 24px; font-weight: 600; color: var(--green-dark); line-height: 1.25; }
+.num span { font-size: 13.5px; color: var(--muted); }
+.table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.table th, .table td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); }
+.table thead th { border-top: 0; color: var(--muted); font-weight: 500; }
+.table td:not(:first-child), .table th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+<header><h1>学情反馈</h1></header>
+<main>
+  <div class="bar hidden" id="pick-box">
+    <label for="child">孩子</label>
+    <select id="child"></select>
+  </div>
+  <div class="card hidden" id="empty"><p>还没有孩子的记录。手机同步之后，这里就会有内容。</p></div>
+  <div id="content" class="hidden">
+    <div class="card alert hidden" id="recorded"><p>演示备份：这一页里星火写的句子是提前写好的，不是这次现写的。数字仍由程序现算。</p></div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-parent" aria-selected="true">给家长</button>
+      <button class="tab" role="tab" id="tab-teacher" aria-selected="false">给老师</button>
+    </div>
+
+    <section id="parent">
+      <div class="card">
+        <h2>这几天</h2>
+        <p class="lead" id="p-facts"></p>
+        <p class="lead" id="p-stuck"></p>
+      </div>
+      <div class="card">
+        <h2>今晚可以做</h2>
+        <p class="lead" id="p-tonight"></p>
+      </div>
+      <p class="note" id="p-source"></p>
+    </section>
+
+    <section id="teacher" class="hidden">
+      <div class="card alert hidden" id="t-needs-box">
+        <h2>需要您留意</h2>
+        <ul id="t-needs"></ul>
+      </div>
+      <div class="card">
+        <h2>卡在哪</h2>
+        <p id="t-stuck"></p>
+        <p id="t-advice"></p>
+        <p class="note" id="t-source"></p>
+      </div>
+      <div class="card">
+        <h2>程序算的数</h2>
+        <div class="nums" id="t-nums"></div>
+      </div>
+      <div class="card hidden" id="t-topics-box">
+        <h2>分类情况</h2>
+        <table class="table">
+          <thead><tr><th>哪一类</th><th>做过</th><th>错过</th><th>最近连对</th></tr></thead>
+          <tbody id="t-topics"></tbody>
+        </table>
+      </div>
+      <div class="card hidden" id="t-flagged-box">
+        <h2>孩子觉得不对的专属题</h2>
+        <ul id="t-flagged"></ul>
+      </div>
+      <div class="card hidden" id="t-questions-box">
+        <h2>孩子最近说过的话（提问、不会等，不算答错）</h2>
+        <ul id="t-questions"></ul>
+      </div>
+      <div class="card hidden" id="t-answers-box">
+        <h2>疑惑与云端解答</h2>
+        <p class="note">这里的解释由云端模型生成；需要老师确认的内容单独标明。</p>
+        <ul id="t-answers"></ul>
+      </div>
+      <div class="card hidden" id="t-notsure-box">
+        <h2>手机不确定答案的题，孩子可能会来问您</h2>
+        <ul id="t-notsure"></ul>
+      </div>
+      <div class="card hidden" id="t-phone-box">
+        <h2>手机把题拆错了（不是孩子的错）</h2>
+        <ul id="t-phone"></ul>
+      </div>
+    </section>
+    <p class="note hidden" id="working">云端老师还在看新记录，这一页会自动更新。</p>
+  </div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let refreshTimer = null;
+
+async function get(path) {
+  const response = await fetch(path);
+  if (!response.ok) throw new Error("读取失败");
+  return response.json();
+}
+
+function fillList(boxId, listId, items, render) {
+  $(boxId).classList.toggle("hidden", !items.length);
+  $(listId).replaceChildren(...items.map(item => {
+    const row = document.createElement("li");
+    render(row, item);
+    return row;
+  }));
+}
+
+function plain(row, text) {
+  row.textContent = text;
+}
+
+function question(row, text) {
+  row.className = "en";
+  row.textContent = text;
+}
+
+function show(report) {
+  $("recorded").classList.toggle("hidden", !report.recorded);
+  const parent = report.parent;
+  const teacher = report.teacher;
+  $("p-facts").textContent = parent.facts;
+  $("p-stuck").textContent = parent.stuck;
+  $("p-tonight").textContent = parent.tonight;
+  $("p-source").textContent = parent.byModel ? "这段话由云端老师根据孩子的记录写成，次数由程序统计。" : "这段话由程序根据记录生成。";
+
+  fillList("t-needs-box", "t-needs", teacher.needsTeacher, plain);
+  $("t-stuck").textContent = teacher.stuck;
+  $("t-advice").textContent = teacher.advice;
+  $("t-source").textContent = teacher.byModel ? "这两句由星火大模型写成，请结合下面的数字看。" : "这两句由程序生成。";
+
+  const numbers = [
+    [teacher.judged, "算对错的题"],
+    [teacher.withMistakes, "中途做错过"],
+    [teacher.drills.given, "发过的专属题"],
+    [teacher.drills.done, "已做完"],
+  ];
+  $("t-nums").replaceChildren(...numbers.map(([value, label]) => {
+    const box = document.createElement("div");
+    box.className = "num";
+    const big = document.createElement("b");
+    big.textContent = value;
+    const small = document.createElement("span");
+    small.textContent = label;
+    box.append(big, small);
+    return box;
+  }));
+
+  $("t-topics-box").classList.toggle("hidden", !teacher.topics.length);
+  $("t-topics").replaceChildren(...teacher.topics.map(row => {
+    const line = document.createElement("tr");
+    [row.topic, row.attempts, row.wrong, row.streak].forEach(value => {
+      const cell = document.createElement("td");
+      cell.textContent = value;
+      line.append(cell);
+    });
+    return line;
+  }));
+
+  fillList("t-flagged-box", "t-flagged", teacher.flagged, (row, item) => {
+    const text = document.createElement("span");
+    text.className = "en";
+    text.textContent = item.text;
+    row.append(text, `　云端的答案：${item.answer || "未知"}`);
+  });
+  fillList("t-questions-box", "t-questions", teacher.questions, plain);
+  fillList("t-answers-box", "t-answers", report.questions || [], (row, item) => {
+    const labels = { pending: "待解答", answered: "云端已解答", needs_teacher: "需要老师确认" };
+    const title = document.createElement("strong");
+    title.textContent = `${labels[item.status]}：${item.question}`;
+    const text = document.createElement("p");
+    text.className = "en";
+    text.textContent = item.text;
+    const context = document.createElement("p");
+    context.textContent = `当时的小问：${item.ask}`;
+    const answer = document.createElement("p");
+    answer.className = "answer-text";
+    answer.textContent = item.answer || "等待云端处理。";
+    row.append(title, text, context, answer);
+  });
+  fillList("t-notsure-box", "t-notsure", teacher.notSure, question);
+  fillList("t-phone-box", "t-phone", teacher.phoneProblems, question);
+
+  $("working").classList.toggle("hidden", !report.working);
+  clearTimeout(refreshTimer);
+  if (report.working) refreshTimer = setTimeout(loadReport, 8000);
+}
+
+function pickTab(name) {
+  ["parent", "teacher"].forEach(item => {
+    $(item).classList.toggle("hidden", item !== name);
+    $(`tab-${item}`).setAttribute("aria-selected", String(item === name));
+  });
+}
+
+async function loadReport() {
+  const child = $("child").value;
+  if (!child) return;
+  show(await get(`/api/report/${encodeURIComponent(child)}`));
+}
+
+async function start() {
+  const { children } = await get("/api/children");
+  $("empty").classList.toggle("hidden", children.length > 0);
+  $("content").classList.toggle("hidden", !children.length);
+  $("pick-box").classList.toggle("hidden", children.length < 2);
+  $("child").replaceChildren(...children.map(child => {
+    const option = document.createElement("option");
+    option.value = child;
+    option.textContent = child;
+    return option;
+  }));
+  if (children.length) await loadReport();
+}
+
+$("tab-parent").onclick = () => pickTab("parent");
+$("tab-teacher").onclick = () => pickTab("teacher");
+$("child").onchange = loadReport;
+start().catch(error => {
+  $("empty").classList.remove("hidden");
+  $("empty").textContent = "读不到数据，请确认云端程序还开着。";
+});
+</script>
+</body>
+</html>

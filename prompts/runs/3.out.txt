@@ -1,0 +1,43 @@
+
+
+Loading model... 
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b12084-f9448cddc
+model      : D:\competition\xiangke-v4-最终版-Q4_K_M.gguf
+ftype      : Q4_K - Medium
+modalities : text
+using custom system prompt
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> 题目（recognizedText，孩子已确认）：改错（只改一个词）：She like cats.
+讲法（voice）：先问哪个词错了，再问它该改成什么。
+孩子犯过的错（reminders）：（无）
+禁令（forbid）：不要直接说出标准答案。
+拆题样例（examples，只模仿拆法，答案与本题无关）：
+[
+ {
+  "recognizedText": "She ___ my sister. (am / is / are)",
+  "steps": [
+   {"ask": "先找主语：这句话里是谁是我的姐姐？说出那个英文词。 ... (truncated)
+{"steps": [{"ask": "这句话里哪个词用错了？说出那个英文词。", "expect": "like", "explain": "这句话里用错的是 like，其他词都没问题。"}, {"ask": "主语 She 是哪一种：说「我」「你」「一个」还是「多个」？", "expect": "我", "explain": "She 说的是「我」（第一人称单数）。"}, {"ask": "那 like 应该改成什么？", "expect": "likes", "explain": "口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。She 是「我」，句子里还有复数 cats，所以 like 要改成 likes。"}]}
+
+[ Prompt: 323.4 t/s | Generation: 35.7 t/s ]
+
+
+Exiting...

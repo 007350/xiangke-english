@@ -1,0 +1,43 @@
+
+
+Loading model... 
+
+▄▄ ▄▄
+██ ██
+██ ██  ▀▀█▄ ███▄███▄  ▀▀█▄    ▄████ ████▄ ████▄
+██ ██ ▄█▀██ ██ ██ ██ ▄█▀██    ██    ██ ██ ██ ██
+██ ██ ▀█▄██ ██ ██ ██ ▀█▄██ ██ ▀████ ████▀ ████▀
+                                    ██    ██
+                                    ▀▀    ▀▀
+
+build      : b12084-f9448cddc
+model      : D:\competition\xiangke-v4-最终版-Q4_K_M.gguf
+ftype      : Q4_K - Medium
+modalities : text
+using custom system prompt
+
+available commands:
+  /exit or Ctrl+C     stop or exit
+  /regen              regenerate the last response
+  /clear              clear the chat history
+  /read <file>        add a text file
+  /glob <pattern>     add text files using globbing pattern
+
+
+
+> 题目（recognizedText，孩子已确认）：This is an ___. (apple / apples)
+讲法（voice）：先看空前面的词，再选该用的那个词。
+孩子犯过的错（reminders）：（无）
+禁令（forbid）：不要直接说出标准答案。
+拆题样例（examples，只模仿拆法，答案与本题无关）：
+[
+ {
+  "recognizedText": "She ___ my sister. (am / is / are)",
+  "steps": [
+   {"ask": "先找主语：这句话里是谁是我的姐姐？说出那个英文词。", "expect": ... (truncated)
+{"steps": [{"ask": "空格前面紧挨着的那个英文词是什么？", "expect": "an", "explain": "空格前面紧挨着的是 an。"}, {"ask": "an 后面选 apple 还是 apples？", "expect": "apple", "explain": "看后面单词的最后一个字母：apple 以 e 结尾，后面直接加 i；apples 以 s 结尾，后面加 es。所以填 apple。"}]}
+
+[ Prompt: 321.8 t/s | Generation: 34.2 t/s ]
+
+
+Exiting...

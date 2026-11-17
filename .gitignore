@@ -1,0 +1,44 @@
+# ---- 模型权重：不进仓库，用 python -m xiangke.download_model 下载 ----
+models/*.gguf
+*.gguf
+*.part
+# OCR 英文识别模型只有 7.9 MB，留在仓库里，否则装完依赖也跑不起来
+!models/rapidocr/*.onnx
+
+# ---- 训练数据：不进仓库 ----
+训练/*/ds_v*/*.jsonl
+训练/**/*.jsonl
+训练/**/.ms_upload_cache
+训练/**/*_server.log
+
+# ---- 本机环境 ----
+.venv/
+__pycache__/
+*.py[cod]
+.idea/
+.vscode/
+.cursor/
+.claude/
+
+# ---- 打包产物、录屏、二进制 ----
+tools/llama.cpp/
+打包/*.zip
+打包/乡课英语-发布版/
+打包/乡课英语-手机端/
+打包/乡课英语-手机端-体验版/
+打包/*.mp4
+*.zip
+*.mp4
+*.exe
+*.dll
+
+# ---- 本机跑出来的记录与备份 ----
+demo/*.db
+演示/*.db
+备份/
+*.log
+
+# 内部资料：交接包、参赛准备清单，不进公开仓库
+交接包/
+Qoder试站/
+models/

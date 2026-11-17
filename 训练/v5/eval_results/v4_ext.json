@@ -1,0 +1,1080 @@
+{
+ "summary": {
+  "right": 39,
+  "checkPassed": 40,
+  "total": 40,
+  "avgSeconds": 6.09
+ },
+ "rows": [
+  {
+   "id": "ext-q01",
+   "text": "I ___ a student. (am / is / are)",
+   "answer": "am",
+   "raw": "{\"steps\": [{\"ask\": \"想想上次的小错误。先找主语：这句话是在说谁？说出那个英文词。\", \"expect\": \"I\", \"explain\": \"主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 I。\"}, {\"ask\": \"主语是 I，那空里填 am、is 还是 are？\", \"expect\": \"am\", \"explain\": \"口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语是 I，所以填 am。\"}]}",
+   "seconds": 5.89,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "想想上次的小错误。先找主语：这句话是在说谁？说出那个英文词。",
+     "expect": "I",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 I。"
+    },
+    {
+     "ask": "主语是 I，那空里填 am、is 还是 are？",
+     "expect": "am",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语是 I，所以填 am。"
+    }
+   ],
+   "final": "am",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q02",
+   "text": "They ___ in the classroom. (am / is / are)",
+   "answer": "are",
+   "raw": "{\"steps\": [{\"ask\": \"上次这里弄混过，这次看仔细。先找主语：这句话是在说谁？说出那个英文词。\", \"expect\": \"They\", \"explain\": \"主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 They。\"}, {\"ask\": \"They 是两个或更多人。那空里填 am、is 还是 are？\", \"expect\": \"are\", \"explain\": \"口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。They 是两个或更多人，所以填 are。\"}]}",
+   "seconds": 6.04,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这里弄混过，这次看仔细。先找主语：这句话是在说谁？说出那个英文词。",
+     "expect": "They",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 They。"
+    },
+    {
+     "ask": "They 是两个或更多人。那空里填 am、is 还是 are？",
+     "expect": "are",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。They 是两个或更多人，所以填 are。"
+    }
+   ],
+   "final": "are",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q03",
+   "text": "My mother ___ a teacher. (am / is / are)",
+   "answer": "is",
+   "raw": "{\"steps\": [{\"ask\": \"上次这里弄混过，这次看仔细。这句话的主语是什么？请用英文把主语整个说出来。\", \"expect\": \"My mother\", \"explain\": \"主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 My mother。\"}, {\"ask\": \"主语 My mother 是一个人。那空里填 am、is 还是 are？\", \"expect\": \"is\", \"explain\": \"口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语 My mother 是一个人，所以填 is。\"}]}",
+   "seconds": 6.1,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这里弄混过，这次看仔细。这句话的主语是什么？请用英文把主语整个说出来。",
+     "expect": "My mother",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 My mother。"
+    },
+    {
+     "ask": "主语 My mother 是一个人。那空里填 am、is 还是 are？",
+     "expect": "is",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语 My mother 是一个人，所以填 is。"
+    }
+   ],
+   "final": "is",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q04",
+   "text": "You ___ my good friend. (am / is / are)",
+   "answer": "are",
+   "raw": "{\"steps\": [{\"ask\": \"想想上次的小错误。先找主语：这句话是在说谁？说出那个英文词。\", \"expect\": \"You\", \"explain\": \"主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 You。\"}, {\"ask\": \"主语是 you（你）。从 am / is / are 里选一个填进空里。\", \"expect\": \"are\", \"explain\": \"口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语是 you（你），所以填 are。\"}]}",
+   "seconds": 6.03,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "想想上次的小错误。先找主语：这句话是在说谁？说出那个英文词。",
+     "expect": "You",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 You。"
+    },
+    {
+     "ask": "主语是 you（你）。从 am / is / are 里选一个填进空里。",
+     "expect": "are",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语是 you（你），所以填 are。"
+    }
+   ],
+   "final": "are",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q05",
+   "text": "The cat ___ under the chair. (am / is / are)",
+   "answer": "is",
+   "raw": "{\"steps\": [{\"ask\": \"上次这里弄混过，这次看仔细。先找主语：这句话是在说谁？说出那个英文词。\", \"expect\": \"The cat\", \"explain\": \"主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 The cat。\"}, {\"ask\": \"主语 The cat 是一只动物。那空里填 am、is 还是 are？\", \"expect\": \"is\", \"explain\": \"口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语 The cat 是一只动物，所以填 is。\"}]}",
+   "seconds": 6.14,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这里弄混过，这次看仔细。先找主语：这句话是在说谁？说出那个英文词。",
+     "expect": "The cat",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 The cat。"
+    },
+    {
+     "ask": "主语 The cat 是一只动物。那空里填 am、is 还是 are？",
+     "expect": "is",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语 The cat 是一只动物，所以填 is。"
+    }
+   ],
+   "final": "is",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q06",
+   "text": "I have ___ apple. (a / an)",
+   "answer": "an",
+   "raw": "{\"steps\": [{\"ask\": \"上次这种题出过错，这次慢一点。空格后面的单词 apple，第一个字母是什么？\", \"expect\": \"a\", \"explain\": \"apple 的第一个字母是 a。\"}, {\"ask\": \"a 是元音字母还是辅音字母？\", \"expect\": \"元音\", \"explain\": \"a 是元音字母，元音字母一共五个：a、e、i、o、u。\"}, {\"ask\": \"a 是元音字母。那空里从 a / an 里选哪一个？\", \"expect\": \"an\", \"explain\": \"看后面单词开头的音：辅音开头用 a，元音（a、e、i、o、u）开头用 an。apple 以元音字母 a 开头，所以用 an。\"}]}",
+   "seconds": 7.09,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这种题出过错，这次慢一点。空格后面的单词 apple，第一个字母是什么？",
+     "expect": "a",
+     "explain": "apple 的第一个字母是 a。"
+    },
+    {
+     "ask": "a 是元音字母还是辅音字母？",
+     "expect": "元音",
+     "explain": "a 是元音字母，元音字母一共五个：a、e、i、o、u。"
+    },
+    {
+     "ask": "a 是元音字母。那空里从 a / an 里选哪一个？",
+     "expect": "an",
+     "explain": "看后面单词开头的音：辅音开头用 a，元音（a、e、i、o、u）开头用 an。apple 以元音字母 a 开头，所以用 an。"
+    }
+   ],
+   "final": "an",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q07",
+   "text": "This is ___ book. (a / an)",
+   "answer": "a",
+   "raw": "{\"steps\": [{\"ask\": \"上次这种题出过错，这次慢一点。空格后面的单词 book，第一个字母是什么？\", \"expect\": \"b\", \"explain\": \"book 的第一个字母是 b。\"}, {\"ask\": \"b 是元音字母还是辅音字母？\", \"expect\": \"辅音\", \"explain\": \"元音字母只有五个，b 不在这五个里面，所以它是辅音字母。\"}, {\"ask\": \"b 是辅音字母。那空里从 a / an 里选哪一个？\", \"expect\": \"a\", \"explain\": \"看后面单词开头的音：辅音开头用 a，元音（a、e、i、o、u）开头用 an。book 以辅音字母 b 开头，所以用 a。\"}]}",
+   "seconds": 7.0,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这种题出过错，这次慢一点。空格后面的单词 book，第一个字母是什么？",
+     "expect": "b",
+     "explain": "book 的第一个字母是 b。"
+    },
+    {
+     "ask": "b 是元音字母还是辅音字母？",
+     "expect": "辅音",
+     "explain": "元音字母只有五个，b 不在这五个里面，所以它是辅音字母。"
+    },
+    {
+     "ask": "b 是辅音字母。那空里从 a / an 里选哪一个？",
+     "expect": "a",
+     "explain": "看后面单词开头的音：辅音开头用 a，元音（a、e、i、o、u）开头用 an。book 以辅音字母 b 开头，所以用 a。"
+    }
+   ],
+   "final": "a",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q08",
+   "text": "He is ___ English teacher. (a / an)",
+   "answer": "an",
+   "raw": "{\"steps\": [{\"ask\": \"上次这种题出过错，这次慢一点。空格后面的单词 English teacher，第一个字母是什么？\", \"expect\": \"e\", \"explain\": \"English teacher 的第一个字母是 e。\"}, {\"ask\": \"e 是元音字母还是辅音字母？\", \"expect\": \"元音\", \"explain\": \"e 是元音字母，元音字母一共五个：a、e、i、o、u。\"}, {\"ask\": \"e 是元音字母。那空里从 a / an 里选哪一个？\", \"expect\": \"an\", \"explain\": \"看后面单词开头的音：辅音开头用 a，元音（a、e、i、o、u）开头用 an。English teacher 以元音字母 e 开头，所以用 an。\"}]}",
+   "seconds": 7.49,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这种题出过错，这次慢一点。空格后面的单词 English teacher，第一个字母是什么？",
+     "expect": "e",
+     "explain": "English teacher 的第一个字母是 e。"
+    },
+    {
+     "ask": "e 是元音字母还是辅音字母？",
+     "expect": "元音",
+     "explain": "e 是元音字母，元音字母一共五个：a、e、i、o、u。"
+    },
+    {
+     "ask": "e 是元音字母。那空里从 a / an 里选哪一个？",
+     "expect": "an",
+     "explain": "看后面单词开头的音：辅音开头用 a，元音（a、e、i、o、u）开头用 an。English teacher 以元音字母 e 开头，所以用 an。"
+    }
+   ],
+   "final": "an",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q09",
+   "text": "There is ___ orange on the desk. (a / an)",
+   "answer": "an",
+   "raw": "{\"steps\": [{\"ask\": \"上次这种题出过错，这次慢一点。空格后面的单词 orange，第一个字母是什么？\", \"expect\": \"o\", \"explain\": \"orange 的第一个字母是 o。\"}, {\"ask\": \"o 是元音字母还是辅音字母？\", \"expect\": \"元音\", \"explain\": \"o 是元音字母，元音字母一共五个：a、e、i、o、u。\"}, {\"ask\": \"o 是元音字母。那空里从 a / an 里选哪一个？\", \"expect\": \"an\", \"explain\": \"看后面单词开头的音：辅音开头用 a，元音（a、e、i、o、u）开头用 an。orange 以元音字母 o 开头，所以用 an。\"}]}",
+   "seconds": 7.07,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这种题出过错，这次慢一点。空格后面的单词 orange，第一个字母是什么？",
+     "expect": "o",
+     "explain": "orange 的第一个字母是 o。"
+    },
+    {
+     "ask": "o 是元音字母还是辅音字母？",
+     "expect": "元音",
+     "explain": "o 是元音字母，元音字母一共五个：a、e、i、o、u。"
+    },
+    {
+     "ask": "o 是元音字母。那空里从 a / an 里选哪一个？",
+     "expect": "an",
+     "explain": "看后面单词开头的音：辅音开头用 a，元音（a、e、i、o、u）开头用 an。orange 以元音字母 o 开头，所以用 an。"
+    }
+   ],
+   "final": "an",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q10",
+   "text": "I can see five ___. (bird / birds)",
+   "answer": "birds",
+   "raw": "{\"steps\": [{\"ask\": \"上次复数忘了变，这次留心。空格前面表示数量的词是什么？\", \"expect\": \"five\", \"explain\": \"空格前面的 five 表示数量。\"}, {\"ask\": \"five 表示一个还是多个？\", \"expect\": \"多个\", \"explain\": \"five 是不止一个，所以是多个。\"}, {\"ask\": \"那空里选 bird 还是 birds？\", \"expect\": \"birds\", \"explain\": \"数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。bird → birds，所以填 birds。\"}]}",
+   "seconds": 5.83,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次复数忘了变，这次留心。空格前面表示数量的词是什么？",
+     "expect": "five",
+     "explain": "空格前面的 five 表示数量。"
+    },
+    {
+     "ask": "five 表示一个还是多个？",
+     "expect": "多个",
+     "explain": "five 是不止一个，所以是多个。"
+    },
+    {
+     "ask": "那空里选 bird 还是 birds？",
+     "expect": "birds",
+     "explain": "数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。bird → birds，所以填 birds。"
+    }
+   ],
+   "final": "birds",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q11",
+   "text": "There are two ___ in the box. (box / boxes)",
+   "answer": "boxes",
+   "raw": "{\"steps\": [{\"ask\": \"上次复数忘了变，这次留心。空格前面表示数量的词是什么？\", \"expect\": \"two\", \"explain\": \"空格前面的 two 表示数量。\"}, {\"ask\": \"two 表示一个还是多个？\", \"expect\": \"多个\", \"explain\": \"two 是不止一个，所以是多个。\"}, {\"ask\": \"那空里选 box 还是 boxes？\", \"expect\": \"boxes\", \"explain\": \"数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。box → boxes，所以填 boxes。\"}]}",
+   "seconds": 5.63,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次复数忘了变，这次留心。空格前面表示数量的词是什么？",
+     "expect": "two",
+     "explain": "空格前面的 two 表示数量。"
+    },
+    {
+     "ask": "two 表示一个还是多个？",
+     "expect": "多个",
+     "explain": "two 是不止一个，所以是多个。"
+    },
+    {
+     "ask": "那空里选 box 还是 boxes？",
+     "expect": "boxes",
+     "explain": "数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。box → boxes，所以填 boxes。"
+    }
+   ],
+   "final": "boxes",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q12",
+   "text": "Look at the ___! They are big. (bus / buses)",
+   "answer": "buses",
+   "raw": "{\"steps\": [{\"ask\": \"上次复数忘了变，这次留心。空格前面有没有 two、three 这样表示数量的词？说「有」或「没有」。\", \"expect\": \"没有\", \"explain\": \"空格前面没有 two、three 这样的数字词；the、my 这样的词也不告诉我们是一个还是多个，要去句子别的地方找线索。\"}, {\"ask\": \"看后面那句话，用哪个英文词来代替这个东西？\", \"expect\": \"They\", \"explain\": \"后面那句话用 They 来说这个东西。\"}, {\"ask\": \"They 说的是一个还是多个？说「一个」或「多个」。\", \"expect\": \"多个\", \"explain\": \"They 说的是两个或更多。\"}, {\"ask\": \"所以空里选 bus 还是 buses？\", \"expect\": \"buses\", \"explain\": \"后面用 They，说的是两个或更多，所以选复数 buses。\"}]}",
+   "seconds": 7.66,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次复数忘了变，这次留心。空格前面有没有 two、three 这样表示数量的词？说「有」或「没有」。",
+     "expect": "没有",
+     "explain": "空格前面没有 two、three 这样的数字词；the、my 这样的词也不告诉我们是一个还是多个，要去句子别的地方找线索。"
+    },
+    {
+     "ask": "看后面那句话，用哪个英文词来代替这个东西？",
+     "expect": "They",
+     "explain": "后面那句话用 They 来说这个东西。"
+    },
+    {
+     "ask": "They 说的是一个还是多个？说「一个」或「多个」。",
+     "expect": "多个",
+     "explain": "They 说的是两个或更多。"
+    },
+    {
+     "ask": "所以空里选 bus 还是 buses？",
+     "expect": "buses",
+     "explain": "后面用 They，说的是两个或更多，所以选复数 buses。"
+    }
+   ],
+   "final": "buses",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q13",
+   "text": "She has one ___. (pen / pens)",
+   "answer": "pen",
+   "raw": "{\"steps\": [{\"ask\": \"上次复数忘了变，这次留心。空格前面表示数量的词是什么？\", \"expect\": \"one\", \"explain\": \"空格前面的 one 表示数量。\"}, {\"ask\": \"one 表示一个还是多个？\", \"expect\": \"一个\", \"explain\": \"one 是只有一个，所以是一个。\"}, {\"ask\": \"那空里选 pen 还是 pens？\", \"expect\": \"pen\", \"explain\": \"只有一个，名词用原来的样子（单数），不加 s，所以填 pen。\"}]}",
+   "seconds": 5.61,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次复数忘了变，这次留心。空格前面表示数量的词是什么？",
+     "expect": "one",
+     "explain": "空格前面的 one 表示数量。"
+    },
+    {
+     "ask": "one 表示一个还是多个？",
+     "expect": "一个",
+     "explain": "one 是只有一个，所以是一个。"
+    },
+    {
+     "ask": "那空里选 pen 还是 pens？",
+     "expect": "pen",
+     "explain": "只有一个，名词用原来的样子（单数），不加 s，所以填 pen。"
+    }
+   ],
+   "final": "pen",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q14",
+   "text": "Yesterday I ___ to the park. (go / went)",
+   "answer": "went",
+   "raw": "{\"steps\": [{\"ask\": \"上次没注意时间词，这次留心。句子里表示时间的词是什么？整个说出来。\", \"expect\": \"Yesterday\", \"explain\": \"表示时间的是 Yesterday。\"}, {\"ask\": \"Yesterday 是过去的时间，那空里选 go 还是 went？\", \"expect\": \"went\", \"explain\": \"过去的时间里，不管主语是谁，动词都要用过去式，也不用加 s：go → went。\"}]}",
+   "seconds": 4.87,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次没注意时间词，这次留心。句子里表示时间的词是什么？整个说出来。",
+     "expect": "Yesterday",
+     "explain": "表示时间的是 Yesterday。"
+    },
+    {
+     "ask": "Yesterday 是过去的时间，那空里选 go 还是 went？",
+     "expect": "went",
+     "explain": "过去的时间里，不管主语是谁，动词都要用过去式，也不用加 s：go → went。"
+    }
+   ],
+   "final": "went",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q15",
+   "text": "He ___ his homework last night. (does / did)",
+   "answer": "did",
+   "raw": "{\"steps\": [{\"ask\": \"上次没注意时间词，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。\", \"expect\": \"last night\", \"explain\": \"表示时间的是 last night。\"}, {\"ask\": \"last night 说的是过去、现在，还是将来？\", \"expect\": \"过去\", \"explain\": \"last night 是已经过去的时间，所以动词过去式也要写。\"}, {\"ask\": \"那空里选 do 还是 did？\", \"expect\": \"did\", \"explain\": \"过去的事，不管主语是谁，动词都要用过去式，也不用加 s：do → did。\"}]}",
+   "seconds": 5.82,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次没注意时间词，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。",
+     "expect": "last night",
+     "explain": "表示时间的是 last night。"
+    },
+    {
+     "ask": "last night 说的是过去、现在，还是将来？",
+     "expect": "过去",
+     "explain": "last night 是已经过去的时间，所以动词过去式也要写。"
+    },
+    {
+     "ask": "那空里选 do 还是 did？",
+     "expect": "did",
+     "explain": "过去的事，不管主语是谁，动词都要用过去式，也不用加 s：do → did。"
+    }
+   ],
+   "final": "did",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q16",
+   "text": "We ___ a film yesterday. (watch / watched)",
+   "answer": "watched",
+   "raw": "{\"steps\": [{\"ask\": \"上次没注意时间词，这次留心。句子里表示时间的词是什么？整个说出来。\", \"expect\": \"yesterday\", \"explain\": \"表示时间的是 yesterday。\"}, {\"ask\": \"yesterday 说的是过去、现在，还是将来？\", \"expect\": \"过去\", \"explain\": \"yesterday 是已经过去的时间，所以动词要用过去式。\"}, {\"ask\": \"那空里选 watch 还是 watched？\", \"expect\": \"watched\", \"explain\": \"发生在过去（yesterday），动词用过去式。规则动词直接加 ed：watch → watched。\"}]}",
+   "seconds": 5.41,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次没注意时间词，这次留心。句子里表示时间的词是什么？整个说出来。",
+     "expect": "yesterday",
+     "explain": "表示时间的是 yesterday。"
+    },
+    {
+     "ask": "yesterday 说的是过去、现在，还是将来？",
+     "expect": "过去",
+     "explain": "yesterday 是已经过去的时间，所以动词要用过去式。"
+    },
+    {
+     "ask": "那空里选 watch 还是 watched？",
+     "expect": "watched",
+     "explain": "发生在过去（yesterday），动词用过去式。规则动词直接加 ed：watch → watched。"
+    }
+   ],
+   "final": "watched",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q17",
+   "text": "Last week my father ___ a new bike. (buy / bought)",
+   "answer": "bought",
+   "raw": "{\"steps\": [{\"ask\": \"上次没注意时间词，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。\", \"expect\": \"Last week\", \"explain\": \"表示时间的是 Last week。\"}, {\"ask\": \"Last week 是过去的时间，那动词要不要变形？说「要」或「不要」。\", \"expect\": \"要\", \"explain\": \"过去的时间发生的动作，动词要变形。\"}, {\"ask\": \"那空里选 buy 还是 bought？\", \"expect\": \"bought\", \"explain\": \"过去的时间发生的动作，动词要变形：以「辅音字母 + y」结尾的动词，把 y 变成 i 再加 er，buy → bought。\"}]}",
+   "seconds": 6.22,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次没注意时间词，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。",
+     "expect": "Last week",
+     "explain": "表示时间的是 Last week。"
+    },
+    {
+     "ask": "Last week 是过去的时间，那动词要不要变形？说「要」或「不要」。",
+     "expect": "要",
+     "explain": "过去的时间发生的动作，动词要变形。"
+    },
+    {
+     "ask": "那空里选 buy 还是 bought？",
+     "expect": "bought",
+     "explain": "过去的时间发生的动作，动词要变形：以「辅音字母 + y」结尾的动词，把 y 变成 i 再加 er，buy → bought。"
+    }
+   ],
+   "final": "bought",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q18",
+   "text": "The ball is ___ the box. 球在盒子里。(in / on / under)",
+   "answer": "in",
+   "raw": "{\"steps\": [{\"ask\": \"上次介词用混过，这次想清楚。中文里说球在盒子的什么位置？\", \"expect\": \"里面\", \"explain\": \"中文说「球在盒子里」，所以是在盒子的里面。\"}, {\"ask\": \"在盒子的里面，空里用哪个英文词？从括号里选。\", \"expect\": \"in\", \"explain\": \"方位介词：in 在……里面，on 在……上面，under 在……下面，behind 在……后面。在盒子的里面，所以用 in。\"}]}",
+   "seconds": 5.53,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次介词用混过，这次想清楚。中文里说球在盒子的什么位置？",
+     "expect": "里面",
+     "explain": "中文说「球在盒子里」，所以是在盒子的里面。"
+    },
+    {
+     "ask": "在盒子的里面，空里用哪个英文词？从括号里选。",
+     "expect": "in",
+     "explain": "方位介词：in 在……里面，on 在……上面，under 在……下面，behind 在……后面。在盒子的里面，所以用 in。"
+    }
+   ],
+   "final": "in",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q19",
+   "text": "I get up ___ seven o'clock. (at / in / on)",
+   "answer": "at",
+   "raw": "{\"steps\": [{\"ask\": \"上次介词用混过，这次想清楚。空格后面的 seven o'clock，表示「几点」「月份」「季节」还是「星期」？\", \"expect\": \"几点\", \"explain\": \"seven o'clock 表示几点。\"}, {\"ask\": \"seven o'clock 是几点，那空里用 at、in 还是 on？\", \"expect\": \"at\", \"explain\": \"时间介词口诀：几点前用 at，月份、季节前用 in，星期几前用 on。seven o'clock 是几点，所以用 at。\"}]}",
+   "seconds": 5.63,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次介词用混过，这次想清楚。空格后面的 seven o'clock，表示「几点」「月份」「季节」还是「星期」？",
+     "expect": "几点",
+     "explain": "seven o'clock 表示几点。"
+    },
+    {
+     "ask": "seven o'clock 是几点，那空里用 at、in 还是 on？",
+     "expect": "at",
+     "explain": "时间介词口诀：几点前用 at，月份、季节前用 in，星期几前用 on。seven o'clock 是几点，所以用 at。"
+    }
+   ],
+   "final": "at",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q20",
+   "text": "My birthday is ___ May. (at / in / on)",
+   "answer": "in",
+   "raw": "{\"steps\": [{\"ask\": \"上次介词用混过，这次想清楚。空格后面的 May，表示「几点」「月份」「季节」还是「星期」？\", \"expect\": \"月份\", \"explain\": \"May 表示月份。\"}, {\"ask\": \"May 是月份，那空里用 at、in 还是 on？\", \"expect\": \"in\", \"explain\": \"时间介词口诀：几点前用 at，月份、季节前用 in，星期几前用 on。May 是月份，所以用 in。\"}]}",
+   "seconds": 5.24,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次介词用混过，这次想清楚。空格后面的 May，表示「几点」「月份」「季节」还是「星期」？",
+     "expect": "月份",
+     "explain": "May 表示月份。"
+    },
+    {
+     "ask": "May 是月份，那空里用 at、in 还是 on？",
+     "expect": "in",
+     "explain": "时间介词口诀：几点前用 at，月份、季节前用 in，星期几前用 on。May 是月份，所以用 in。"
+    }
+   ],
+   "final": "in",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q21",
+   "text": "We have no school ___ Sunday. (at / in / on)",
+   "answer": "on",
+   "raw": "{\"steps\": [{\"ask\": \"上次介词用混过，这次想清楚。空格后面的 Sunday，表示「几点」「月份」「季节」还是「星期」？\", \"expect\": \"星期\", \"explain\": \"Sunday 表示星期。\"}, {\"ask\": \"Sunday 是星期，那空里用 at、in 还是 on？\", \"expect\": \"on\", \"explain\": \"时间介词口诀：几点前用 at，月份、季节前用 in，星期几前用 on。Sunday 是星期，所以用 on。\"}]}",
+   "seconds": 5.3,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次介词用混过，这次想清楚。空格后面的 Sunday，表示「几点」「月份」「季节」还是「星期」？",
+     "expect": "星期",
+     "explain": "Sunday 表示星期。"
+    },
+    {
+     "ask": "Sunday 是星期，那空里用 at、in 还是 on？",
+     "expect": "on",
+     "explain": "时间介词口诀：几点前用 at，月份、季节前用 in，星期几前用 on。Sunday 是星期，所以用 on。"
+    }
+   ],
+   "final": "on",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q22",
+   "text": "Yesterday she ___ (eat) an apple.",
+   "answer": "ate",
+   "raw": "{\"steps\": [{\"ask\": \"上次没注意时间词，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。\", \"expect\": \"Yesterday\", \"explain\": \"表示时间的是 Yesterday。\"}, {\"ask\": \"Yesterday 说的是过去、现在，还是将来？\", \"expect\": \"过去\", \"explain\": \"Yesterday 是已经过去的时间，所以动词要用过去式。\"}, {\"ask\": \"把 eat 变成过去式，填进空里。\", \"expect\": \"ate\", \"explain\": \"发生在过去（Yesterday），动词用过去式。这是不规则动词，过去式要专门记住：eat → ate。\"}]}",
+   "seconds": 5.65,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次没注意时间词，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。",
+     "expect": "Yesterday",
+     "explain": "表示时间的是 Yesterday。"
+    },
+    {
+     "ask": "Yesterday 说的是过去、现在，还是将来？",
+     "expect": "过去",
+     "explain": "Yesterday 是已经过去的时间，所以动词要用过去式。"
+    },
+    {
+     "ask": "把 eat 变成过去式，填进空里。",
+     "expect": "ate",
+     "explain": "发生在过去（Yesterday），动词用过去式。这是不规则动词，过去式要专门记住：eat → ate。"
+    }
+   ],
+   "final": "ate",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q23",
+   "text": "My brother ___ (like) bananas.",
+   "answer": "likes",
+   "raw": "{\"steps\": [{\"ask\": \"上次动词忘了变，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。\", \"expect\": \"My brother ___ (like) bananas.\", \"explain\": \"没有 explicit 的 now、last 这样的词；the、and 这样的词也不告诉我们是什么时候。这句话用动词原形，说的是现在（现在的事）。\"}, {\"ask\": \"My brother 说的是现在的事，那动词要不要变？说「要」或「不要」。\", \"expect\": \"要\", \"explain\": \"My brother 是现在（现在的事），动词要变。\"}, {\"ask\": \"那动词应该变成什么？\", \"expect\": \"likes\", \"explain\": \"现在的事，动词要变：一般直接加 s。like → likes。\"}]}",
+   "seconds": 6.49,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次动词忘了变，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。",
+     "expect": "My brother ___ (like) bananas.",
+     "explain": "没有 explicit 的 now、last 这样的词；the、and 这样的词也不告诉我们是什么时候。这句话用动词原形，说的是现在（现在的事）。"
+    },
+    {
+     "ask": "My brother 说的是现在的事，那动词要不要变？说「要」或「不要」。",
+     "expect": "要",
+     "explain": "My brother 是现在（现在的事），动词要变。"
+    },
+    {
+     "ask": "那动词应该变成什么？",
+     "expect": "likes",
+     "explain": "现在的事，动词要变：一般直接加 s。like → likes。"
+    }
+   ],
+   "final": "likes",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q24",
+   "text": "I have two ___ (book).",
+   "answer": "books",
+   "raw": "{\"steps\": [{\"ask\": \"上次复数忘了变，这次留心。空格前面表示数量的词是什么？\", \"expect\": \"two\", \"explain\": \"空格前面的 two 表示数量。\"}, {\"ask\": \"book 变复数，词尾加 s 还是 es？\", \"expect\": \"s\", \"explain\": \"一般的名词变复数，直接在词尾加 s。\"}, {\"ask\": \"把 book 的复数形式写出来，填进空里。\", \"expect\": \"books\", \"explain\": \"数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。book → books。\"}]}",
+   "seconds": 5.8,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次复数忘了变，这次留心。空格前面表示数量的词是什么？",
+     "expect": "two",
+     "explain": "空格前面的 two 表示数量。"
+    },
+    {
+     "ask": "book 变复数，词尾加 s 还是 es？",
+     "expect": "s",
+     "explain": "一般的名词变复数，直接在词尾加 s。"
+    },
+    {
+     "ask": "把 book 的复数形式写出来，填进空里。",
+     "expect": "books",
+     "explain": "数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。book → books。"
+    }
+   ],
+   "final": "books",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q25",
+   "text": "This is ___ (我的) bag.",
+   "answer": "my",
+   "raw": "{\"steps\": [{\"ask\": \"括号里的中文说的是谁的东西？用英文说出这个人。\", \"expect\": \"I\", \"explain\": \"「我的」说的是 I。\"}, {\"ask\": \"那「我的」用英文怎么说？填进空里。\", \"expect\": \"my\", \"explain\": \"表示「谁的」要用物主代词：I→my，you→your，he→his，she→her，we→our，they→their。所以「我的」是 my。\"}]}",
+   "seconds": 4.77,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "括号里的中文说的是谁的东西？用英文说出这个人。",
+     "expect": "I",
+     "explain": "「我的」说的是 I。"
+    },
+    {
+     "ask": "那「我的」用英文怎么说？填进空里。",
+     "expect": "my",
+     "explain": "表示「谁的」要用物主代词：I→my，you→your，he→his，she→her，we→our，they→their。所以「我的」是 my。"
+    }
+   ],
+   "final": "my",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q26",
+   "text": "Tom ___ (have) a dog.",
+   "answer": "has",
+   "raw": "{\"steps\": [{\"ask\": \"上次动词忘了变，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。\", \"expect\": \"Tom ___ (have) a dog.\", \"explain\": \"没有明显的时间词。这句话的意思是现在（不管现在还是将来），主语是 Tom。\"}, {\"ask\": \"主语 Tom 是现在（不是过去），动词要不要变？说「要」或「不要」。\", \"expect\": \"不要\", \"explain\": \"现在的事，主语 Tom 是「我」，动词不变，用原来的样子；这是不规则动词，现在多归类的动词要专门记住。\"}, {\"ask\": \"那空里应该填什么？\", \"expect\": \"have\", \"explain\": \"现在的事，主语 Tom 是「我」，动词用原来的样子，不加 s，所以填 have。\"}]}",
+   "seconds": 6.68,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次动词忘了变，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。",
+     "expect": "Tom ___ (have) a dog.",
+     "explain": "没有明显的时间词。这句话的意思是现在（不管现在还是将来），主语是 Tom。"
+    },
+    {
+     "ask": "主语 Tom 是现在（不是过去），动词要不要变？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "现在的事，主语 Tom 是「我」，动词不变，用原来的样子；这是不规则动词，现在多归类的动词要专门记住。"
+    },
+    {
+     "ask": "那空里应该填什么？",
+     "expect": "have",
+     "explain": "现在的事，主语 Tom 是「我」，动词用原来的样子，不加 s，所以填 have。"
+    }
+   ],
+   "final": "have",
+   "finalOk": false,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q27",
+   "text": "Last summer we ___ (swim) in the river.",
+   "answer": "swam",
+   "raw": "{\"steps\": [{\"ask\": \"上次没注意时间词，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。\", \"expect\": \"Last summer\", \"explain\": \"表示时间的是 Last summer。\"}, {\"ask\": \"Last summer 是过去的时间，那动词要不要变形？说「要」或「不要」。\", \"expect\": \"要\", \"explain\": \"过去的时间发生的动作，动词要变形。\"}, {\"ask\": \"那空里应该填什么？请说出这个词。\", \"expect\": \"swam\", \"explain\": \"过去的时间发生的动作，动词要变形：一般直接加 ed。swim → swam。\"}]}",
+   "seconds": 5.92,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次没注意时间词，这次留心。先找时间词：这件事是什么时候发生的？说出句子里的英文。",
+     "expect": "Last summer",
+     "explain": "表示时间的是 Last summer。"
+    },
+    {
+     "ask": "Last summer 是过去的时间，那动词要不要变形？说「要」或「不要」。",
+     "expect": "要",
+     "explain": "过去的时间发生的动作，动词要变形。"
+    },
+    {
+     "ask": "那空里应该填什么？请说出这个词。",
+     "expect": "swam",
+     "explain": "过去的时间发生的动作，动词要变形：一般直接加 ed。swim → swam。"
+    }
+   ],
+   "final": "swam",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q28",
+   "text": "改错（只改一个词）：She go to school every day.",
+   "answer": "goes",
+   "raw": "{\"steps\": [{\"ask\": \"这句话的主语是哪个词？\", \"expect\": \"She\", \"explain\": \"主语一般在句子开头，这句话的主语是 She。\"}, {\"ask\": \"She 后面的动词要不要变形？说「要」或「不要」。\", \"expect\": \"不要\", \"explain\": \"She 是好几个人，不是第三人称单数，动词用原形，不加 s。\"}, {\"ask\": \"那这个词别直接加 s，应该改成什么？\", \"expect\": \"goes\", \"explain\": \"主语 She 是好几个人，动词用原形，不加 s，所以动词还是 go，不是 goes。这句话里另一个动词是 go。\"}]}",
+   "seconds": 6.5,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "这句话的主语是哪个词？",
+     "expect": "She",
+     "explain": "主语一般在句子开头，这句话的主语是 She。"
+    },
+    {
+     "ask": "She 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "She 是好几个人，不是第三人称单数，动词用原形，不加 s。"
+    },
+    {
+     "ask": "那这个词别直接加 s，应该改成什么？",
+     "expect": "goes",
+     "explain": "主语 She 是好几个人，动词用原形，不加 s，所以动词还是 go，不是 goes。这句话里另一个动词是 go。"
+    }
+   ],
+   "final": "goes",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q29",
+   "text": "改错（只改一个词）：I is ten years old.",
+   "answer": "am",
+   "raw": "{\"steps\": [{\"ask\": \"上次这里弄混过，这次看仔细。这句话的主语是哪个词？请用英文说。\", \"expect\": \"I\", \"explain\": \"主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 I。\"}, {\"ask\": \"主语是 I，那它后面的动词要不要变形？说「要」或「不要」。\", \"expect\": \"不要\", \"explain\": \"I 是我，不是第三人称单数，动词用原形，不加 s。\"}, {\"ask\": \"那它后面的 is 应该改成什么？\", \"expect\": \"am\", \"explain\": \"口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语是 I，句子里还有 old 这样表示状态的词，也不变，所以 is 要改成 am：I am ten years old。\"}]}",
+   "seconds": 7.96,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这里弄混过，这次看仔细。这句话的主语是哪个词？请用英文说。",
+     "expect": "I",
+     "explain": "主语就是句子在说的人或东西，一般在句子开头、空格前面。这句话的主语是 I。"
+    },
+    {
+     "ask": "主语是 I，那它后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "I 是我，不是第三人称单数，动词用原形，不加 s。"
+    },
+    {
+     "ask": "那它后面的 is 应该改成什么？",
+     "expect": "am",
+     "explain": "口诀：我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。主语是 I，句子里还有 old 这样表示状态的词，也不变，所以 is 要改成 am：I am ten years old。"
+    }
+   ],
+   "final": "am",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q30",
+   "text": "改错（只改一个词）：They is my classmates.",
+   "answer": "are",
+   "raw": "{\"steps\": [{\"ask\": \"上次这里弄混过，这次看仔细。这句话的主语是哪个词？请用英文说。\", \"expect\": \"They\", \"explain\": \"主语一般在句子开头，这句话的主语是 They。\"}, {\"ask\": \"They 后面的动词要不要变形？说「要」或「不要」。\", \"expect\": \"不要\", \"explain\": \"They 是好几个人，不是第三人称单数，动词用原形，不加 s。\"}, {\"ask\": \"那这句话里哪个词用错了？说出那个英文词。\", \"expect\": \"is\", \"explain\": \"这句话里用错的是 is，其他词都没问题。\"}, {\"ask\": \"is 要改成哪个词？请说出来。\", \"expect\": \"are\", \"explain\": \"主语 They 是好几个人，动词要用原形，不加 s：is 要改成 are。\"}]}",
+   "seconds": 7.38,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这里弄混过，这次看仔细。这句话的主语是哪个词？请用英文说。",
+     "expect": "They",
+     "explain": "主语一般在句子开头，这句话的主语是 They。"
+    },
+    {
+     "ask": "They 后面的动词要不要变形？说「要」或「不要」。",
+     "expect": "不要",
+     "explain": "They 是好几个人，不是第三人称单数，动词用原形，不加 s。"
+    },
+    {
+     "ask": "那这句话里哪个词用错了？说出那个英文词。",
+     "expect": "is",
+     "explain": "这句话里用错的是 is，其他词都没问题。"
+    },
+    {
+     "ask": "is 要改成哪个词？请说出来。",
+     "expect": "are",
+     "explain": "主语 They 是好几个人，动词要用原形，不加 s：is 要改成 are。"
+    }
+   ],
+   "final": "are",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q31",
+   "text": "改错（只改一个词）：He have a red pen.",
+   "answer": "has",
+   "raw": "{\"steps\": [{\"ask\": \"上次动词忘了变，这次留心。这句话里哪个词用错了？说出那个英文词。\", \"expect\": \"have\", \"explain\": \"这句话里用错的是 have，其他词都没问题。\"}, {\"ask\": \"主语 He 是哪一种：说「我」「你」「一个」还是「多个」？\", \"expect\": \"一个\", \"explain\": \"He 说的是一个人（不是我，也不是你）。\"}, {\"ask\": \"那 have 应该改成什么？\", \"expect\": \"has\", \"explain\": \"口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。He 是一个人，句子里还有 a，所以 are 要改成 is：He has a red pen。注意，这是不规则变化，要专门记住。\"}]}",
+   "seconds": 6.73,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次动词忘了变，这次留心。这句话里哪个词用错了？说出那个英文词。",
+     "expect": "have",
+     "explain": "这句话里用错的是 have，其他词都没问题。"
+    },
+    {
+     "ask": "主语 He 是哪一种：说「我」「你」「一个」还是「多个」？",
+     "expect": "一个",
+     "explain": "He 说的是一个人（不是我，也不是你）。"
+    },
+    {
+     "ask": "那 have 应该改成什么？",
+     "expect": "has",
+     "explain": "口诀：「我」用 am，「你」用 are，一个人或一样东西用 is，两个或更多用 are。He 是一个人，句子里还有 a，所以 are 要改成 is：He has a red pen。注意，这是不规则变化，要专门记住。"
+    }
+   ],
+   "final": "has",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q32",
+   "text": "改错（只改一个词）：I see three dog.",
+   "answer": "dogs",
+   "raw": "{\"steps\": [{\"ask\": \"上次复数忘了变，这次留心。仔细读一读，哪个英文词写错了？\", \"expect\": \"dog\", \"explain\": \"这句话里用错的是 dog，其他词都没问题。\"}, {\"ask\": \"three 表示一个还是多个？\", \"expect\": \"多个\", \"explain\": \"three 不止一个，所以是多个。\"}, {\"ask\": \"dog 要改成哪个词？请说出来。\", \"expect\": \"dogs\", \"explain\": \"数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。dog → dogs。\"}]}",
+   "seconds": 5.75,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次复数忘了变，这次留心。仔细读一读，哪个英文词写错了？",
+     "expect": "dog",
+     "explain": "这句话里用错的是 dog，其他词都没问题。"
+    },
+    {
+     "ask": "three 表示一个还是多个？",
+     "expect": "多个",
+     "explain": "three 不止一个，所以是多个。"
+    },
+    {
+     "ask": "dog 要改成哪个词？请说出来。",
+     "expect": "dogs",
+     "explain": "数量是多个，名词要用复数。一般的名词变复数，直接在词尾加 s。dog → dogs。"
+    }
+   ],
+   "final": "dogs",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q33",
+   "text": "改错（只改一个词）：Yesterday we play basketball.",
+   "answer": "played",
+   "raw": "{\"steps\": [{\"ask\": \"上次没注意时间词，这次留心。这句话里哪个词用错了？说出那个英文词。\", \"expect\": \"play\", \"explain\": \"这句话里用错的是 play，其他词都没问题。\"}, {\"ask\": \"句子开头的 Yesterday 说的是过去、现在，还是将来？\", \"expect\": \"过去\", \"explain\": \"Yesterday 是已经过去的时间，所以动词要用过去式。\"}, {\"ask\": \"把 play 变成过去式，填进空里。\", \"expect\": \"played\", \"explain\": \"发生在过去（Yesterday），动词用过去式。规则动词直接加 ed：play → played。\"}]}",
+   "seconds": 5.77,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次没注意时间词，这次留心。这句话里哪个词用错了？说出那个英文词。",
+     "expect": "play",
+     "explain": "这句话里用错的是 play，其他词都没问题。"
+    },
+    {
+     "ask": "句子开头的 Yesterday 说的是过去、现在，还是将来？",
+     "expect": "过去",
+     "explain": "Yesterday 是已经过去的时间，所以动词要用过去式。"
+    },
+    {
+     "ask": "把 play 变成过去式，填进空里。",
+     "expect": "played",
+     "explain": "发生在过去（Yesterday），动词用过去式。规则动词直接加 ed：play → played。"
+    }
+   ],
+   "final": "played",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q34",
+   "text": "改错（只改一个词）：This is a egg.",
+   "answer": "an",
+   "raw": "{\"steps\": [{\"ask\": \"上次这种题出过错，这次慢一点。仔细读一读，哪个英文词写错了？\", \"expect\": \"a\", \"explain\": \"这句话里用错的是 a，其他词都没问题。\"}, {\"ask\": \"egg 的第一个字母是元音字母还是辅音字母？\", \"expect\": \"元音\", \"explain\": \"egg 以 e 开头，e 是元音字母。\"}, {\"ask\": \"那 a 应该改成什么？\", \"expect\": \"an\", \"explain\": \"辅音开头的词前面用 a，元音（a、e、i、o、u）开头的词前面用 an。egg 以元音字母开头，所以 a 要改成 an。\"}]}",
+   "seconds": 6.57,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次这种题出过错，这次慢一点。仔细读一读，哪个英文词写错了？",
+     "expect": "a",
+     "explain": "这句话里用错的是 a，其他词都没问题。"
+    },
+    {
+     "ask": "egg 的第一个字母是元音字母还是辅音字母？",
+     "expect": "元音",
+     "explain": "egg 以 e 开头，e 是元音字母。"
+    },
+    {
+     "ask": "那 a 应该改成什么？",
+     "expect": "an",
+     "explain": "辅音开头的词前面用 a，元音（a、e、i、o、u）开头的词前面用 an。egg 以元音字母开头，所以 a 要改成 an。"
+    }
+   ],
+   "final": "an",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q35",
+   "text": "看中文写单词：苹果 a_ple",
+   "answer": "apple",
+   "raw": "{\"steps\": [{\"ask\": \"上次拼写漏过字母，这次慢慢来。「苹果」这个词里，空格缺的是什么字母？\", \"expect\": \"p\", \"explain\": \"这个空是整个词的第二个字母，这里要写 p。\"}, {\"ask\": \"很好！现在把「苹果」这个词完整地拼出来。\", \"expect\": \"apple\", \"explain\": \"「苹果」的英文是 apple，一共 5 个字母：a p p l e。\"}]}",
+   "seconds": 4.81,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次拼写漏过字母，这次慢慢来。「苹果」这个词里，空格缺的是什么字母？",
+     "expect": "p",
+     "explain": "这个空是整个词的第二个字母，这里要写 p。"
+    },
+    {
+     "ask": "很好！现在把「苹果」这个词完整地拼出来。",
+     "expect": "apple",
+     "explain": "「苹果」的英文是 apple，一共 5 个字母：a p p l e。"
+    }
+   ],
+   "final": "apple",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q36",
+   "text": "看中文写单词：学校 sch__l",
+   "answer": "school",
+   "raw": "{\"steps\": [{\"ask\": \"上次拼写漏过字母，这次慢慢来。「学校」这个词里，第一个空格缺的是什么字母？\", \"expect\": \"o\", \"explain\": \"这个空是整个词的第四个字母，这里要写 o。\"}, {\"ask\": \"「学校」这个词里，第二个空格缺的是什么字母？\", \"expect\": \"o\", \"explain\": \"这个空是整个词的第五个字母，这里要写 o。\"}, {\"ask\": \"很好！现在把「学校」这个词完整地拼出来。\", \"expect\": \"school\", \"explain\": \"「学校」的英文是 school，一共 6 个字母：s c h o o l。\"}]}",
+   "seconds": 6.04,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次拼写漏过字母，这次慢慢来。「学校」这个词里，第一个空格缺的是什么字母？",
+     "expect": "o",
+     "explain": "这个空是整个词的第四个字母，这里要写 o。"
+    },
+    {
+     "ask": "「学校」这个词里，第二个空格缺的是什么字母？",
+     "expect": "o",
+     "explain": "这个空是整个词的第五个字母，这里要写 o。"
+    },
+    {
+     "ask": "很好！现在把「学校」这个词完整地拼出来。",
+     "expect": "school",
+     "explain": "「学校」的英文是 school，一共 6 个字母：s c h o o l。"
+    }
+   ],
+   "final": "school",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q37",
+   "text": "看中文写单词：老师 t_ach_r",
+   "answer": "teacher",
+   "raw": "{\"steps\": [{\"ask\": \"上次拼写漏过字母，这次慢慢来。「老师」这个词里，第一个空格缺的是什么字母？\", \"expect\": \"e\", \"explain\": \"这个空是整个词的第二个字母，这里要写 e。\"}, {\"ask\": \"「老师」这个词里，第二个空格缺的是什么字母？\", \"expect\": \"e\", \"explain\": \"这个空是整个词的第七个字母，这里要写 e。\"}, {\"ask\": \"很好！现在把「老师」这个词完整地拼出来。\", \"expect\": \"teacher\", \"explain\": \"「老师」的英文是 teacher，一共 7 个字母：t e a c h e r。\"}]}",
+   "seconds": 6.02,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次拼写漏过字母，这次慢慢来。「老师」这个词里，第一个空格缺的是什么字母？",
+     "expect": "e",
+     "explain": "这个空是整个词的第二个字母，这里要写 e。"
+    },
+    {
+     "ask": "「老师」这个词里，第二个空格缺的是什么字母？",
+     "expect": "e",
+     "explain": "这个空是整个词的第七个字母，这里要写 e。"
+    },
+    {
+     "ask": "很好！现在把「老师」这个词完整地拼出来。",
+     "expect": "teacher",
+     "explain": "「老师」的英文是 teacher，一共 7 个字母：t e a c h e r。"
+    }
+   ],
+   "final": "teacher",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q38",
+   "text": "看中文写单词：书 b__k",
+   "answer": "book",
+   "raw": "{\"steps\": [{\"ask\": \"上次拼写漏过字母，这次慢慢来。「书」这个词里，第一个空格缺的是什么字母？\", \"expect\": \"o\", \"explain\": \"这个空是整个词的第二个字母，这里要写 o。\"}, {\"ask\": \"「书」这个词里，第二个空格缺的是什么字母？\", \"expect\": \"e\", \"explain\": \"这个空是整个词的第三个字母，这里要写 e。\"}, {\"ask\": \"很好！现在把「书」这个词完整地拼出来。\", \"expect\": \"book\", \"explain\": \"「书」的英文是 book，一共 4 个字母：b o o k。\"}]}",
+   "seconds": 5.97,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次拼写漏过字母，这次慢慢来。「书」这个词里，第一个空格缺的是什么字母？",
+     "expect": "o",
+     "explain": "这个空是整个词的第二个字母，这里要写 o。"
+    },
+    {
+     "ask": "「书」这个词里，第二个空格缺的是什么字母？",
+     "expect": "e",
+     "explain": "这个空是整个词的第三个字母，这里要写 e。"
+    },
+    {
+     "ask": "很好！现在把「书」这个词完整地拼出来。",
+     "expect": "book",
+     "explain": "「书」的英文是 book，一共 4 个字母：b o o k。"
+    }
+   ],
+   "final": "book",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q39",
+   "text": "根据中文拼写单词：星期一 ___ (首字母 M)",
+   "answer": "Monday",
+   "raw": "{\"steps\": [{\"ask\": \"上次拼写漏过字母，这次慢慢来。「星期一」的英文以 M 开头，第二个字母是什么？\", \"expect\": \"o\", \"explain\": \"「星期一」的英文是 M 开头的，第二个字母是 o。\"}, {\"ask\": \"这个词的最后一个字母是什么？\", \"expect\": \"y\", \"explain\": \"这个词的最后一个字母是 y。\"}, {\"ask\": \"现在把「星期一」这个单词完整地拼出来。\", \"expect\": \"Monday\", \"explain\": \"「星期一」的英文是 Monday，一共 6 个字母：M o n d a y。\"}]}",
+   "seconds": 5.71,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次拼写漏过字母，这次慢慢来。「星期一」的英文以 M 开头，第二个字母是什么？",
+     "expect": "o",
+     "explain": "「星期一」的英文是 M 开头的，第二个字母是 o。"
+    },
+    {
+     "ask": "这个词的最后一个字母是什么？",
+     "expect": "y",
+     "explain": "这个词的最后一个字母是 y。"
+    },
+    {
+     "ask": "现在把「星期一」这个单词完整地拼出来。",
+     "expect": "Monday",
+     "explain": "「星期一」的英文是 Monday，一共 6 个字母：M o n d a y。"
+    }
+   ],
+   "final": "Monday",
+   "finalOk": true,
+   "checkPassed": true
+  },
+  {
+   "id": "ext-q40",
+   "text": "根据中文拼写单词：绿色 ___ (首字母 g)",
+   "answer": "green",
+   "raw": "{\"steps\": [{\"ask\": \"上次拼写漏过字母，这次慢慢来。「绿色」的英文以 g 开头，第二个字母是什么？\", \"expect\": \"r\", \"explain\": \"「绿色」的英文是 g 开头的，第二个字母是 r。\"}, {\"ask\": \"这个词的最后一个字母是什么？\", \"expect\": \"e\", \"explain\": \"这个词的最后一个字母是 e。\"}, {\"ask\": \"那整个单词是什么？请说出来。\", \"expect\": \"green\", \"explain\": \"「绿色」的英文是 green，一共 5 个字母：g r e e n。\"}]}",
+   "seconds": 5.53,
+   "valid": true,
+   "steps": [
+    {
+     "ask": "上次拼写漏过字母，这次慢慢来。「绿色」的英文以 g 开头，第二个字母是什么？",
+     "expect": "r",
+     "explain": "「绿色」的英文是 g 开头的，第二个字母是 r。"
+    },
+    {
+     "ask": "这个词的最后一个字母是什么？",
+     "expect": "e",
+     "explain": "这个词的最后一个字母是 e。"
+    },
+    {
+     "ask": "那整个单词是什么？请说出来。",
+     "expect": "green",
+     "explain": "「绿色」的英文是 green，一共 5 个字母：g r e e n。"
+    }
+   ],
+   "final": "green",
+   "finalOk": true,
+   "checkPassed": true
+  }
+ ]
+}

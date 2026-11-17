@@ -1,0 +1,20 @@
+{
+  "v_3s": [
+    "like", "love", "want", "need", "eat", "drink", "play", "look", "live", "work",
+    "help", "walk", "run", "jump", "sing", "swim", "sleep", "make", "see", "speak",
+    "take", "give", "get", "come", "sit", "stand", "open", "close", "clean", "cook",
+    "draw", "write", "ride", "drive", "dance", "sweep", "listen", "hear", "know", "think",
+    "feel", "find", "keep", "hold", "buy", "sell", "say", "tell", "ask", "answer",
+    "call", "talk", "show", "learn", "use", "visit", "wear", "wake", "start", "stop",
+    "skate", "climb", "paint", "plant", "rain", "snow", "water", "grow", "send", "bring",
+    "meet", "leave", "lose", "win", "begin", "bake", "wait", "stay", "enjoy", "smile",
+    "laugh"
+  ],
+  "v_es": [
+    "watch", "teach", "catch", "wash", "brush", "finish", "miss", "guess", "pass", "cross",
+    "kiss", "mix", "fix", "relax", "push", "reach", "touch"
+  ],
+  "v_ies": ["study", "carry", "fly", "cry", "try", "worry", "hurry", "tidy", "copy"],
+  "v_irregular": {"go": "goes", "do": "does", "have": "has"},
+  "needsWordAfter": ["open", "close", "clean"]
+}

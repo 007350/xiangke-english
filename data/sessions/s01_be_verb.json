@@ -1,0 +1,28 @@
+{
+  "session": {
+    "sessionId": "s_01",
+    "childId": "child_01",
+    "planVersion": 1,
+    "source": "photo",
+    "recognizedText": "I ___ a student. (am / is / are)",
+    "confirmed": true,
+    "offline": true,
+    "startedAt": "2026-11-01T19:12:00+08:00",
+    "endedAt": "2026-11-01T19:16:40+08:00",
+    "checkPassed": true,
+    "checkReasons": [],
+    "steps": [
+      {
+        "stepId": "s1",
+        "ask": "I 后面用 am、is 还是 are？",
+        "expect": "am",
+        "explain": "I 和 am 连用。he、she、it 才用 is。"
+      }
+    ],
+    "events": [
+      {"stepId": "s1", "said": "is", "result": "miss", "hintUsed": 1},
+      {"stepId": "s1", "said": "I am", "result": "miss", "hintUsed": 2},
+      {"stepId": "s1", "said": "是am", "result": "hit", "hintUsed": 2}
+    ]
+  }
+}
