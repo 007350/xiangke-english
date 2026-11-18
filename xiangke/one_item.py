@@ -9,7 +9,6 @@ from __future__ import annotations
 import re
 
 from xiangke.kernel import finish_session, judge
-from xiangke.questions import DEFERRED
 from xiangke.reply import confirm_reply, finish_with_error_kinds, route_reply
 from xiangke.teach import teach
 
@@ -17,6 +16,40 @@ CANNOT_TEACH = "这道题我现在还不会讲，不是你的问题。可以检�
 NOT_SURE = "这道题我不一定对，可以问问老师。"
 BE_RULE = "我（I）用 am，你（you）用 are，一个人或一样东西用 is，两个或更多用 are。先看主语是谁。"
 SAFE_RULE = "先看看句子里的线索，再想一想。"
+
+
+_ACK = {
+    "why": ("嗯，这个值得弄明白。", "你问到点子上了。", "嗯，咱们把道理弄明白。"),
+    "meaning": ("你想知道它的意思呀。", "嗯，先弄明白意思再做，是对的。"),
+    "other": ("嗯，这个问题有意思。", "这个问题问得细。"),
+}
+_DEFER = (
+    "这个我先记下来，去问问老师，联网了他写回信给你。",
+    "我先记在小本子上，去问问老师，联网了他写回信给你。",
+    "好，先记下来，我去问问老师，等联网了他写回信给你。",
+)
+_LEAD = ("那你说，", "来，", "回到这一问，")
+
+
+def question_reply(said: str, ask: str, rule: str | None, count: int) -> str:
+    """三拍：接住孩子的话，能答就答、答不了诚实推迟，再温和接回当前小问。"""
+    said = said.strip()
+    if any(word in said for word in ("为什么", "为啥", "为何")):
+        shape = "why"
+    elif "意思" in said:
+        shape = "meaning"
+    else:
+        shape = "other"
+    acks = _ACK[shape]
+    ack = acks[count % len(acks)]
+    if said and len(said) <= 14:
+        ack = f"「{said.rstrip('？?。！!')}」，{ack}"
+    if shape == "why" and rule and rule != SAFE_RULE:
+        body = rule
+    else:
+        body = _DEFER[count % len(_DEFER)]
+    lead = _LEAD[count % len(_LEAD)]
+    return f"{ack}{body}{lead}{ask.removeprefix('想一想，')}"
 
 
 def rule_without_answer(lesson: dict, remaining: list[dict]) -> str:
@@ -46,7 +79,7 @@ class ItemSession:
         self.lesson = teach(text, write, plan, known)
         self.steps = self.lesson["steps"] or []
         self.transcript: list[str] = []
-        self.index = self.misses = self.stuck = 0
+        self.index = self.misses = self.stuck = self.questions = 0
         self.pending: str | None = None
         self.answers: list[str] = []
         self.log: list[tuple] = []
@@ -95,7 +128,8 @@ class ItemSession:
             self.events.append({"stepId": step["stepId"], "said": said, "result": "note", "hintUsed": 0, "noteKind": "question"})
         else:
             self._note(said, step, "question")
-        self._say(DEFERRED)
+        self._say(question_reply(said, step["ask"], None, self.questions))
+        self.questions += 1
         return self.take_messages()
 
     def record(self, ended_at: str | None = None) -> dict:
@@ -159,7 +193,9 @@ class ItemSession:
                     self._say(f"没关系，慢慢想。{step['ask']}")
                 return
             if action == "show_rule":
-                self._say(DEFERRED)
+                rule = rule_without_answer(self.lesson, self.steps[self.index:])
+                self._say(question_reply(said, step["ask"], rule, self.questions))
+                self.questions += 1
                 return
             if action == "redirect":
                 self._say(f"我们先把这一问做完。{step['ask']}")
@@ -203,7 +239,8 @@ class ItemSession:
         if label in ("提问", "不会"):
             self.events[-1]["noteKind"] = "question" if label == "提问" else "stuck"
         if label == "提问":
-            self._say(DEFERRED)
+            self._say(question_reply(said, step["ask"], None, self.questions))
+            self.questions += 1
             return
         if label == "其他":
             self._say(f"我们先把这一问做完。{step['ask']}")

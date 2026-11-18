@@ -138,5 +138,11 @@
    },
    "drills": []
   }
+ },
+ "answers": {
+  "[\"改错（只改一个词）：she like cats.\", \"那 like 应该改成什么？\", \"为什么要加s\", \"question\"]": {
+   "status": "answered",
+   "answer": "当主语是 he、she、it 时，后面的动词要加 s。这道题的主语是 She，所以动词 like 要改成 likes，句子就正确了。"
+  }
  }
 }

@@ -3,7 +3,7 @@ import unittest
 
 from xiangke.answers import compute_answer
 from xiangke.intent import classify, make_label_of
-from xiangke.one_item import SAFE_RULE, rule_without_answer, run_item
+from xiangke.one_item import SAFE_RULE, question_reply, rule_without_answer, run_item
 from xiangke.teach import answer_grammar, check_talk, program_steps, repair_terms, teach, user_message
 
 FACTS = {
@@ -403,6 +403,28 @@ class RunItemTests(unittest.TestCase):
         joined = "\n".join(result["transcript"])
         self.assertIn("先看主语是谁", joined)
         self.assertNotIn("主语是 they，用 are", joined)
+
+    def test_why_reply_answers_without_bookkeeping(self):
+        reply = question_reply("为什么？", "想一想，空里选 like 还是 likes？", "主语是一个，现在常做的事，动词要变。", 0)
+        self.assertIn("「为什么」", reply)
+        self.assertIn("主语是一个，现在常做的事，动词要变。", reply)
+        self.assertNotIn("记下来", reply)
+        self.assertIn("那你说，空里选 like 还是 likes？", reply)
+
+    def test_meaning_or_unsafe_rule_defers_to_the_letter(self):
+        for said, rule in [("这是什么意思？", "主语是一个，现在常做的事，动词要变。"), ("为什么？", SAFE_RULE)]:
+            with self.subTest(said=said):
+                reply = question_reply(said, "想一想，空里选 like 还是 likes？", rule, 0)
+                self.assertNotIn("主语是一个", reply)
+                self.assertNotIn(SAFE_RULE, reply)
+                self.assertIn("回信", reply)
+                self.assertNotIn("信封", reply)
+
+    def test_long_question_is_not_quoted_and_rotation_varies(self):
+        long = "老师，我一直搞不懂这里到底为什么要这样写？"
+        reply = question_reply(long, "空里选什么？", None, 0)
+        self.assertNotIn("「", reply)
+        self.assertNotEqual(reply, question_reply(long, "空里选什么？", None, 1))
 
     def test_third_miss_stops_with_assisted(self):
         result = run_item(TEXT, ["They", "is", "am", "is", "are"], writer(GOOD), FACTS)

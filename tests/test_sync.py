@@ -71,7 +71,7 @@ class WholeLoopTests(SyncCase):
 
         self.phone.set_network(True)
         home = self.phone.sync()
-        self.assertEqual(home["syncResult"], {"sent": 1, "accepted": 1, "planUpdated": True, "planRefused": [], "planVersion": 3})
+        self.assertEqual(home["syncResult"], {"sent": 1, "accepted": 1, "planUpdated": True, "planRefused": [], "questionsUpdated": 0, "planVersion": 3})
         self.assertEqual(home["waitingSync"], 0)
         self.assertEqual(home["planVersion"], 3)
 
@@ -90,7 +90,7 @@ class WholeLoopTests(SyncCase):
         self.phone.set_network(True)
         self.phone.sync()
         result = self.phone.sync()["syncResult"]
-        self.assertEqual(result, {"sent": 0, "accepted": 0, "planUpdated": False, "planRefused": [], "planVersion": 3})
+        self.assertEqual(result, {"sent": 0, "accepted": 0, "planUpdated": False, "planRefused": [], "questionsUpdated": 0, "planVersion": 3})
         self.assertEqual(self.cloud_store.latest_version("child_01"), 3)
 
     def test_no_sessions_yet_gives_no_new_plan(self):

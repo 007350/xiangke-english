@@ -41,3 +41,7 @@ demo/*.db
 # 内部资料：交接包、参赛准备清单，不进公开仓库
 交接包/
 Qoder试站/
+
+# 本地工作区数据与演示运行状态
+.workbuddy/
+demo/service-state.json

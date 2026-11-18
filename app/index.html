@@ -63,9 +63,24 @@ button.row:hover { border-color: var(--green); }
 .tag { padding: 0 8px; border-radius: 6px; background: var(--green-soft); color: var(--green-dark); white-space: nowrap; }
 .tag.maybe { background: var(--amber-soft); color: var(--amber); }
 .tag.none { background: #ece8dc; color: var(--muted); }
-.question-answer { margin: 9px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .question-context { margin: 5px 0; color: var(--muted); font-size: 14px; }
 .note { color: var(--muted); font-size: 14px; margin: 18px 0 0; text-align: center; }
+.letter-banner { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; padding: 12px 14px; margin: 0 0 14px; min-height: 64px; }
+.letter-banner svg { flex: none; width: 34px; height: 34px; color: var(--muted); }
+.letter-banner b { display: block; font-size: 18px; color: var(--muted); }
+.letter-banner small { display: block; font-size: 14px; color: var(--muted); }
+.letter-banner:not(.idle) { background: var(--green-soft); border-color: var(--green); animation: letter-in .5s ease; }
+.letter-banner:not(.idle):hover { background: #d5e8dd; }
+.letter-banner:not(.idle) svg { color: var(--green-dark); animation: letter-wave 2s infinite; }
+.letter-banner:not(.idle) b { color: var(--green-dark); }
+@keyframes letter-in { from { opacity: 0; transform: translateY(-8px); } }
+@keyframes letter-wave { 50% { transform: scale(1.12) rotate(-5deg); } }
+@media (prefers-reduced-motion: reduce) { .letter-banner, .letter-banner svg { animation: none; } }
+.letter { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+.letter .tag { display: inline-block; margin-bottom: 8px; }
+.letter .said { margin: 0 0 6px; font-weight: 600; }
+.letter .teacher-label { color: var(--green-dark); font-weight: 600; margin: 10px 0 2px; }
+.letter .teacher { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 textarea { width: 100%; min-height: 110px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--card); padding: 12px; font-family: var(--en); font-size: 19px; resize: vertical; }
 textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1px; border-color: var(--green); }
 .tip { color: var(--muted); font-size: 14.5px; margin: 8px 0 16px; }
@@ -115,6 +130,10 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
   <!-- 首页 -->
   <section class="screen on" id="s-home">
     <main>
+      <button class="letter-banner idle" id="letter-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        <span style="flex:1"><b id="letter-banner-title">老师的回信</b><small id="letter-banner-sub">暂无新回信。</small></span>
+      </button>
       <p class="hello">今天学点什么？</p>
       <p class="sub">不会的题拍下来，一步一步来。</p>
       <label class="camera" for="photo">
@@ -135,15 +154,19 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
         <h2>给你准备的专属题</h2>
         <div id="drills"></div>
       </div>
-      <div id="questions-box" class="hidden">
-        <h2>我留下的疑惑</h2>
-        <p class="tip">云端老师解答后，同步到这里；收到的解答断网也能看。</p>
-        <div id="questions" aria-live="polite"></div>
-      </div>
       <h2>课包里的题</h2>
       <div id="pack"></div>
       <h2>做过的题</h2>
       <div id="history"></div>
+    </main>
+  </section>
+
+  <!-- 老师的回信 -->
+  <section class="screen" id="s-letter">
+    <main>
+      <p class="sub" style="margin-bottom:12px">老师看到你留下的疑惑，写了回信。断网也能看。</p>
+      <div id="letters"></div>
+      <button class="primary" id="letter-done">我知道啦</button>
     </main>
   </section>
 
@@ -198,8 +221,8 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
 
 <script>
 const $ = id => document.getElementById(id);
-const screens = { home: "s-home", confirm: "s-confirm", chat: "s-chat" };
-const titles = { home: "乡课英语", confirm: "确认题目", chat: "一起做题" };
+const screens = { home: "s-home", confirm: "s-confirm", chat: "s-chat", letter: "s-letter" };
+const titles = { home: "乡课英语", confirm: "确认题目", chat: "一起做题", letter: "老师的回信" };
 let current = "home";
 let textSource = "photo";
 let lastQuestion = "";
@@ -264,26 +287,8 @@ function renderHome(data) {
     return button;
   }));
   const questions = data.questions || [];
-  $("questions-box").classList.toggle("hidden", !questions.length);
-  $("questions").replaceChildren(...questions.map(item => {
-    const card = document.createElement("details");
-    card.className = "row";
-    const summary = document.createElement("summary");
-    const labels = { pending: "待云端解答", answered: "云端已解答", needs_teacher: "需要老师确认" };
-    const label = item.seq === 0 ? "待同步" : labels[item.status];
-    summary.textContent = `${label}：${item.question}`;
-    const context = document.createElement("p");
-    context.className = "question-context";
-    context.textContent = `当时的小问：${item.ask}`;
-    const text = document.createElement("div");
-    text.className = "en";
-    text.textContent = item.text;
-    const answer = document.createElement("p");
-    answer.className = "question-answer";
-    answer.textContent = item.answer || (item.seq === 0 ? "疑惑保存在这台设备上，联网后点同步交给云端老师。" : "疑惑已经收到，解答写好后再同步查看。");
-    card.append(summary, text, context, answer);
-    return card;
-  }));
+  allQuestions = questions;
+  renderLetterBanner(questions);
   const history = $("history");
   if (!data.history.length) {
     const empty = document.createElement("div");
@@ -299,6 +304,109 @@ function renderHome(data) {
   $("net").dataset.online = data.online ? "1" : "";
   $("sync-now").classList.toggle("hidden", !data.online);
 }
+
+/* 老师回信：常驻首页。新解答到达时是提醒态，读过后回到空态 */
+let unreadLetters = [];
+let allLetters = [];
+let allQuestions = [];
+
+function seenLetters() {
+  try { return JSON.parse(localStorage.getItem("xiangke-letter-seen")); } catch { return null; }
+}
+
+function saveLetterSeen(map) {
+  try { localStorage.setItem("xiangke-letter-seen", JSON.stringify(map)); } catch { /* 存不了就每次提示 */ }
+}
+
+function renderLetterBanner(questions) {
+  allLetters = questions.filter(item => item.status !== "pending");
+  let seen = seenLetters();
+  if (!seen) {
+    // 第一次用：把现有的记成已读，只提示之后新到的回信
+    seen = {};
+    questions.forEach(item => { seen[item.questionId] = item.seq; });
+    saveLetterSeen(seen);
+  }
+  unreadLetters = allLetters.filter(item => item.seq > (seen[item.questionId] || 0));
+  const active = unreadLetters.length > 0;
+  const waiting = questions.filter(item => item.status === "pending").length;
+  $("letter-banner").classList.toggle("idle", !active);
+  $("letter-banner-title").textContent = active ? "云端老师回信了！" : "老师的回信";
+  $("letter-banner-sub").textContent = active
+    ? `你留下的 ${unreadLetters.length} 条疑惑有回音了，点开看看。`
+    : waiting ? `暂无新回信。${waiting} 条疑惑在等老师写回来。` : "暂无新回信。留下疑惑，联网后老师会写回来。";
+}
+
+function openLetter() {
+  const letters = unreadLetters.length ? unreadLetters : allLetters;
+  const waiting = allQuestions.filter(item => item.status === "pending");
+  $("letter-done").textContent = unreadLetters.length ? "我知道啦" : "回到首页";
+  const nodes = letters.map(item => {
+    const card = document.createElement("div");
+    card.className = "letter";
+    const tag = document.createElement("span");
+    tag.className = item.status === "answered" ? "tag" : "tag maybe";
+    tag.textContent = item.status === "answered" ? "解决了" : "需要老师确认";
+    const said = document.createElement("p");
+    said.className = "said";
+    said.textContent = `你当时问：${item.question}`;
+    const text = document.createElement("div");
+    text.className = "en";
+    text.textContent = item.text;
+    const context = document.createElement("p");
+    context.className = "question-context";
+    context.textContent = `当时的小问：${item.ask}`;
+    const label = document.createElement("p");
+    label.className = "teacher-label";
+    label.textContent = "老师说：";
+    const answer = document.createElement("p");
+    answer.className = "teacher";
+    answer.textContent = item.answer;
+    card.append(tag, said, text, context, label, answer);
+    return card;
+  });
+  if (waiting.length) {
+    const head = document.createElement("h2");
+    head.textContent = "还在等老师回信";
+    nodes.push(head);
+    waiting.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "letter";
+      const tag = document.createElement("span");
+      tag.className = "tag none";
+      tag.textContent = item.seq === 0 ? "待同步" : "待回信";
+      const said = document.createElement("p");
+      said.className = "said";
+      said.textContent = `你当时问：${item.question}`;
+      const text = document.createElement("div");
+      text.className = "en";
+      text.textContent = item.text;
+      const context = document.createElement("p");
+      context.className = "question-context";
+      context.textContent = item.seq === 0 ? "疑惑保存在这台设备上，联网后点同步交给云端老师。" : `当时的小问：${item.ask}`;
+      card.append(tag, said, text, context);
+      nodes.push(card);
+    });
+  }
+  if (!nodes.length) {
+    const tip = document.createElement("p");
+    tip.className = "tip";
+    tip.textContent = "还没有回信。做题时留下疑惑，联网同步后，老师会写回来。";
+    nodes.push(tip);
+  }
+  $("letters").replaceChildren(...nodes);
+  show("letter");
+}
+
+$("letter-banner").onclick = openLetter;
+$("letter-done").onclick = () => {
+  const seen = seenLetters() || {};
+  unreadLetters.forEach(item => { seen[item.questionId] = item.seq; });
+  saveLetterSeen(seen);
+  unreadLetters = [];
+  show("home");
+  loadHome();
+};
 
 /* 同步：传完记录就回来，云端在后台写，这里隔一会儿再取一次，直到云端写完 */
 const POLL_MS = 8000;
@@ -330,7 +438,7 @@ function syncText(note) {
   if (note.accepted < note.sent) parts.push(`还有 ${note.sent - note.accepted} 次云端没收下，下次再传。`);
   if (note.planVersion !== null) parts.push(`讲法更新到第 ${note.planVersion} 版。`);
   if (note.drills) parts.push(`收到 ${note.drills} 道专属题。`);
-  if (note.questions) parts.push("疑惑和解答已更新，可以在下面查看。");
+  if (note.questions) parts.push("老师的回信到了，点首页上面的信封看。");
   if (note.questionFailed) parts.push("部分疑惑这次还没解答，记录保留着，下次点同步重试。");
   if (note.questionsRefused) parts.push("答疑内容没有收完整，稍后再同步。");
   if (note.refused) parts.push("新讲法没通过检查，继续用旧的。");

@@ -624,9 +624,10 @@ def main() -> None:
         parser.error("--record 和 --replay 不能同时用")
     if args.replay:
         replayer = Replayer(args.replay)
-        print("写讲法：回放演示备份，不联网", flush=True)
+        print("写讲法和答疑：回放演示备份，不联网", flush=True)
         planner, maker, reporter = replayer.planner, replayer.maker, replayer.reporter
-        question_answerer = None  # 旧录制不含答疑，回放时不偷偷调用真实接口。
+        # 旧录制不含答疑，回放时不偷偷调用真实接口。
+        question_answerer = replayer.answerer if replayer.answers is not None else None
     else:
         planner, maker, reporter = pick_planner(args.test_planner), pick_drill_maker(args.test_planner), pick_reporter(args.test_planner)
         question_answerer = pick_question_answerer(args.test_planner)
@@ -634,6 +635,7 @@ def main() -> None:
         recorder = Recorder(args.record)
         planner, reporter = recorder.wrap_planner(planner), recorder.wrap_reporter(reporter) if reporter else None
         maker = recorder.wrap_maker(maker) if maker else None
+        question_answerer = recorder.wrap_answerer(question_answerer) if question_answerer else None
     with CloudStore(args.db) as store:
         app = CloudApp(store, planner, maker, background=True, reporter=reporter, recorded=bool(args.replay), question_answerer=question_answerer)
         server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(app))
