@@ -117,6 +117,16 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
 #finish h3 { margin: 0 0 4px; font-size: 21px; }
 #finish p { margin: 0 0 12px; color: var(--muted); }
 .hidden { display: none !important; }
+/* 做题反馈：答对打勾，做完撒星，整道题一次没错才放烟花 */
+.iconpill { min-width: 34px; padding: 3px 8px; display: flex; align-items: center; justify-content: center; }
+.iconpill svg { width: 17px; height: 17px; }
+#fx { position: fixed; inset: 0; pointer-events: none; z-index: 60; }
+@keyframes bubble-pop { 0% { transform: scale(.94); opacity: .5; } 70% { transform: scale(1.015); } 100% { transform: scale(1); opacity: 1; } }
+.bubble.good { animation: bubble-pop .26s ease-out; }
+@keyframes tick-in { 0% { transform: scale(.2); opacity: 0; } 60% { transform: scale(1.25); } 100% { transform: scale(1); opacity: 1; } }
+.bubble.good .tick { display: inline-block; margin-right: 6px; font-weight: 700; animation: tick-in .34s ease-out; }
+.sound-hint { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); transform: translateX(-50%); border: 0; border-radius: 99px; background: rgba(40, 50, 40, .88); color: #fff; font-size: 13.5px; padding: 9px 16px; z-index: 70; animation: bubble-pop .3s ease-out; }
+@media (prefers-reduced-motion: reduce) { .bubble.good, .bubble.good .tick, .sound-hint { animation: none; } }
 </style>
 </head>
 <body>
@@ -125,6 +135,14 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
     <button class="back hidden" id="back" aria-label="返回">‹</button>
     <h1 id="title">乡课英语</h1>
     <button class="pill" id="net" title="模拟网络的开关，点一下切换">已断网 · 点此联网</button>
+    <button class="pill iconpill" id="sound" aria-label="声音已开，点此关闭" title="点一下关掉声音">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M4 9.5v5h3l4 3.2V6.3L7 9.5H4z"/>
+        <path class="wave" d="M15.2 9.3a4 4 0 0 1 0 5.4"/>
+        <path class="wave" d="M17.8 6.9a7.6 7.6 0 0 1 0 10.2"/>
+        <path class="slash" d="M4.5 4.5l15 15" style="display:none"/>
+      </svg>
+    </button>
   </header>
 
   <!-- 首页 -->
@@ -233,6 +251,8 @@ function show(name) {
   for (const key in screens) $(screens[key]).classList.toggle("on", key === name);
   $("title").textContent = titles[name];
   $("back").classList.toggle("hidden", name === "home");
+  // 离开首页就把声音提示收掉，别挡住做题页底部的输入框
+  document.querySelectorAll(".sound-hint").forEach(hint => hint.remove());
 }
 
 async function api(path, body, raw) {
@@ -693,10 +713,191 @@ function startChat(text) {
   setBusy(true);
 }
 
+/* 声音与特效。答对一声「叮」，做完撒一小把星，整道题一次没错才放烟花——
+   稀有才有意思，每道题都放，第三次孩子就腻了，家长也开始嫌吵。 */
+const FX_MUTE_KEY = "xiangke-sound-muted";
+const FX_HINT_KEY = "xiangke-sound-hint";
+const FX_GREEN = "#2f6b52";
+const FX_YELLOW = "#d99416";
+const FX_CLAY = "#c2603f";
+const FX_SKY = "#3f7fa0";
+const FX_LEAF = "#6b8f3f";
+const reduceMotion = Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+let muted = false;
+try { muted = localStorage.getItem(FX_MUTE_KEY) === "1"; } catch { /* 存不了就按默认开 */ }
+
+let audioCtx = null;
+function audioOn() {
+  if (muted) return null;
+  if (!audioCtx) {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    audioCtx = new Ctx();
+  }
+  if (audioCtx.state === "suspended") audioCtx.resume().catch(() => {});
+  return audioCtx;
+}
+
+// 浏览器要求先有一次用户操作才让出声，所以第一次点屏幕时把声音引擎唤醒
+document.addEventListener("pointerdown", () => { if (!muted) audioOn(); }, { once: true });
+
+function tone(freq, delay, length, volume, type) {
+  const ctx = audioOn();
+  if (!ctx) return;
+  const at = ctx.currentTime + delay;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type || "sine";
+  osc.frequency.setValueAtTime(freq, at);
+  gain.gain.setValueAtTime(0.0001, at);
+  gain.gain.linearRampToValueAtTime(volume, at + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, at + length);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(at);
+  osc.stop(at + length + 0.03);
+}
+
+function soundRight() {
+  tone(1046.5, 0, 0.16, 0.1);
+  tone(1568, 0.015, 0.13, 0.045);
+}
+
+function soundDone() {
+  [784, 988, 1175].forEach((freq, index) => tone(freq, index * 0.085, 0.2, 0.085));
+}
+
+function soundClean() {
+  [523, 659, 784, 1046, 1319].forEach((freq, index) => tone(freq, index * 0.075, 0.34, 0.095));
+  tone(160, 0.02, 0.4, 0.09, "triangle");
+}
+
+let fxCanvas = null;
+let fxPaint = null;
+let fxParticles = [];
+let fxFrame = 0;
+
+function sizeFx() {
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  fxCanvas.width = Math.round(innerWidth * ratio);
+  fxCanvas.height = Math.round(innerHeight * ratio);
+  fxPaint.setTransform(ratio, 0, 0, ratio, 0, 0);
+}
+
+function fxReady() {
+  if (fxCanvas) return;
+  fxCanvas = document.createElement("canvas");
+  fxCanvas.id = "fx";
+  fxCanvas.setAttribute("aria-hidden", "true");
+  document.body.appendChild(fxCanvas);
+  fxPaint = fxCanvas.getContext("2d");
+  sizeFx();
+}
+
+function sparks(count, speed, colors) {
+  if (reduceMotion) return;
+  fxReady();
+  const cx = innerWidth / 2;
+  const cy = Math.min(innerHeight * 0.3, 260);
+  for (let index = 0; index < count; index += 1) {
+    const angle = (Math.PI * 2 * index) / count + Math.random() * 0.25;
+    const push = speed * (0.35 + Math.random() * 0.75);
+    fxParticles.push({
+      x: cx,
+      y: cy,
+      vx: Math.cos(angle) * push,
+      vy: Math.sin(angle) * push,
+      life: 1,
+      fade: 0.0048 + Math.random() * 0.004,
+      size: 2.4 + Math.random() * 3,
+      color: colors[index % colors.length],
+    });
+  }
+  if (!fxFrame) fxFrame = requestAnimationFrame(paintFx);
+}
+
+function paintFx() {
+  const width = innerWidth;
+  const height = innerHeight;
+  fxPaint.clearRect(0, 0, width, height);
+  fxParticles = fxParticles.filter(particle => particle.life > 0);
+  fxPaint.lineCap = "round";
+  for (const particle of fxParticles) {
+    particle.vy += 0.16;
+    particle.vx *= 0.988;
+    particle.vy *= 0.988;
+    particle.x += particle.vx;
+    particle.y += particle.vy;
+    particle.life -= particle.fade;
+    const alive = particle.life > 0 ? particle.life : 0;
+    // 按速度方向画一小段线，比圆点更有飞出去的感觉
+    fxPaint.globalAlpha = alive;
+    fxPaint.strokeStyle = particle.color;
+    fxPaint.lineWidth = Math.max(particle.size * alive * 1.5, 1.5);
+    fxPaint.beginPath();
+    fxPaint.moveTo(particle.x, particle.y);
+    fxPaint.lineTo(particle.x - particle.vx * 1.15, particle.y - particle.vy * 1.15);
+    fxPaint.stroke();
+  }
+  fxPaint.globalAlpha = 1;
+  if (fxParticles.length) {
+    fxFrame = requestAnimationFrame(paintFx);
+  } else {
+    fxPaint.clearRect(0, 0, width, height);
+    fxFrame = 0;
+  }
+}
+
+function celebrate(kind) {
+  if (kind === "clean") {
+    soundClean();
+    sparks(88, 5.4, [FX_GREEN, FX_YELLOW, FX_CLAY, FX_SKY, FX_LEAF]);
+    setTimeout(() => sparks(34, 4.2, [FX_YELLOW, FX_GREEN, FX_CLAY]), 240);
+  } else {
+    soundDone();
+    sparks(26, 3.6, [FX_GREEN, FX_YELLOW]);
+  }
+}
+
+function paintSoundButton() {
+  const button = $("sound");
+  button.querySelector(".slash").style.display = muted ? "" : "none";
+  button.querySelectorAll(".wave").forEach(wave => { wave.style.display = muted ? "none" : ""; });
+  button.setAttribute("aria-label", muted ? "声音已关，点此打开" : "声音已开，点此关闭");
+  button.title = muted ? "点一下打开声音" : "点一下关掉声音";
+}
+
+function setMuted(value) {
+  muted = value;
+  try { localStorage.setItem(FX_MUTE_KEY, value ? "1" : "0"); } catch { /* 存不了就这次生效 */ }
+  paintSoundButton();
+}
+
+function showSoundHint() {
+  if (muted) return;
+  try { if (localStorage.getItem(FX_HINT_KEY)) return; } catch { /* 忽略 */ }
+  try { localStorage.setItem(FX_HINT_KEY, "1"); } catch { /* 忽略 */ }
+  const hint = document.createElement("button");
+  hint.type = "button";
+  hint.className = "sound-hint";
+  hint.textContent = "做题有声音，点这里可以关";
+  hint.addEventListener("click", () => { setMuted(true); hint.remove(); });
+  document.body.appendChild(hint);
+  setTimeout(() => hint.remove(), 6000);
+}
+
 function bubble(text, who, extra) {
   const item = document.createElement("div");
   item.className = `bubble ${who}${extra ? " " + extra : ""}`;
-  item.textContent = text;
+  if (extra === "good") {
+    const tick = document.createElement("span");
+    tick.className = "tick";
+    tick.setAttribute("aria-hidden", "true");
+    tick.textContent = "✓";
+    item.appendChild(tick);
+  }
+  item.appendChild(document.createTextNode(text));
   $("chat").append(item);
   item.scrollIntoView({ block: "end" });
   return item;
@@ -726,7 +927,9 @@ function applyView(view) {
   for (const text of view.messages) {
     // 这句话已经固定显示在题目下面，不再重复
     if (text.startsWith("这道题我不一定对")) continue;
-    bubble(text, "phone-say", text === "答对了！" ? "good" : "");
+    const right = text === "答对了！";
+    bubble(text, "phone-say", right ? "good" : "");
+    if (right) soundRight();
   }
   $("notsure").classList.toggle("hidden", view.mode !== "try");
   $("flag-item").classList.toggle("hidden", !view.drill || view.done);
@@ -784,6 +987,10 @@ function finish(view) {
   $("finish-text").textContent = text;
   $("finish").classList.remove("hidden");
   $("chat").scrollTop = $("chat").scrollHeight;
+  // 只有真做完（试做模式、讲不了都不算）才给庆祝，全对才是大烟花
+  if (view.outcome === "finished" && view.mode !== "try") {
+    celebrate(summary && summary.wrong === 0 ? "clean" : "done");
+  }
 }
 
 async function send(said, isQuestion = false) {
@@ -828,6 +1035,14 @@ async function goHome() {
 $("back").onclick = goHome;
 $("again").onclick = goHome;
 $("fix-text").onclick = () => openConfirm(lastQuestion, textSource === "drill" ? "photo" : textSource);
+
+$("sound").onclick = () => {
+  setMuted(!muted);
+  if (!muted) soundRight(); // 打开时响一声，让人知道声音回来了
+};
+paintSoundButton();
+showSoundHint();
+window.addEventListener("resize", () => { if (fxCanvas) sizeFx(); });
 
 loadHome();
 </script>
