@@ -125,5 +125,28 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(stored["checkReasons"], [])
 
 
+class StartedOnTests(unittest.TestCase):
+    """结束页靠这个数说「今天做了几道」。"""
+
+    def setUp(self):
+        self.store = Store(":memory:")
+        self.addCleanup(self.store.connection.close)
+
+    def test_counts_only_that_day_and_that_child(self):
+        today = sample("s_1")
+        today["startedAt"] = "2026-11-18T20:00:00+08:00"
+        yesterday = sample("s_2")
+        yesterday["startedAt"] = "2026-11-17T20:00:00+08:00"
+        other = sample("s_3", child="child_02")
+        other["startedAt"] = "2026-11-18T09:00:00+08:00"
+        for record in (today, yesterday, other):
+            self.store.save_session(record)
+
+        self.assertEqual(self.store.started_on("child_01", "2026-11-18"), 1)
+        self.assertEqual(self.store.started_on("child_01", "2026-11-17"), 1)
+        self.assertEqual(self.store.started_on("child_01", "2026-11-16"), 0)
+        self.assertEqual(self.store.started_on("child_02", "2026-11-18"), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -18,12 +18,14 @@ from pathlib import Path
 from xiangke.intent import make_label_of
 from xiangke.local_model import DEFAULT_MODEL, LocalModel
 from xiangke.one_item import ItemSession
+from xiangke.pack import texts as pack_texts
 from xiangke.store import Store
 from xiangke.sync import DEFAULT_CLOUD, SyncFailed, sync_once
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "app" / "index.html"
 DEFAULT_DB = ROOT / "demo" / "phone.db"
+DEFAULT_PACK = ROOT / "data" / "pack.json"
 CHILD = "child_01"
 BEIJING = timezone(timedelta(hours=8))
 MAX_IMAGE = 15 * 1024 * 1024
@@ -40,12 +42,13 @@ def now() -> str:
 class PhoneApp:
     """Everything the page can ask for, without any HTTP. Tests use this directly."""
 
-    def __init__(self, write, store: Store, recognizer=None, child_id: str = CHILD, cloud_url: str = DEFAULT_CLOUD):
+    def __init__(self, write, store: Store, recognizer=None, child_id: str = CHILD, cloud_url: str = DEFAULT_CLOUD, pack_path: str | Path | None = None):
         self.write = write
         self.store = store
         self.recognizer = recognizer
         self.child_id = child_id
         self.cloud_url = cloud_url
+        self.pack_path = Path(pack_path) if pack_path else DEFAULT_PACK
         # 模拟的网络开关。云端也在这台电脑上，真断网断不开，所以用开关。启动时是断网
         self.online = False
         self.label_of = make_label_of(write)
@@ -62,12 +65,12 @@ class PhoneApp:
 
     def home(self) -> dict:
         plan = self.store.latest_plan(self.child_id)
-        pack = json.loads((ROOT / "data" / "pack.json").read_text(encoding="utf-8"))
+        pack = json.loads(self.pack_path.read_text(encoding="utf-8"))
         return {
             "planVersion": plan["planVersion"],
             "online": self.online,
             "waitingSync": len(self.store.unsynced(self.child_id)),
-            "pack": [row["recognizedText"] for row in pack],
+            "pack": pack_texts(pack),
             "drills": [{"drillId": row["drillId"], "text": row["text"], "source": row["source"]} for row in self.store.open_drills(self.child_id)],
             "history": [_history_row(record) for record in self.store.recent(self.child_id, 20)],
             "questions": self.store.questions(self.child_id),
@@ -208,7 +211,12 @@ class PhoneApp:
         if item.done:
             self._save()
             view["summary"] = _summary(item.record())
+            view["today"] = self._today()
         return view
+
+    def _today(self) -> dict:
+        """今天做了几道、还有几道专门练的题。结束页靠它判断该不该收工。"""
+        return {"done": self.store.started_on(self.child_id, now()[:10]), "left": len(self.store.open_drills(self.child_id))}
 
 
 def _summary(record: dict) -> dict:
@@ -324,6 +332,7 @@ def main() -> None:
     parser.add_argument("--model", default=str(DEFAULT_MODEL))
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--cloud", default=DEFAULT_CLOUD, help="云端地址")
+    parser.add_argument("--pack", default=str(DEFAULT_PACK), help="课包文件，老师用 python -m xiangke.pack 生成")
     parser.add_argument("--open", action="store_true", help="启动后打开浏览器")
     args = parser.parse_args()
 
@@ -333,7 +342,7 @@ def main() -> None:
         return recognize(image)
 
     with Store(args.db) as store, LocalModel(args.model) as model:
-        app = PhoneApp(model.write, store, recognizer, cloud_url=args.cloud)
+        app = PhoneApp(model.write, store, recognizer, cloud_url=args.cloud, pack_path=args.pack)
         server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(app))
         print(f"手机界面已启动：http://127.0.0.1:{args.port}", flush=True)
         if args.open:

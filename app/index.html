@@ -521,8 +521,11 @@ $("sync-now").onclick = async () => {
 };
 
 function historyRow(item) {
-  const row = document.createElement("div");
+  const row = document.createElement("button");
+  row.type = "button";
   row.className = "row";
+  row.title = "点一下再做一遍";
+  row.onclick = () => openConfirm(item.question, "photo");
   const text = document.createElement("div");
   text.className = "en";
   text.textContent = item.question;
@@ -764,6 +767,18 @@ function finish(view) {
   } else {
     title = "做完了，真不错！";
     text = `这道题一共 ${summary.questions} 问，错了 ${summary.wrong} 次，最后都改对了。`;
+  }
+  // 收工：专门练的题做完了，今天也做了不少，就明确告诉他可以放下手机
+  const today = view.today || {};
+  const done = today.done || 0;
+  const left = today.left || 0;
+  $("again").textContent = "再做一道";
+  if (view.mode !== "try" && view.outcome === "finished" && left === 0 && (view.drill || done >= 3)) {
+    title = "今天做完了";
+    text = `今天一共做了 ${done} 道题。手机上暂时没有新的题，可以收起来了。`;
+    $("again").textContent = "好，收起来";
+  } else if (view.mode !== "try" && view.outcome === "finished" && left > 0) {
+    text += `还有 ${left} 道专门给你练的题。`;
   }
   $("finish-title").textContent = title;
   $("finish-text").textContent = text;

@@ -1,9 +1,11 @@
 import json
+import tempfile
 import threading
 import unittest
 import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
+from pathlib import Path
 
 from xiangke.app import BadRequest, PhoneApp, make_handler
 from xiangke.store import Store
@@ -184,6 +186,53 @@ class HttpTests(AppCase):
                 with self.assertRaises(urllib.error.HTTPError) as caught:
                     urllib.request.urlopen(self.url + path)
                 self.assertEqual(caught.exception.code, 404)
+
+
+class PackFileTests(unittest.TestCase):
+    """老师用 xlsx 读出来的课包，手机首页要读得出来。"""
+
+    def test_home_reads_new_format_pack(self):
+        pack = {
+            "packId": "pack_demo_01",
+            "packVersion": 1,
+            "grade": "三年级",
+            "unit": "第一单元",
+            "words": [],
+            "items": [{"itemId": "1", "kind": "choose", "recognizedText": "He ___ tall. (is / are)", "answer": "is"}],
+            "rules": ["be_verb"],
+            "teacherWords": [],
+        }
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "pack.json"
+            path.write_text(json.dumps(pack, ensure_ascii=False), encoding="utf-8")
+            store = Store(":memory:")
+            try:
+                app = PhoneApp(fake_write, store, pack_path=path)
+                self.assertEqual(app.home()["pack"], ["He ___ tall. (is / are)"])
+            finally:
+                store.connection.close()
+
+    def test_missing_pack_file_fails_loudly(self):
+        store = Store(":memory:")
+        try:
+            app = PhoneApp(fake_write, store, pack_path="没有这个文件.json")
+            with self.assertRaises(FileNotFoundError):
+                app.home()
+        finally:
+            store.connection.close()
+
+
+class TodayTests(AppCase):
+    def test_finished_item_reports_today_and_left(self):
+        self.app.start(TEXT, "pack", offline=True)
+        self.app.reply("They")
+        view = self.app.reply("are")
+        self.assertTrue(view["done"])
+        self.assertEqual(view["today"], {"done": 1, "left": 0})
+
+    def test_unfinished_item_has_no_today(self):
+        view = self.app.start(TEXT, "pack", offline=True)
+        self.assertNotIn("today", view)
 
 
 if __name__ == "__main__":

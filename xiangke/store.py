@@ -120,6 +120,14 @@ class Store:
         ).fetchall()
         return [json.loads(row[0]) for row in rows]
 
+    def started_on(self, child_id: str, day: str) -> int:
+        """这一天开始做了几道题。``day`` 形如 ``2026-11-18``。
+
+        一个孩子一天只有几条，扫全部记录比依赖 JSON 文本格式更稳。
+        """
+        rows = self.connection.execute("SELECT record FROM sessions WHERE childId = ?", (child_id,)).fetchall()
+        return sum(json.loads(row[0]).get("startedAt", "").startswith(day) for row in rows)
+
     def mark_synced(self, session_ids: list[str]) -> None:
         with self.connection:
             self.connection.executemany("UPDATE sessions SET synced = 1 WHERE sessionId = ?", [(item,) for item in session_ids])
