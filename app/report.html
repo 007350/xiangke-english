@@ -55,6 +55,12 @@ li:last-child { padding-bottom: 0; }
 .table th, .table td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); }
 .table thead th { border-top: 0; color: var(--muted); font-weight: 500; }
 .table td:not(:first-child), .table th:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+.copybar { display: flex; align-items: center; gap: 10px; margin: -2px 0 14px; }
+.copy { min-height: 44px; padding: 8px 16px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--card); color: var(--green-dark); font-weight: 600; cursor: pointer; }
+.copy:active { transform: translateY(1px); }
+.copy[data-done="1"] { border-color: var(--green); background: var(--green-soft); }
+.copy[data-done="0"] { border-color: #d9b98c; background: var(--amber-soft); color: var(--amber); }
+.copy-note { color: var(--muted); font-size: 13.5px; line-height: 1.4; }
 .hidden { display: none !important; }
 </style>
 </head>
@@ -71,6 +77,10 @@ li:last-child { padding-bottom: 0; }
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-parent" aria-selected="true">给家长</button>
       <button class="tab" role="tab" id="tab-teacher" aria-selected="false">给老师</button>
+    </div>
+    <div class="copybar">
+      <button class="copy" id="copy" type="button">复制给家长</button>
+      <span class="copy-note" id="copy-note"></span>
     </div>
 
     <section id="parent">
@@ -136,6 +146,123 @@ li:last-child { padding-bottom: 0; }
 <script>
 const $ = id => document.getElementById(id);
 let refreshTimer = null;
+let shown = null;          // 当前显示的这一份反馈，复制时直接用，不去抠页面文字
+let childCount = 0;
+
+function isTeacherTab() {
+  return $("tab-teacher").getAttribute("aria-selected") === "true";
+}
+
+function renderCopyButton() {
+  $("copy").textContent = isTeacherTab() ? "复制给老师" : "复制给家长";
+  $("copy").dataset.done = "";
+}
+
+function stamp() {
+  const now = new Date();
+  return `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+}
+
+function tidy(lines) {
+  return lines.join("\n").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+function parentText(report) {
+  const parent = report.parent || {};
+  const lines = ["乡课英语 · 学情反馈", stamp()];
+  if (childCount > 1 && report.childId) lines.push(`孩子：${report.childId}`);
+  lines.push("", "这几天", parent.facts || "", parent.stuck || "");
+  lines.push("", "今晚可以做", parent.tonight || "");
+  lines.push("", parent.byModel
+    ? "这段话由云端老师根据孩子的记录写成，次数由程序统计。"
+    : "这段话由程序根据记录生成。");
+  if (report.recorded) lines.push("（演示备份：星火写的句子是提前写好的。）");
+  return tidy(lines);
+}
+
+function teacherText(report) {
+  const teacher = report.teacher || {};
+  const drills = teacher.drills || {};
+  const lines = ["乡课英语 · 学情反馈（给老师）", stamp()];
+  if (childCount > 1 && report.childId) lines.push(`孩子：${report.childId}`);
+
+  if ((teacher.needsTeacher || []).length) {
+    lines.push("", "需要您留意");
+    teacher.needsTeacher.forEach(item => lines.push(`· ${item}`));
+  }
+  lines.push("", "卡在哪", teacher.stuck || "", teacher.advice || "");
+
+  lines.push("", "程序算的数");
+  [
+    [teacher.judged, "算对错的题"],
+    [teacher.withMistakes, "中途做错过"],
+    [drills.given, "发过的专属题"],
+    [drills.done, "已做完"],
+  ].forEach(([value, label]) => lines.push(`${label} ${value}`));
+
+  if ((teacher.topics || []).length) {
+    lines.push("", "分类情况");
+    teacher.topics.forEach(row => lines.push(
+      `· ${row.topic}：做过 ${row.attempts}，错过 ${row.wrong}，最近连对 ${row.streak}`));
+  }
+  if ((teacher.flagged || []).length) {
+    lines.push("", "孩子觉得不对的专属题");
+    teacher.flagged.forEach(item => lines.push(`· ${item.text}（云端答案：${item.answer || "未知"}）`));
+  }
+  if ((teacher.questions || []).length) {
+    lines.push("", "孩子最近说过的话");
+    teacher.questions.forEach(item => lines.push(`· ${item}`));
+  }
+  const questions = report.questions || [];
+  if (questions.length) {
+    const labels = { pending: "待解答", answered: "云端已解答", needs_teacher: "需要老师确认" };
+    lines.push("", "疑惑与云端解答");
+    questions.forEach(item => lines.push(
+      `· ${labels[item.status] || item.status}：${item.question}`,
+      `  ${item.answer || "等待云端处理。"}`));
+  }
+  if ((teacher.notSure || []).length) {
+    lines.push("", "手机不确定答案的题，孩子可能会来问您");
+    teacher.notSure.forEach(item => lines.push(`· ${item}`));
+  }
+  if ((teacher.phoneProblems || []).length) {
+    lines.push("", "手机把题拆错了（不是孩子的错）");
+    teacher.phoneProblems.forEach(item => lines.push(`· ${item}`));
+  }
+  lines.push("", teacher.byModel
+    ? "这两句由星火大模型写成，请结合上面的数字看。"
+    : "这两句由程序生成。");
+  return tidy(lines);
+}
+
+// 手机上 http:// 局域网地址不算安全上下文，navigator.clipboard 用不了，需要退路
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      // 落到下面的老办法
+    }
+  }
+  const area = document.createElement("textarea");
+  area.value = text;
+  area.setAttribute("readonly", "");
+  area.style.position = "fixed";
+  area.style.top = "-1000px";
+  area.style.opacity = "0";
+  document.body.append(area);
+  area.select();
+  area.setSelectionRange(0, text.length);
+  let copied = false;
+  try {
+    copied = document.execCommand("copy");
+  } catch (error) {
+    copied = false;
+  }
+  area.remove();
+  return copied;
+}
 
 async function get(path) {
   const response = await fetch(path);
@@ -162,6 +289,8 @@ function question(row, text) {
 }
 
 function show(report) {
+  shown = report;
+  renderCopyButton();
   $("recorded").classList.toggle("hidden", !report.recorded);
   const parent = report.parent;
   const teacher = report.teacher;
@@ -237,6 +366,7 @@ function pickTab(name) {
     $(item).classList.toggle("hidden", item !== name);
     $(`tab-${item}`).setAttribute("aria-selected", String(item === name));
   });
+  if (shown) renderCopyButton();
 }
 
 async function loadReport() {
@@ -247,6 +377,7 @@ async function loadReport() {
 
 async function start() {
   const { children } = await get("/api/children");
+  childCount = children.length;
   $("empty").classList.toggle("hidden", children.length > 0);
   $("content").classList.toggle("hidden", !children.length);
   $("pick-box").classList.toggle("hidden", children.length < 2);
@@ -262,6 +393,21 @@ async function start() {
 $("tab-parent").onclick = () => pickTab("parent");
 $("tab-teacher").onclick = () => pickTab("teacher");
 $("child").onchange = loadReport;
+
+$("copy").onclick = async () => {
+  if (!shown) return;
+  const teacher = isTeacherTab();
+  const text = teacher ? teacherText(shown) : parentText(shown);
+  const copied = await copyText(text);
+  const button = $("copy");
+  button.textContent = copied ? "已复制" : "复制不了";
+  button.dataset.done = copied ? "1" : "0";
+  $("copy-note").textContent = copied ? "粘到微信就能发" : "这台设备不让自动复制，请长按文字手动选";
+  if (copied) {
+    setTimeout(() => { renderCopyButton(); $("copy-note").textContent = ""; }, 2200);
+  }
+};
+
 start().catch(error => {
   $("empty").classList.remove("hidden");
   $("empty").textContent = "读不到数据，请确认云端程序还开着。";
