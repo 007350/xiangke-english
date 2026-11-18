@@ -1,2 +1,4 @@
 rapidocr==3.10.0
 onnxruntime==1.31.1
+# 读老师的课包 Excel。读取程序还没写，先装好依赖，免得以后忘
+openpyxl==3.1.5
