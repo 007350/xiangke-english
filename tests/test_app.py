@@ -47,6 +47,25 @@ class HomeTests(AppCase):
         self.assertEqual(home["history"], [])
         self.assertEqual(home["waitingSync"], 0)
 
+    def test_home_keeps_more_than_the_page_fold(self):
+        """折起来是页面的事，接口不能替页面把记录截掉。"""
+        for index in range(25):
+            self.store.save_session(
+                {
+                    "sessionId": f"s_{index:02d}",
+                    "childId": "child_01",
+                    "answerSource": "program",
+                    "source": "photo",
+                    "events": [],
+                    "steps": [],
+                    "recognizedText": f"第 {index} 题",
+                    "startedAt": "2026-11-19T09:00:00+08:00",
+                }
+            )
+        home = self.app.home()
+        self.assertEqual(len(home["history"]), 25)
+        self.assertEqual(home["history"][0]["question"], "第 24 题")
+
 
 class RecognizeTests(AppCase):
     def test_lines_are_cleaned(self):

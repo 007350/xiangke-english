@@ -112,8 +112,12 @@ class Store:
         rows = self.connection.execute(query + " ORDER BY savedOrder", values).fetchall()
         return [json.loads(row[0]) for row in rows]
 
-    def recent(self, child_id: str, limit: int = 20) -> list[dict]:
-        """Newest first, for showing past sessions."""
+    def recent(self, child_id: str, limit: int = 200) -> list[dict]:
+        """Newest first, for showing past sessions.
+
+        200 covers a term of daily practice; the page fold is a display
+        concern and must not silently drop records the store already has.
+        """
         rows = self.connection.execute(
             "SELECT record FROM sessions WHERE childId = ? ORDER BY savedOrder DESC LIMIT ?",
             (child_id, limit),

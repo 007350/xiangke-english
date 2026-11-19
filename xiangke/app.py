@@ -72,7 +72,7 @@ class PhoneApp:
             "waitingSync": len(self.store.unsynced(self.child_id)),
             "pack": pack_texts(pack),
             "drills": [{"drillId": row["drillId"], "text": row["text"], "source": row["source"]} for row in self.store.open_drills(self.child_id)],
-            "history": [_history_row(record) for record in self.store.recent(self.child_id, 20)],
+            "history": [_history_row(record) for record in self.store.recent(self.child_id)],
             "questions": self.store.questions(self.child_id),
         }
 

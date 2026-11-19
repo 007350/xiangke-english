@@ -84,6 +84,9 @@ button.row:hover { border-color: var(--green); }
 textarea { width: 100%; min-height: 110px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--card); padding: 12px; font-family: var(--en); font-size: 19px; resize: vertical; }
 textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1px; border-color: var(--green); }
 .tip { color: var(--muted); font-size: 14.5px; margin: 8px 0 16px; }
+.fold { display: block; width: 100%; text-align: center; font-size: 14.5px; margin: 2px 0 10px; }
+/* 首页底部留白：声音提示条浮在底部 56px，别让它盖住最后一行按钮 */
+#s-home main { padding-bottom: 60px; }
 .line-pick.on { border-color: var(--green); background: var(--green-soft); }
 .alert { background: var(--red-soft); color: var(--red); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; }
 .stack { display: flex; flex-direction: column; gap: 10px; }
@@ -173,9 +176,9 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
         <div id="drills"></div>
       </div>
       <h2>课包里的题</h2>
-      <div id="pack"></div>
+      <div id="pack"><p class="tip">正在读……</p></div>
       <h2>做过的题</h2>
-      <div id="history"></div>
+      <div id="history"><p class="tip">正在读……</p></div>
     </main>
   </section>
 
@@ -265,7 +268,7 @@ async function api(path, body, raw) {
   try {
     response = await fetch(path, options);
   } catch (error) {
-    throw new Error("连不上手机的程序，请确认它还开着");
+    throw new Error("和电脑失联了，叫大人过来看看");
   }
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error || "出了点问题，请再试一次");
@@ -279,6 +282,30 @@ function fail(id, message) {
 }
 
 /* 首页 */
+let allHistory = [];      // 后端一次给全，超过 8 道折起来，别让孩子以为记录丢了
+let historyOpen = false;
+
+function renderHistory() {
+  const box = $("history");
+  if (!allHistory.length) {
+    const empty = document.createElement("div");
+    empty.className = "tip";
+    empty.textContent = "还没有做过题。";
+    box.replaceChildren(empty);
+    return;
+  }
+  const nodes = (historyOpen ? allHistory : allHistory.slice(0, 8)).map(historyRow);
+  if (allHistory.length > 8) {
+    const more = document.createElement("button");
+    more.type = "button";
+    more.className = "link fold";
+    more.textContent = historyOpen ? "只看最近 8 道" : `查看全部 ${allHistory.length} 道`;
+    more.onclick = () => { historyOpen = !historyOpen; renderHistory(); };
+    nodes.push(more);
+  }
+  box.replaceChildren(...nodes);
+}
+
 function renderHome(data) {
   const pack = $("pack");
   pack.replaceChildren(...data.pack.map(text => {
@@ -309,15 +336,8 @@ function renderHome(data) {
   const questions = data.questions || [];
   allQuestions = questions;
   renderLetterBanner(questions);
-  const history = $("history");
-  if (!data.history.length) {
-    const empty = document.createElement("div");
-    empty.className = "tip";
-    empty.textContent = "还没有做过题。";
-    history.replaceChildren(empty);
-  } else {
-    history.replaceChildren(...data.history.slice(0, 8).map(historyRow));
-  }
+  allHistory = data.history || [];
+  renderHistory();
   $("sync").textContent = data.waitingSync ? `有 ${data.waitingSync} 次辅导等待同步` : "记录都同步好了";
   $("plan-version").textContent = `现在用的是第 ${data.planVersion} 版讲法`;
   $("net").textContent = data.online ? "已联网 · 点此断网" : "已断网 · 点此联网";
@@ -577,6 +597,8 @@ async function loadHome() {
     renderHome(await api("/api/home"));
     fail("home-error", "");
   } catch (error) {
+    // 读不到就别让「正在读……」一直挂着，看着像卡死了
+    for (const id of ["pack", "history"]) $(id).replaceChildren();
     fail("home-error", error.message);
   }
 }
@@ -953,6 +975,13 @@ function finish(view) {
   $("composer").classList.add("hidden");
   $("quick").classList.add("hidden");
   const summary = view.summary;
+  // 今天做到第几道：让孩子看见进度，但不给正确率，不把注意力拉到分数上
+  const today = view.today || {};
+  const done = today.done || 0;
+  const left = today.left || 0;
+  const nth = view.mode !== "try" && done > 0
+    ? (done === 1 ? "今天的第一道。" : `这是今天的第 ${done} 道。`)
+    : "";
   let title, text;
   if (view.outcome === "cannot") {
     title = "这道题先放一放";
@@ -966,15 +995,12 @@ function finish(view) {
     text = "这道题的答案不一定对，明天可以问问老师。";
   } else if (summary.wrong === 0) {
     title = "全部答对！";
-    text = `这道题一共 ${summary.questions} 问，你都答对了。`;
+    text = `${nth}这道题一共 ${summary.questions} 问，你都答对了。`;
   } else {
     title = "做完了，真不错！";
-    text = `这道题一共 ${summary.questions} 问，错了 ${summary.wrong} 次，最后都改对了。`;
+    text = `${nth}这道题一共 ${summary.questions} 问，错了 ${summary.wrong} 次，最后都改对了。`;
   }
   // 收工：专门练的题做完了，今天也做了不少，就明确告诉他可以放下手机
-  const today = view.today || {};
-  const done = today.done || 0;
-  const left = today.left || 0;
   $("again").textContent = "再做一道";
   if (view.mode !== "try" && view.outcome === "finished" && left === 0 && (view.drill || done >= 3)) {
     title = "今天做完了";
