@@ -173,6 +173,7 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
       </div>
       <div id="drills-box" class="hidden">
         <h2>给你准备的专属题</h2>
+        <p class="tip" style="margin:0 0 8px">这是下一次的任务，今天做完了可以先收起来。</p>
         <div id="drills"></div>
       </div>
       <h2>课包里的题</h2>
@@ -185,7 +186,7 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
   <!-- 老师的回信 -->
   <section class="screen" id="s-letter">
     <main>
-      <p class="sub" style="margin-bottom:12px">老师看到你留下的疑惑，写了回信。断网也能看。</p>
+      <p class="sub" style="margin-bottom:12px">这里可以查看答疑进度。收到的回复断网也能看。</p>
       <div id="letters"></div>
       <button class="primary" id="letter-done">我知道啦</button>
     </main>
@@ -216,6 +217,7 @@ textarea:focus, #say:focus { outline: 2px solid var(--green); outline-offset: 1p
     <div class="notsure hidden" id="notsure">这道题我不一定对，也不算你的对错，可以问问老师。</div>
     <div id="chat" aria-live="polite"></div>
     <div id="quick">
+      <button class="chip hidden" id="show-explanation" type="button">看讲解</button>
       <button class="chip" data-say="不知道">不知道</button>
       <button class="chip" data-say="为什么？">为什么？</button>
       <button class="chip" data-say="这是什么意思？">什么意思？</button>
@@ -333,13 +335,13 @@ function renderHome(data) {
     button.onclick = () => openDrill(item);
     return button;
   }));
-  const questions = data.questions || [];
+  const questions = (data.questions || []).map(displayQuestion);
   allQuestions = questions;
   renderLetterBanner(questions);
   allHistory = data.history || [];
   renderHistory();
   $("sync").textContent = data.waitingSync ? `有 ${data.waitingSync} 次辅导等待同步` : "记录都同步好了";
-  $("plan-version").textContent = `现在用的是第 ${data.planVersion} 版讲法`;
+  $("plan-version").textContent = data.starterPlan ? "现在用的是通用讲法" : `现在用的是第 ${data.planVersion} 版讲法`;
   $("net").textContent = data.online ? "已联网 · 点此断网" : "已断网 · 点此联网";
   $("net").dataset.online = data.online ? "1" : "";
   $("sync-now").classList.toggle("hidden", !data.online);
@@ -349,6 +351,18 @@ function renderHome(data) {
 let unreadLetters = [];
 let allLetters = [];
 let allQuestions = [];
+
+function displayQuestion(item) {
+  // 旧手机库里的回放占位在同步到新状态前也应显示为等待答疑。
+  if (["needs_teacher", "teacher_confirmed"].includes(item.status) && item.answer === "这条疑惑的解答没有录进演示备份，需要老师确认。") {
+    return { ...item, status: "pending", answer: "" };
+  }
+  return item;
+}
+
+function hasReply(item) {
+  return item.status === "answered" || item.status === "teacher_confirmed";
+}
 
 function seenLetters() {
   try { return JSON.parse(localStorage.getItem("xiangke-letter-seen")); } catch { return null; }
@@ -367,26 +381,27 @@ function renderLetterBanner(questions) {
     questions.forEach(item => { seen[item.questionId] = item.seq; });
     saveLetterSeen(seen);
   }
-  unreadLetters = allLetters.filter(item => item.seq > (seen[item.questionId] || 0));
+  unreadLetters = allLetters.filter(item => hasReply(item) && item.seq > (seen[item.questionId] || 0));
   const active = unreadLetters.length > 0;
   const waiting = questions.filter(item => item.status === "pending").length;
+  const review = questions.filter(item => item.status === "needs_teacher").length;
   $("letter-banner").classList.toggle("idle", !active);
-  $("letter-banner-title").textContent = active ? "云端老师回信了！" : "老师的回信";
+  $("letter-banner-title").textContent = active ? "有新的答疑回复" : "老师的回信";
   $("letter-banner-sub").textContent = active
     ? `你留下的 ${unreadLetters.length} 条疑惑有回音了，点开看看。`
-    : waiting ? `暂无新回信。${waiting} 条疑惑在等老师写回来。` : "暂无新回信。留下疑惑，联网后老师会写回来。";
+    : [waiting ? `${waiting} 条正在等答疑。` : "", review ? `${review} 条需要老师确认。` : ""].join("") || "暂无新回复。做题时可以留下疑惑。";
 }
 
 function openLetter() {
-  const letters = unreadLetters.length ? unreadLetters : allLetters;
+  const letters = allLetters;
   const waiting = allQuestions.filter(item => item.status === "pending");
   $("letter-done").textContent = unreadLetters.length ? "我知道啦" : "回到首页";
   const nodes = letters.map(item => {
     const card = document.createElement("div");
     card.className = "letter";
     const tag = document.createElement("span");
-    tag.className = item.status === "answered" ? "tag" : "tag maybe";
-    tag.textContent = item.status === "answered" ? "解决了" : "需要老师确认";
+    tag.className = item.status === "needs_teacher" ? "tag maybe" : "tag";
+    tag.textContent = item.status === "teacher_confirmed" ? "老师确认过" : item.status === "answered" ? "星火已回复" : "需要老师确认";
     const said = document.createElement("p");
     said.className = "said";
     said.textContent = `你当时问：${item.question}`;
@@ -398,23 +413,34 @@ function openLetter() {
     context.textContent = `当时的小问：${item.ask}`;
     const label = document.createElement("p");
     label.className = "teacher-label";
-    label.textContent = "老师说：";
+    label.textContent = item.status === "teacher_confirmed" ? "老师确认的解释" : item.status === "answered" ? "星火答疑" : "处理说明";
     const answer = document.createElement("p");
     answer.className = "teacher";
     answer.textContent = item.answer;
     card.append(tag, said, text, context, label, answer);
+    if (item.transferReady ?? ["answered", "teacher_confirmed"].includes(item.status)) {
+      const button = document.createElement("button");
+      button.className = "secondary";
+      button.style.marginTop = "12px";
+      button.textContent = "读完回信，试一道新题";
+      const note = document.createElement("p");
+      note.className = "question-context";
+      note.setAttribute("role", "status");
+      button.onclick = () => startTransfer(item.questionId, button, note);
+      card.append(button, note);
+    }
     return card;
   });
   if (waiting.length) {
     const head = document.createElement("h2");
-    head.textContent = "还在等老师回信";
+    head.textContent = "还在等答疑";
     nodes.push(head);
     waiting.forEach(item => {
       const card = document.createElement("div");
       card.className = "letter";
       const tag = document.createElement("span");
       tag.className = "tag none";
-      tag.textContent = item.seq === 0 ? "待同步" : "待回信";
+      tag.textContent = item.seq === 0 ? "待同步" : "等待云端回复";
       const said = document.createElement("p");
       said.className = "said";
       said.textContent = `你当时问：${item.question}`;
@@ -431,22 +457,46 @@ function openLetter() {
   if (!nodes.length) {
     const tip = document.createElement("p");
     tip.className = "tip";
-    tip.textContent = "还没有回信。做题时留下疑惑，联网同步后，老师会写回来。";
+    tip.textContent = "还没有答疑回复。做题时留下疑惑，联网后点同步。";
     nodes.push(tip);
   }
   $("letters").replaceChildren(...nodes);
   show("letter");
 }
 
-$("letter-banner").onclick = openLetter;
-$("letter-done").onclick = () => {
+function markLettersSeen() {
   const seen = seenLetters() || {};
   unreadLetters.forEach(item => { seen[item.questionId] = item.seq; });
   saveLetterSeen(seen);
   unreadLetters = [];
+}
+
+$("letter-banner").onclick = openLetter;
+$("letter-done").onclick = () => {
+  markLettersSeen();
   show("home");
   loadHome();
 };
+
+let openingTransfer = false;
+async function startTransfer(questionId, button, note) {
+  if (openingTransfer) return;
+  openingTransfer = true;
+  button.disabled = true;
+  note.textContent = "正在准备新题……";
+  try {
+    const view = await api("/api/transfer", { questionId });
+    markLettersSeen();
+    startChat(view.question);
+    applyView(view);
+  } catch (error) {
+    note.textContent = error.message;
+  } finally {
+    openingTransfer = false;
+    button.disabled = false;
+    setBusy(false);
+  }
+}
 
 /* 同步：传完记录就回来，云端在后台写，这里隔一会儿再取一次，直到云端写完 */
 const POLL_MS = 8000;
@@ -459,33 +509,42 @@ function newSyncNote() {
   return { sent: 0, accepted: 0, planVersion: null, drills: 0, refused: false, failed: false, working: false, questions: 0, questionFailed: false, questionsRefused: false };
 }
 
-function addToNote(note, result) {
+function addToNote(note, data) {
+  const result = data.syncResult;
   note.sent += result.sent;
   note.accepted += result.accepted;
   if (result.planUpdated) note.planVersion = result.planVersion;
   if (result.planRefused.length) note.refused = true;
   if (result.planFailed) note.failed = true;
   note.drills += result.drillsAdded || 0;
-  note.questions += result.questionsUpdated || 0;
+  if (result.questionsUpdated) {
+    const previous = new Map(allQuestions.map(item => [item.questionId, item.seq]));
+    note.questions += (data.questions || []).filter(item => hasReply(item) && item.seq > (previous.get(item.questionId) || 0)).length;
+  }
   note.questionFailed = Boolean(result.questionFailed);
   note.questionsRefused = Boolean(result.questionsRefused);
   note.working = Boolean(result.working);
   note.recorded = Boolean(result.recorded);
+  note.replayPlanMissing = Boolean(result.replayPlanMissing);
+  note.replayQuestionMissing = Boolean(result.replayQuestionMissing);
 }
 
-function syncText(note) {
+function syncText(note, waitingMessage = "") {
   const parts = [note.accepted ? `传上去 ${note.accepted} 次辅导。` : "没有新的辅导要传。"];
   if (note.accepted < note.sent) parts.push(`还有 ${note.sent - note.accepted} 次云端没收下，下次再传。`);
   if (note.planVersion !== null) parts.push(`讲法更新到第 ${note.planVersion} 版。`);
   if (note.drills) parts.push(`收到 ${note.drills} 道专属题。`);
-  if (note.questions) parts.push("老师的回信到了，点首页上面的信封看。");
+  if (note.questions) parts.push("收到答疑回复，点首页的信封查看。");
   if (note.questionFailed) parts.push("部分疑惑这次还没解答，记录保留着，下次点同步重试。");
   if (note.questionsRefused) parts.push("答疑内容没有收完整，稍后再同步。");
   if (note.refused) parts.push("新讲法没通过检查，继续用旧的。");
   if (note.failed) parts.push("云端这次没写出新讲法，继续用旧的，下次同步再试。");
-  if (note.working && !note.questionFailed) parts.push("云端老师还在看这次的记录，写好了会自动收到。");
+  if (waitingMessage) parts.push(waitingMessage);
+  else if (note.working && !note.questionFailed && !note.questionsRefused) parts.push("云端正在处理，写好了会自动收到。");
   else if (note.planVersion === null && !note.drills && !note.refused && !note.failed) parts.push("讲法没有变化。");
-  if (note.recorded) parts.push("（演示备份：云端内容是提前写好的。）");
+  if (note.replayPlanMissing) parts.push("这次做题和演示录制不一致，没有回放新讲法。");
+  if (note.replayQuestionMissing) parts.push("演示备份里没有这次的答疑，老师可以直接回复。");
+  if (note.recorded && !note.replayPlanMissing && !note.replayQuestionMissing) parts.push("（演示回放模式）");
   return parts.join("");
 }
 
@@ -497,29 +556,38 @@ function stopPolling() {
 
 function schedulePoll() {
   clearTimeout(pollTimer);
-  if (pollsLeft <= 0) return;
   pollTimer = setTimeout(pollOnce, POLL_MS);
 }
 
+function setSyncBusy(busy) {
+  $("sync-now").disabled = busy;
+  $("net").disabled = busy;
+  $("sync-now").textContent = busy ? "正在同步……" : "同步";
+}
+
 async function pollOnce() {
-  pollsLeft -= 1;
   // 孩子在做题时不打扰，回到首页再取
   if (current !== "home") {
-    pollsLeft += 1;
     schedulePoll();
     return;
   }
+  pollsLeft -= 1;
+  setSyncBusy(true);
   try {
     const data = await api("/api/sync", {});
+    addToNote(syncNote, data);
     renderHome(data);
-    addToNote(syncNote, data.syncResult);
-    $("sync-result").textContent = syncText(syncNote);
-    if (data.syncResult.working && !data.syncResult.questionFailed && !data.syncResult.questionsRefused) schedulePoll();
+    const waiting = syncNote.working && !syncNote.questionFailed && !syncNote.questionsRefused;
+    const timedOut = waiting && pollsLeft === 0;
+    $("sync-result").textContent = syncText(syncNote,
+      timedOut ? "云端还在处理，过一会儿点「同步」再看看。" : "");
+    if (waiting && !timedOut) schedulePoll();
     else stopPolling();
   } catch (error) {
     stopPolling();
-    syncNote.working = false;
-    $("sync-result").textContent = syncText(syncNote);
+    $("sync-result").textContent = syncText(syncNote, "这次没能从云端取回结果，联网后可以再点「同步」。");
+  } finally {
+    setSyncBusy(false);
   }
 }
 
@@ -527,26 +595,27 @@ $("net").onclick = async () => {
   const online = !$("net").dataset.online;
   $("sync-result").textContent = "";
   stopPolling();
+  setSyncBusy(true);
   try {
     renderHome(await api("/api/network", { online }));
     fail("home-error", "");
   } catch (error) {
     fail("home-error", error.message);
+  } finally {
+    setSyncBusy(false);
   }
 };
 
 $("sync-now").onclick = async () => {
-  const button = $("sync-now");
-  button.disabled = true;
-  button.textContent = "正在同步……";
+  setSyncBusy(true);
   $("sync-result").textContent = "";
   fail("home-error", "");
   stopPolling();
   try {
     const data = await api("/api/sync", {});
-    renderHome(data);
     syncNote = newSyncNote();
-    addToNote(syncNote, data.syncResult);
+    addToNote(syncNote, data);
+    renderHome(data);
     $("sync-result").textContent = syncText(syncNote);
     if (data.syncResult.working && !data.syncResult.questionFailed && !data.syncResult.questionsRefused) {
       pollsLeft = POLL_TIMES;
@@ -555,8 +624,7 @@ $("sync-now").onclick = async () => {
   } catch (error) {
     fail("home-error", error.message);
   } finally {
-    button.disabled = false;
-    button.textContent = "同步";
+    setSyncBusy(false);
   }
 };
 
@@ -565,7 +633,7 @@ function historyRow(item) {
   row.type = "button";
   row.className = "row";
   row.title = "点一下再做一遍";
-  row.onclick = () => openConfirm(item.question, "photo");
+  row.onclick = () => openConfirm(item.question, item.source === "pack" ? "pack" : "photo");
   const text = document.createElement("div");
   text.className = "en";
   text.textContent = item.question;
@@ -579,7 +647,8 @@ function historyRow(item) {
     tag.textContent = "等老师看这道题";
   } else if (item.answerSource === "program" || item.answerSource === "cloud") {
     tag.className = "tag";
-    tag.textContent = item.finished ? (item.wrong ? `做完了，错 ${item.wrong} 次` : "全对") : "没做完";
+    const base = item.finished ? (item.afterExplanation ? "跟着讲解做完了" : item.wrong ? `做完了，错 ${item.wrong} 次` : "全对") : "没做完";
+    tag.textContent = item.source === "transfer" ? `回信后的新题 · ${base}` : base;
   } else if (item.answerSource === "model") {
     tag.className = "tag maybe";
     tag.textContent = "不一定对，问问老师";
@@ -731,6 +800,7 @@ function startChat(text) {
   $("confirm-chips").style.display = "none";
   $("fix-text").classList.add("hidden");
   $("flag-item").classList.add("hidden");
+  $("show-explanation").classList.add("hidden");
   show("chat");
   setBusy(true);
 }
@@ -954,6 +1024,7 @@ function applyView(view) {
     if (right) soundRight();
   }
   $("notsure").classList.toggle("hidden", view.mode !== "try");
+  $("show-explanation").classList.toggle("hidden", !view.canExplain);
   $("flag-item").classList.toggle("hidden", !view.drill || view.done);
   const dots = $("progress");
   if (view.steps > 1) {
@@ -993,6 +1064,9 @@ function finish(view) {
   } else if (view.mode === "try") {
     title = "做完了";
     text = "这道题的答案不一定对，明天可以问问老师。";
+  } else if (summary.afterExplanation) {
+    title = "做完了";
+    text = `${nth}有 ${summary.afterExplanation} 问是跟着讲解完成的。`;
   } else if (summary.wrong === 0) {
     title = "全部答对！";
     text = `${nth}这道题一共 ${summary.questions} 问，你都答对了。`;
@@ -1000,14 +1074,18 @@ function finish(view) {
     title = "做完了，真不错！";
     text = `${nth}这道题一共 ${summary.questions} 问，错了 ${summary.wrong} 次，最后都改对了。`;
   }
-  // 收工：专门练的题做完了，今天也做了不少，就明确告诉他可以放下手机
+  // 收工：专门练的题做完了，今天也做了不少，就明确告诉他可以放下手机。
+  // 还有辅导没交给老师时不能说「都做完了」，免得和同步框里的待同步对不上。
   $("again").textContent = "再做一道";
   if (view.mode !== "try" && view.outcome === "finished" && left === 0 && (view.drill || done >= 3)) {
+    const waiting = today.waiting || 0;
     title = "今天做完了";
-    text = `今天一共做了 ${done} 道题。手机上暂时没有新的题，可以收起来了。`;
+    text = waiting
+      ? `今天一共做了 ${done} 道题。还有 ${waiting} 次辅导等联网后交给老师，交完今天就真的做完了，可以先把手机收起来。`
+      : `今天一共做了 ${done} 道题。手机上暂时没有新的题，可以收起来了。`;
     $("again").textContent = "好，收起来";
   } else if (view.mode !== "try" && view.outcome === "finished" && left > 0) {
-    text += `还有 ${left} 道专门给你练的题。`;
+    text += `还有 ${left} 道专属题，是下一次的任务，不用急着做。`;
   }
   $("finish-title").textContent = title;
   $("finish-text").textContent = text;
@@ -1015,7 +1093,7 @@ function finish(view) {
   $("chat").scrollTop = $("chat").scrollHeight;
   // 只有真做完（试做模式、讲不了都不算）才给庆祝，全对才是大烟花
   if (view.outcome === "finished" && view.mode !== "try") {
-    celebrate(summary && summary.wrong === 0 ? "clean" : "done");
+    celebrate(summary && summary.wrong === 0 && !summary.afterExplanation ? "clean" : "done");
   }
 }
 
@@ -1041,6 +1119,18 @@ $("composer").addEventListener("submit", event => {
 document.querySelectorAll(".chip[data-say]").forEach(chip => {
   chip.onclick = () => send(chip.dataset.say);
 });
+$("show-explanation").onclick = async () => {
+  if (busy) return;
+  bubble("看讲解", "child-say");
+  setBusy(true);
+  try {
+    applyView(await api("/api/explain", {}));
+  } catch (error) {
+    bubble(error.message, "phone-say");
+  } finally {
+    setBusy(false);
+  }
+};
 $("save-question").onclick = () => {
   const said = $("say").value.trim();
   if (!said) {

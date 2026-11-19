@@ -22,17 +22,26 @@ class SyncFailed(Exception):
     """这次没同步成功。手机上的记录和计划都没动。"""
 
 
-def post_json(url: str, body: dict) -> dict:
+def post_json(url: str, body: dict, *, timeout: float = TIMEOUT) -> dict:
     data = json.dumps(body, ensure_ascii=False).encode("utf-8")
     request = urllib.request.Request(url, data, {"Content-Type": "application/json; charset=utf-8"})
     # 电脑开了代理时，发给本机的请求不能走代理
     local = urllib.parse.urlsplit(url).hostname in ("127.0.0.1", "localhost")
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({})) if local else urllib.request.build_opener()
     try:
-        with opener.open(request, timeout=TIMEOUT) as response:
+        with opener.open(request, timeout=timeout) as response:
             return json.load(response)
     except (OSError, ValueError, http.client.HTTPException) as error:
         raise SyncFailed(str(error)) from error
+
+
+def acknowledge_plan(cloud_url: str, child_id: str, version: int) -> None:
+    try:
+        post_json(cloud_url.rstrip("/") + "/api/plan-received",
+                  {"childId": child_id, "planVersion": version}, timeout=2)
+    except SyncFailed:
+        # 手机已经存好了。回执失败时，下次同步仍会带上本地版本。
+        pass
 
 
 def _plan_problems(plan, child_id: str) -> list[str]:
@@ -89,6 +98,9 @@ def sync_once(store: Store, child_id: str, cloud_url: str = DEFAULT_CLOUD, post=
         result["working"] = True
     if reply.get("recorded"):
         result["recorded"] = True
+    for key in ("replayPlanMissing", "replayQuestionMissing"):
+        if reply.get(key):
+            result[key] = True
     if reply.get("questionFailed"):
         result["questionFailed"] = True
     questions = reply.get("questions")

@@ -7,8 +7,7 @@
     python -m xiangke.pack data/课包样例.xlsx
     python -m xiangke.pack 我的课包.xlsx -o data/pack.json
 
-程序算不出答案的题（现在是单词拼写）照样读进来，只在输出里点出来：这些题手机上
-只会讲、不判对错，别让老师以为孩子做错了。
+程序无法核对答案的题照样读进来，并单独列出题号。手机可以试讲，作答不计对错。
 """
 
 from __future__ import annotations
@@ -227,7 +226,32 @@ def _teacher_words(sheet, problems: list[str]) -> list[dict]:
 
 def unjudged(pack: dict) -> list[str]:
     """程序算不出答案的题号。这些题手机只讲，不判对错。"""
-    return [item["itemId"] for item in pack.get("items", []) if compute_answer(item["recognizedText"]) is None]
+    return [item["itemId"] for item in pack.get("items", [])
+            if compute_answer(item["recognizedText"]) is None and spelling_answer(pack, item["recognizedText"]) is None]
+
+
+def _spelling_item(item: dict) -> dict | None:
+    text = item.get("recognizedText", "")
+    answer = item.get("answer")
+    if item.get("kind") != "spell" or not isinstance(answer, str) or not re.fullmatch(r"[A-Za-z]+", answer):
+        return None
+    parts = text.split()
+    mask = parts[-1] if parts else ""
+    if "_" not in mask or not re.fullmatch(r"[A-Za-z_]+", mask) or len(mask) != len(answer):
+        return None
+    answer = answer.casefold()
+    if any(letter != "_" and letter.casefold() != expected for letter, expected in zip(mask, answer)):
+        return None
+    return {"kind": "pack_spelling", "answer": answer, "mask": mask, "ruleKey": "spelling",
+            "rule": "按题目里给出的字母顺序，把缺的字母补进去。"}
+
+
+def spelling_answer(pack, text: str) -> dict | None:
+    rows = pack if isinstance(pack, list) else pack.get("items", [])
+    matches = [_spelling_item(row) for row in rows if isinstance(row, dict) and row.get("recognizedText") == text]
+    if matches and matches[0] and all(answer == matches[0] for answer in matches):
+        return matches[0]
+    return None
 
 
 def texts(pack) -> list[str]:
@@ -263,7 +287,7 @@ def main(argv: list[str] | None = None) -> int:
     if cannot:
         print(f"  这 {len(cannot)} 道题程序算不出答案，手机上只会讲、不判对错：题号 {'、'.join(cannot)}")
     if "spelling" in pack["rules"]:
-        print("  这一单元教单词拼写：拼写题手机现在只会讲、不判对错，别当成已经能判。")
+        print("  拼写题的标准答案和题面字母位置一致时，手机会逐个核对缺字母。")
 
     if args.out:
         target = Path(args.out)

@@ -90,6 +90,19 @@ class CheckDraftTests(unittest.TestCase):
     def errors(self, **change):
         return check_draft(dumps({**GOOD, **change}), CURRENT, [record()])[1]
 
+    def test_scoped_update_keeps_previous_topics_and_requires_valid_error_evidence(self):
+        old = {"be_i": {"strategy": "self_first", "voice": "先分清说的是自己"}}
+        new = {"strategy": "explain", "voice": "先找句子里用错的词"}
+        raw = dumps({**GOOD, "topicPlans": {"be_i": {"strategy": "explain", "voice": "别给提示"},
+                                          "correction:v_3s": new}})
+        current = {**CURRENT, "topicPlans": old}
+        ignored, errors = check_draft(raw, current, [record(checkPassed=False)])
+        self.assertEqual(errors, [])
+        self.assertEqual(ignored["topicPlans"], old)
+        merged, errors = check_draft(raw, current, [record()])
+        self.assertEqual(errors, [])
+        self.assertEqual(merged["topicPlans"], {**old, "correction:v_3s": new})
+
     def test_good_draft_passes(self):
         draft, errors = check_draft(dumps(GOOD), CURRENT, [record()])
         self.assertEqual(errors, [])

@@ -155,8 +155,10 @@ class ReadPackTest(unittest.TestCase):
         problems = self.problems_of(change)
         self.assertTrue(any("一道题都没有" in line for line in problems), problems)
 
-    def test_unjudged_lists_spelling_item(self):
+    def test_unjudged_excludes_spelling_with_a_matching_teacher_answer(self):
         pack, _ = read_pack(SAMPLE)
+        self.assertEqual(unjudged(pack), [])
+        pack["items"][-1]["answer"] = "desk"
         self.assertEqual(unjudged(pack), ["4"])
 
     def test_texts_accepts_old_and_new(self):

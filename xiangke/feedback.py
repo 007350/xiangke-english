@@ -11,8 +11,57 @@ from __future__ import annotations
 import json
 import re
 
-from xiangke.planner import COMMON_WORDS, TERMS, TRIES, LlmError, _parse, _words
-from xiangke.portrait import counts_as_judged, stats_for_model
+from xiangke.planner import COMMON_WORDS, MAX_SESSIONS, TERMS, TRIES, LlmError, _parse, _words, topic_evidence
+from xiangke.portrait import counts_as_judged, stats_for_model, topic_of
+from xiangke.teach import looks_like_item
+
+_PLAN_STEPS = {
+    "self_first": "先用中文分清说的是自己还是别人，再选填空的词。",
+    "cue_first": "先找表示「能」的词，再判断动词要不要变形，最后选词。",
+    "explain": "沿用题目的标准小问，按这个孩子容易卡住的地方调整解释。",
+}
+_STANDARD_STEPS = "按通用流程讲题，第一问随题目变化。"
+
+
+def build_plan_changes(plans: list[dict], sessions: list[dict], received_version: int | None) -> dict:
+    """Compare active topic plans with the version that preceded each change."""
+    changes = {}
+    previous = {}
+    boundary = 0
+    positions = {session["sessionId"]: index + 1 for index, session in enumerate(sessions)}
+    for plan in plans:
+        current = plan.get("topicPlans") or {}
+        end = max(boundary, positions.get(plan.get("basedOnSessionId"), boundary))
+        updated = {key: entry for key, entry in current.items() if entry != previous.get(key)}
+        evidence = topic_evidence(sessions[boundary:end][-MAX_SESSIONS:]) if updated else {}
+        for key, entry in updated.items():
+            old = previous.get(key)
+            sample = evidence.get(key, [])
+            session = sample[-1] if sample else None
+            mistake = None
+            if session:
+                event = next(event for event in reversed(session["events"]) if event.get("result") in ("miss", "assisted"))
+                step = next((step for step in session["steps"] if step.get("stepId") == event.get("stepId")), {})
+                mistake = {"text": session["recognizedText"], "said": event.get("said", ""),
+                           "expected": step.get("expect", ""), "ask": step.get("ask", "")}
+            if key == "be_i":
+                title = "I 和 am 的搭配"
+            elif key.startswith("v_base_after:"):
+                title = f"{key.split(':', 1)[1]} 后的动词"
+            else:
+                title = topic_of(session) if session else "专属讲法"
+            changes[key] = {"title": title, "version": plan["planVersion"], "evidence": mistake,
+                            "before": _plan_description(old), "after": _plan_description(entry)}
+        boundary, previous = end, current
+
+    return {"version": plans[-1]["planVersion"] if plans else None, "receivedVersion": received_version,
+            "items": sorted((changes[key] for key in previous), key=lambda item: -item["version"])}
+
+
+def _plan_description(entry: dict | None) -> dict:
+    if entry is None:
+        return {"steps": _STANDARD_STEPS, "voice": ""}
+    return {"steps": _PLAN_STEPS[entry["strategy"]], "voice": entry["voice"]}
 
 MAX_PARENT = 60
 MAX_TEACHER = 120
@@ -68,7 +117,10 @@ def build_facts(sessions: list[dict], drills: list[dict]) -> dict:
     stopped = [session.get("recognizedText", "") for session in judged if any(event.get("result") == "assisted" for event in session.get("events", []))]
     still_wrong = [session.get("recognizedText", "") for session in judged if session.get("drillId") and _made_mistake(session)]
     not_sure = [session.get("recognizedText", "") for session in sessions if session.get("answerSource") == "model"]
-    phone_problems = [session.get("recognizedText", "") for session in sessions if session.get("checkPassed") is False]
+    phone_problems = [
+        session.get("recognizedText", "") for session in sessions if session.get("checkPassed") is False
+        and (session.get("answerSource") != "none" or looks_like_item(session.get("recognizedText", "")))
+    ]
     needs = []
     if flagged:
         needs.append("孩子觉得有专属题不对，请您核对")
@@ -76,6 +128,20 @@ def build_facts(sessions: list[dict], drills: list[dict]) -> dict:
         needs.append("有一问错到第三次停下了")
     if still_wrong:
         needs.append("专属题做的时候还有错")
+    transfer = [
+        {
+            "text": session.get("recognizedText", ""),
+            "day": session.get("startedAt", "")[:10],
+            "tier": session.get("transferTier", ""),
+            "retest": bool(session.get("transferRetest")),
+            "said": [event.get("said", "") for event in session.get("events", []) if event.get("result") in ("hit", "miss", "assisted")],
+            "basis": session.get("transferBasis"),
+        }
+        for session in sessions
+        if session.get("source") == "transfer"
+    ]
+    if any(row["tier"] == "stopped" for row in transfer):
+        needs.append("读完回信试的新题停下来了，需要您再讲")
     return {
         "judged": len(judged),
         "withMistakes": sum(_made_mistake(session) for session in judged),
@@ -86,6 +152,7 @@ def build_facts(sessions: list[dict], drills: list[dict]) -> dict:
         "notSure": _unique(not_sure),
         "phoneProblems": _unique(phone_problems),
         "needsTeacher": needs,
+        "transfer": transfer,
     }
 
 
@@ -103,11 +170,11 @@ def build_report(stats: dict, facts: dict, written: dict | None) -> dict:
     top = _top_wrong_topic(stats)
     judged = facts["judged"]
     if judged:
-        parent_facts = f"这几次做了 {judged} 道题，其中 {facts['withMistakes']} 道中途做错过。手机上还有 {left} 道专属题。"
+        parent_facts = f"这几次做了 {judged} 道题，其中 {facts['withMistakes']} 道曾答错。手机上还有 {left} 道专属题。"
     else:
         parent_facts = "还没有做题记录。"
     stuck = f"这几次主要卡在“{top['topic']}”这类题。" if top else "这几次没有看到明显卡住的地方。"
-    tonight = "今晚不用您讲，让孩子把手机上的专属题做完就行。" if left else "今晚不用加练，可以让孩子拍一道不会的题问问手机。"
+    tonight = "不用今晚赶着做。下一次拿起手机时，让孩子把手机上的专属题做完就行，不用您讲。" if left else "今天不用加练，可以让孩子拍一道不会的题问问手机。"
     teacher_stuck = f"“{top['topic']}”做了 {top['attempts']} 次，错 {top['wrong']} 次。" if top else "这几次没有看到明显卡住的地方。"
     advice = "建议您看一下下面列出的情况。" if facts["needsTeacher"] else "先让孩子做完专属题，再看结果。"
     written = written or {}

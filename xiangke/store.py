@@ -12,6 +12,7 @@ import sqlite3
 from pathlib import Path
 
 from xiangke.kernel import check_plan
+from xiangke.topic_plans import without_demo_history
 from xiangke.questions import collect_questions
 
 _SCHEMA = """
@@ -117,6 +118,7 @@ class Store:
 
         200 covers a term of daily practice; the page fold is a display
         concern and must not silently drop records the store already has.
+        Pass -1 for the full history when checking whether a question was seen.
         """
         rows = self.connection.execute(
             "SELECT record FROM sessions WHERE childId = ? ORDER BY savedOrder DESC LIMIT ?",
@@ -186,7 +188,7 @@ class Store:
 
     def latest_plan(self, child_id: str) -> dict | None:
         row = self.connection.execute("SELECT plan FROM plans WHERE childId = ?", (child_id,)).fetchone()
-        return json.loads(row[0]) if row else None
+        return without_demo_history(json.loads(row[0])) if row else None
 
     def save_plan(self, plan: dict) -> dict:
         """Check the plan against the phone's version, then replace the old one.

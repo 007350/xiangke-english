@@ -13,6 +13,8 @@ import zlib
 from functools import lru_cache
 from pathlib import Path
 
+from xiangke.rules import VERB_3S
+
 _VERBS = Path(__file__).resolve().parents[1] / "data" / "动词表.json"
 _OPTIONS = re.compile(r"[(（][^)）]*/")
 _TOKEN = re.compile(r"[A-Za-z][A-Za-z']*|[.,!?;]")
@@ -32,12 +34,7 @@ _PRONOUNS = {
     "we": ("我们", "many"),
     "they": ("他们", "many"),
 }
-_RULES = {
-    "v_3s": "主语是 he、she、it，动词要加 s。",
-    "v_es": "主语是 he、she、it，这个动词要加 es。",
-    "v_ies": "主语是 he、she、it，这个动词要把 y 改成 i，再加 es。",
-    "v_irregular": "主语是 he、she、it，这个动词有特殊变化。",
-}
+_RULES = {key: rule for key, (rule, _) in VERB_3S.items()}
 # Every wording asks for one English word, so a right reply can match expect.
 _ASK_WRONG = (
     "这句话里有一个词用错了，是哪个词？说出那个英文词。",
@@ -95,6 +92,7 @@ def plan_correction(recognized_text: str) -> dict:
         "type": "verb_3s",
         "ruleKey": rule_key,
         "rule": _RULES[rule_key],
+        "counter": VERB_3S[rule_key][1],
         "clue": f"{subject} 是{gloss}，{kind}",
         "subject": subject,
         "gloss": gloss,
@@ -126,7 +124,8 @@ def model_input(recognized_text: str, plan: dict) -> str:
             f"第1问：{wrong['ask']}  答案={wrong['expect']}  线索={plan['clue']}",
             f"第1问的 explain 要说出 {wrong['expect']}，不要说出 {right['expect']}。",
             f"第2问：{right['ask']}  答案={right['expect']}  规则={plan['rule']}",
-            f"第2问的 explain 只讲这条规则，并说出 {right['expect']}。",
+            f"反例={plan['counter']}",
+            f"第2问的 explain 只讲这条规则，讲清什么时候才变（要提到 can 这些帮忙的词），并说出 {right['expect']}。",
         ]
     )
 
@@ -196,6 +195,8 @@ def check_wording(model_json: str | dict, plan: dict) -> tuple[bool, list[str], 
             errors.append(f"第{index}问把 {plan['subject']} 说成了人")
         if _OTHER_SUBJECT.search(said):
             errors.append(f"第{index}问拿别的主语举例，容易讲反规则")
+        if index == 2 and "帮忙" not in said:
+            errors.append(f"第{index}问没有讲清什么时候才变，要提到 can 这些帮忙的词")
         if plan["ruleKey"] == "v_3s" and _ADD_ES.search(said):
             errors.append(f"第{index}问把变化说成了加 es")
         if plan["ruleKey"] != "v_3s" and _ADD_S.search(said):
@@ -208,7 +209,7 @@ def template_steps(plan: dict) -> dict:
     return {
         "steps": [
             {"explain": f"{plan['clue']}，后面的动词要变样子，所以 {plan['wrong']} 不对。"},
-            {"explain": f"{plan['rule']}所以改成 {plan['right']}。"},
+            {"explain": f"{plan['rule']}所以改成 {plan['right']}。{plan['counter']}"},
         ]
     }
 

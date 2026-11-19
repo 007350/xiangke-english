@@ -119,6 +119,9 @@ def redo_items(sessions: list[dict], known: set[str], limit: int = MAX_REDO) -> 
     for session in reversed(sessions):
         if len(items) >= limit:
             break
+        # 迁移检验的新题单独记给老师，不当错题发回去
+        if session.get("source") == "transfer":
+            continue
         text = session.get("recognizedText", "")
         if not counts_as_judged(session) or _norm(text) in known:
             continue

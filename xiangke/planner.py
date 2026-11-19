@@ -1,6 +1,6 @@
 """云端写新讲法：程序整理事实，大模型起草，程序检查。
 
-大模型只写 voice、reminders、examples、forbid。版本、孩子和参考哪次辅导由程序写。
+大模型写通用讲法和分题型讲法。版本、孩子和参考哪次辅导由程序写。
 发给大模型的只有题目、问答和孩子的原话，不带孩子编号、辅导编号和时间。
 检查拦得住编造的词、术语和算得出的错答案，拦不住讲得不好的话，真实效果还要人读。
 """
@@ -16,6 +16,7 @@ import urllib.request
 
 from xiangke.answers import compute_answer
 from xiangke.kernel import check_session
+from xiangke.topic_plans import topic_key, topic_strategies, valid_topic_entry
 
 DEFAULT_BASE_URL = "https://maas-api.cn-huabei-1.xf-yun.com/v2"
 DEFAULT_MODEL = "spark-x2.6"
@@ -43,11 +44,12 @@ SYSTEM = """你是乡村小学英语辅导的云端老师。手机上的小模�
 
 你还要更新这个孩子的档案 portrait：judgement 用一两句话说他现在卡在哪、会了什么，不超过 80 字；focus 写接下来最该练的地方，最多 2 个，每个不超过 20 字。程序已经数好了次数，不要自己编次数。
 
-讲法包含四项：
+讲法包含五项：
 - voice：一句总讲法，说清这个孩子适合怎么带。不写任何一道题的选项和答案。不超过 60 字。
 - reminders：最多 3 句，每句不超过 80 字。写这个孩子真实犯过的错，以及下次怎么带他想。只写记录里看得到的错，或旧讲法里仍然有用的。
 - examples：最多 3 道拆题样例，可以为空。只放题目和正确答案，不放孩子的错句。格式：{"recognizedText":"题目","steps":[{"ask":"问句","expect":"答案"}]}。前面的问句不能说出后面的答案。
 - forbid：一句禁令，例如“不要直接说出标准答案”。
+- topicPlans：按题型代码写专属讲法。只给「可更新的题型」中有错题依据的题型写，代码和 strategy 从该列表照抄。每项写 strategy 和 voice。voice 用 80 字以内写清孩子在哪一步卡住、讲解时重点说什么。只有 explain 可选时，保留题目的标准步骤，调整讲解重点。没有可写的就返回 {}。
 
 要求：
 1. 分清两件事。“程序判的错”才是孩子的错。记录里写着“手机把题拆错了”或“答案不一定对”的，不能算孩子的错。
@@ -57,9 +59,10 @@ SYSTEM = """你是乡村小学英语辅导的云端老师。手机上的小模�
 5. 手机只能打字，不能念也不能听，不要让孩子朗读或听发音。不用“小尾巴”这类比喻，直接说动词要不要变。
 6. 拆题样例里，中间几问的答案只能是一个英文词，或者“一个”“多个”“要”“不要”；最后一问的答案是这道题的答案。
 7. 只写记录里看得到的事，不要猜。做过的题少时，不下“完全不会”“总是”这种结论，写成“这几次看到……”。
+8. 讲到动词加 s 这类规则时，要带上适用条件（比如句子里没有 can 这些帮忙的词时才变），不要写成任何句子都成立的通则。
 
 只输出一个 JSON 对象，不要输出其他文字，格式：
-{"portrait":{"judgement":"...","focus":["..."]},"voice":"...","reminders":["..."],"examples":[],"forbid":"..."}"""
+{"portrait":{"judgement":"...","focus":["..."]},"voice":"...","reminders":["..."],"examples":[],"forbid":"...","topicPlans":{"be_i":{"strategy":"self_first","voice":"先解释 I 指说话的人自己，再跟 am 配对。"}}}"""
 
 
 class PlanFailed(Exception):
@@ -101,6 +104,7 @@ def collect_facts(sessions: list[dict]) -> list[dict]:
             if computed:
                 item["程序算的答案"] = computed["answer"]
                 item["规则"] = computed["rule"]
+                item["题型"] = topic_key(computed)
         steps = session.get("steps") or []
         item["过程"] = [_step_facts(step, session.get("events", [])) for step in steps]
         stray = [event["said"] for event in session.get("events", []) if not event.get("stepId") and event.get("said")]
@@ -124,11 +128,13 @@ def _step_facts(step: dict, events: list[dict]) -> dict:
 
 
 def build_messages(current: dict, sessions: list[dict]) -> list[dict]:
-    old = {key: current.get(key) for key in ("voice", "reminders", "examples", "forbid")}
+    old = {key: current.get(key) for key in ("voice", "reminders", "examples", "forbid", "topicPlans")}
+    eligible = {key: topic_strategies(key) for key in topic_evidence(sessions)}
     profile = current.get("profile")
     content = (
         ("这个孩子的档案（次数由程序数好）：\n" + json.dumps(profile, ensure_ascii=False, indent=1) + "\n\n" if profile else "")
         + "现在的讲法：\n" + json.dumps(old, ensure_ascii=False, indent=1)
+        + "\n\n可更新的题型（及各自可用的 strategy）：\n" + json.dumps(eligible, ensure_ascii=False, indent=1)
         + "\n\n最近的做题记录：\n" + json.dumps(collect_facts(sessions), ensure_ascii=False, indent=1)
         + "\n\n请写出下一版讲法和档案。"
     )
@@ -195,6 +201,36 @@ def _good_example(example) -> bool:
     return check_session({"steps": steps})["checkPassed"]
 
 
+def topic_evidence(sessions: list[dict]) -> dict[str, list[dict]]:
+    evidence: dict[str, list[dict]] = {}
+    for session in sessions:
+        if session.get("flagged") or session.get("checkPassed") is not True or session.get("answerSource") != "program":
+            continue
+        if not any(event.get("result") in ("miss", "assisted") for event in session.get("events", [])):
+            continue
+        key = topic_key(compute_answer(session.get("recognizedText", "")))
+        if key:
+            evidence.setdefault(key, []).append(session)
+    return evidence
+
+
+def _merge_topic_plans(draft: dict, current: dict, sessions: list[dict]) -> dict:
+    existing = current.get("topicPlans")
+    plans = {key: entry for key, entry in existing.items() if valid_topic_entry(key, entry)} if isinstance(existing, dict) else {}
+    updates = draft.get("topicPlans")
+    if not isinstance(updates, dict):
+        return plans
+    for key, evidence in topic_evidence(sessions).items():
+        entry = updates.get(key)
+        if not valid_topic_entry(key, entry):
+            continue
+        voice = entry["voice"].strip()
+        if any(term in voice for term in TERMS) or _words(voice) - _known_words({}, evidence):
+            continue
+        plans[key] = {"strategy": entry["strategy"], "voice": voice}
+    return plans
+
+
 def check_draft(raw: str, current: dict, sessions: list[dict]) -> tuple[dict | None, list[str]]:
     """返回能用的讲法和不能用的原因。样例不合格只丢掉样例，不算整份不合格。"""
     try:
@@ -232,7 +268,8 @@ def check_draft(raw: str, current: dict, sessions: list[dict]) -> tuple[dict | N
         if not session.get("flagged")
         for event in session.get("events", [])
     )
-    if made_errors and not reminders:
+    topics = _merge_topic_plans(draft, current, sessions)
+    if made_errors and not reminders and not topics:
         errors.append("孩子有答错，reminders 却是空的")
 
     forbid = draft.get("forbid")
@@ -252,7 +289,10 @@ def check_draft(raw: str, current: dict, sessions: list[dict]) -> tuple[dict | N
 
     if errors:
         return None, errors
-    return {"voice": voice.strip(), "reminders": [item.strip() for item in reminders], "examples": kept, "forbid": forbid.strip()}, []
+    result = {"voice": voice.strip(), "reminders": [item.strip() for item in reminders], "examples": kept, "forbid": forbid.strip()}
+    if "topicPlans" in draft or "topicPlans" in current:
+        result["topicPlans"] = topics
+    return result, []
 
 
 def read_portrait(raw: str, current: dict, sessions: list[dict]) -> dict | None:
@@ -289,6 +329,7 @@ def make_planner(chat, tries: int = TRIES):
             raw = chat(messages)
             draft, errors = check_draft(raw, current, sessions)
             if draft is not None:
+                draft.setdefault("topicPlans", {})
                 portrait = read_portrait(raw, current, sessions)
                 return {**draft, "portrait": portrait} if portrait else draft
             print("大模型的讲法没通过检查:", errors, flush=True)

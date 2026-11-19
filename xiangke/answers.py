@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 
+from xiangke.rules import V_3S, V_3S_COUNTER, V_BASE_AFTER_COUNTER
 from xiangke.verb_3s import plan_correction
 
 _BLANK_OPTIONS = re.compile(r"\b_{2,}\s*(?P<after>[^()（）]*?)\s*[(（](?P<options>[^)）]*/[^)）]*)[)）]\s*$")
@@ -78,20 +79,20 @@ def _verb_choice(text: str) -> dict | None:
         # 问句：空要正好跟在主语后面。Can you see the ___ 不算
         if len(words) < 2 or _subject(words[1:]) is None:
             return None
-        return {"kind": "verb_choice", "answer": base, "ruleKey": "v_base_after", "rule": f"句子里已经有 {words[0]} 了，后面的动词用原来的样子，不加 s。"}
+        return {"kind": "verb_choice", "answer": base, "ruleKey": "v_base_after", "cue": words[0], "rule": f"句子里已经有 {words[0]} 了，后面的动词用原来的样子，不加 s。", "counter": V_BASE_AFTER_COUNTER}
     if lowered[-1] == "to":
         # go to ___ 后面可能是地点。只认 wants to、likes to 这种
         if len(lowered) < 2 or lowered[-2] not in _WANT_WORDS:
             return None
-        return {"kind": "verb_choice", "answer": base, "ruleKey": "v_base_after", "rule": "to 后面的动词用原来的样子，不加 s。"}
+        return {"kind": "verb_choice", "answer": base, "ruleKey": "v_base_after", "cue": "to", "rule": "to 后面的动词用原来的样子，不加 s。", "counter": V_BASE_AFTER_COUNTER}
     if lowered[-1] in _VERB_CUES:
-        return {"kind": "verb_choice", "answer": base, "ruleKey": "v_base_after", "rule": f"{words[-1]} 后面的动词用原来的样子，不加 s。"}
+        return {"kind": "verb_choice", "answer": base, "ruleKey": "v_base_after", "cue": words[-1], "rule": f"{words[-1]} 后面的动词用原来的样子，不加 s。", "counter": V_BASE_AFTER_COUNTER}
     decided = _subject(words)
     if decided is None:
         return None
     be = decided[0]
     if be == "is":
-        return {"kind": "verb_choice", "answer": third, "ruleKey": "v_3s", "rule": "主语是一个，现在常做的事，动词要变。"}
+        return {"kind": "verb_choice", "answer": third, "ruleKey": "v_3s", "rule": V_3S, "counter": V_3S_COUNTER}
     return {"kind": "verb_choice", "answer": base, "ruleKey": "v_base", "rule": "主语不是一个别人，动词用原来的样子。"}
 
 
@@ -118,6 +119,7 @@ def _correction(text: str) -> dict | None:
         "answer": plan["right"],
         "ruleKey": plan["ruleKey"],
         "rule": plan["rule"],
+        "counter": plan["counter"],
         "wrong": plan["wrong"],
     }
 
@@ -214,7 +216,7 @@ def _plural_noun(text: str) -> dict | None:
         return None
     last = words[-1]
     if last in {"a", "an", "one"}:
-        return {"kind": "plural_noun", "answer": single, "ruleKey": "n_a_an", "rule": "a、an、one 后面用一个，名词不加 s。"}
+        return {"kind": "plural_noun", "answer": single, "ruleKey": "n_a_an", "cue": last, "rule": "a、an、one 后面用一个，名词不加 s。"}
     if last in _NUMBERS or last in {"many", "several", "these", "those"}:
         return {"kind": "plural_noun", "answer": plural, "ruleKey": "n_many", "rule": "数量是两个或更多，用复数。"}
     if last in _DETERMINERS and len(words) >= 3:

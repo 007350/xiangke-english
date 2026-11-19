@@ -17,6 +17,33 @@ SYSTEM = (
 )
 GRAMMAR = 'root ::= "{\\"label\\": \\"" ("答题" | "不会" | "提问" | "其他") "\\"}"'
 _ONE_WORD = re.compile(r"[A-Za-z][A-Za-z']*")
+_WHY = re.compile(r"为什么|为啥|为何")
+_QUESTION = re.compile(r"什么意思|是什么含义|(?:怎么|如何)(?:做|知道|判断|区分|选)|在问什么")
+_HELP = re.compile(
+    r"(?:我)?(?:还是|真的|暂时)?(?:不知道|不会(?:做|答)?|不懂|想不出来|想不出|卡住了)"
+    r"|(?:能不能|能|可以|请)?(?:再)?(?:给我?|来)(?:个|点|一点)?提示(?:吗)?"
+    r"|提示一下"
+)
+_ANSWER_CLAIM = re.compile(
+    r"(?:我(?:觉得|想)(?:是|选|填)|我(?:选|填)|应该(?:是|选|填)|是|选|填)"
+    r"\s*[A-Za-z][A-Za-z']*(?:\s*吧)?"
+)
+
+
+def asks_why(said: str) -> bool:
+    return bool(_WHY.search(said))
+
+
+def explicit_intent(said: str) -> str | None:
+    """Use local rules for direct responses and leave less clear wording to v5."""
+    text = said.strip().rstrip("。.!！?？")
+    if asks_why(text) or _QUESTION.search(text):
+        return "提问"
+    if _HELP.fullmatch(text):
+        return "不会"
+    if "?" not in said and "？" not in said and _ANSWER_CLAIM.fullmatch(text):
+        return "答题"
+    return None
 
 
 def classify(question: str, said: str, write) -> str | None:

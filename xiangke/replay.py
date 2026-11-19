@@ -17,9 +17,12 @@ from xiangke.planner import LlmError
 
 
 def round_key(sessions: list[dict]) -> str:
-    """这一轮的记号：做了哪些题，每道有没有做错。顺序不影响。"""
+    """这一轮的记号：做了哪些题，每道有没有做错。顺序不影响。
+    迁移检验是固定的两道新题，不算这一轮做了什么，不参与对号。"""
     rows = []
     for session in sessions:
+        if session.get("source") == "transfer":
+            continue
         wrong = any(event.get("result") in ("miss", "assisted") for event in session.get("events", []))
         rows.append(f"{_norm(session.get('recognizedText', ''))}|{'错' if wrong else '对'}")
     return "\n".join(sorted(rows))
@@ -115,8 +118,5 @@ class Replayer:
         items = self.rounds.get(self.current or "", {}).get("drills") or []
         return [item for item in items if _norm(item["text"]) not in known]
 
-    def answerer(self, item: dict) -> dict:
-        found = (self.answers or {}).get(question_key(item))
-        if found:
-            return found
-        return {"status": "needs_teacher", "answer": "这条疑惑的解答没有录进演示备份，需要老师确认。"}
+    def answerer(self, item: dict) -> dict | None:
+        return (self.answers or {}).get(question_key(item))

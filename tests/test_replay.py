@@ -89,6 +89,10 @@ class RoundKeyTests(unittest.TestCase):
     def test_spacing_and_case_do_not_matter(self):
         self.assertEqual(round_key([session()]), round_key([session(text="she  ___ APPLES. (like / likes)")]))
 
+    def test_transfer_items_do_not_change_the_round(self):
+        transfer = {**session("t1", "He ___ TV. (watch / watches)"), "source": "transfer"}
+        self.assertEqual(round_key([session(), transfer]), round_key([session()]))
+
 
 class RecordTests(ReplayCase):
     def test_everything_is_written_down(self):
@@ -159,7 +163,9 @@ class ReplayTests(ReplayCase):
             reply = cloud.sync("child_01", 2, [session(wrong=False)])
             self.assertIsNone(reply["plan"])
             self.assertNotIn("planFailed", reply)
+            self.assertTrue(reply["replayPlanMissing"])
             report = cloud.report("child_01")
+            self.assertTrue(report["replayPlanMissing"])
             self.assertFalse(report["parent"]["byModel"])
             self.assertIn("做了 1 道题", report["parent"]["facts"])
 
@@ -211,16 +217,86 @@ class ReplayTests(ReplayCase):
             self.assertEqual((item["status"], item["answer"]), (DRAFT["status"], DRAFT["answer"]))
             self.assertNotEqual(item["questionId"], collect_questions(question_session())[0]["questionId"])
 
-    def test_unrecorded_question_is_left_for_the_teacher(self):
+    def test_unrecorded_question_waits_without_sending_a_false_reply(self):
         self.record_question()
         with CloudStore(":memory:") as store:
             replayer = Replayer(self.path)
             cloud = CloudApp(store, replayer.planner, question_answerer=replayer.answerer, recorded=True)
             reply = cloud.sync("child_01", 2, [question_session(question="这道题是不是印错了？")])
             item = reply["questions"][0]
-            self.assertEqual(item["status"], "needs_teacher")
-            self.assertTrue(item["answer"].strip())
+            self.assertEqual((item["status"], item["answer"]), ("pending", ""))
+            self.assertTrue(reply["replayQuestionMissing"])
+            self.assertTrue(cloud.report("child_01")["questions"][0]["replayUnavailable"])
             self.assertNotIn("questionFailed", reply)
+            self.assertNotIn("working", reply)
+            again = cloud.sync("child_01", 2, [], question_seq=item["seq"])
+            self.assertNotIn("working", again)
+            self.assertNotIn("questions", again)
+            cloud.confirm_question("child_01", item["questionId"], "先找句子里的动作词。")
+            store.answer_question(item["questionId"], "child_01", DRAFT)
+            delivered = cloud.sync("child_01", 2, [], question_seq=item["seq"])
+            self.assertNotIn("replayQuestionMissing", delivered)
+            answer = delivered["questions"][0]
+            self.assertEqual((answer["status"], answer["answer"]), ("teacher_confirmed", "先找句子里的动作词。"))
+
+    def test_unrecorded_questions_do_not_block_a_recorded_reply(self):
+        self.record_question()
+        with CloudStore(":memory:") as store:
+            replayer = Replayer(self.path)
+            cloud = CloudApp(store, lambda current, new: None, question_answerer=replayer.answerer, recorded=True)
+            records = [question_session(session_id=f"无回放{i}", question=f"疑惑{i}") for i in range(4)]
+            reply = cloud.sync("child_01", 2, [*records, question_session()])
+            self.assertEqual([item["status"] for item in reply["questions"]], ["pending"] * 4 + ["answered"])
+
+    def test_live_restart_requeues_only_old_replay_placeholders(self):
+        with CloudStore(":memory:") as store, Store(":memory:") as phone:
+            placeholder = "这条疑惑的解答没有录进演示备份，需要老师确认。"
+            old_cloud = CloudApp(store, lambda current, new: None, recorded=True)
+            for version in (1, 2):
+                phone.save_plan({"childId": "child_01", "planVersion": version, "voice": "讲法", "reminders": [], "examples": [], "forbid": "不说答案"})
+            stale = question_session(session_id="旧回放", question="为什么这样填？")
+            real_review = question_session(session_id="真正待确认", question="纸上写的是什么？")
+            confirmed = question_session(session_id="老师确认的疑惑", question="这个词怎么写？")
+            stale_confirmed = question_session(session_id="被确认的占位", question="这是什么意思？")
+            records = (stale, real_review, confirmed, stale_confirmed)
+            for record in records:
+                phone.save_session(record)
+            old_cloud.sync("child_01", 2, list(records))
+            def sync_with(cloud):
+                return sync_once(phone, "child_01", post=lambda url, body: cloud.sync(
+                    body["childId"], body["planVersion"], body["sessions"], body["drillSeq"], body["questionSeq"],
+                ))
+
+            old_id, review_id, confirmed_id, stale_confirmed_id = [collect_questions(row)[0]["questionId"] for row in records]
+            store.answer_question(old_id, "child_01", {"status": "needs_teacher", "answer": placeholder})
+            store.answer_question(review_id, "child_01", {"status": "needs_teacher", "answer": "请老师核对题面。"})
+            store.answer_question(confirmed_id, "child_01", {"status": "needs_teacher", "answer": placeholder})
+            store.confirm_question(confirmed_id, "child_01", "这是老师写的回复。")
+            store.answer_question(stale_confirmed_id, "child_01", {"status": "needs_teacher", "answer": placeholder})
+            store.confirm_question(stale_confirmed_id, "child_01", placeholder)
+            sync_with(old_cloud)
+            cursor = phone.last_question_seq("child_01")
+            live = CloudApp(store, lambda current, new: None)
+            reset = store.questions_after("child_01", cursor)
+            self.assertEqual([(item["questionId"], item["status"], item["answer"]) for item in reset], [
+                (old_id, "pending", ""), (stale_confirmed_id, "pending", ""),
+            ])
+            self.assertEqual(reset[0]["question"], "为什么这样填？")
+            self.assertEqual(store.requeue_replay_misses(), 0)
+            sync_with(live)
+            self.assertEqual({item["questionId"]: item["status"] for item in phone.questions("child_01")}, {
+                old_id: "pending", review_id: "needs_teacher", confirmed_id: "teacher_confirmed", stale_confirmed_id: "pending",
+            })
+            asked = []
+            def answer(question):
+                asked.append(question["questionId"])
+                return DRAFT
+
+            live = CloudApp(store, lambda current, new: None, question_answerer=answer)
+            sync_with(live)
+            sync_with(live)
+            self.assertEqual(asked, [old_id, stale_confirmed_id])
+            self.assertEqual(next(item for item in phone.questions("child_01") if item["questionId"] == old_id)["answer"], DRAFT["answer"])
 
     def test_old_recording_keeps_answering_off(self):
         self.path.parent.mkdir(parents=True)

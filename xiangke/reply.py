@@ -17,6 +17,15 @@ _LATIN = re.compile(r"[A-Za-z][A-Za-z']*")
 _YES = {"是", "是的", "对", "对的", "嗯", "嗯嗯", "好", "没错", "yes", "y", "ok"}
 _NO = {"不是", "不", "不对", "错了", "没有", "no", "n"}
 _ENDINGS = ("ies", "es", "ed", "ing", "s", "d")
+_FINAL_CLAIM = re.compile(r"^(?:(?:所以[，,]?\s*)?(?:这[道一]题(?:的答案)?(?:是|选|填)|最后一空(?:是|选|填))|我(?:选|填))\s*")
+
+
+def matches_final_answer(said: str, expect: str) -> bool:
+    """Recognize a bare answer or an explicit claim about the final answer."""
+    if "?" in said or "？" in said:
+        return False
+    candidate = _FINAL_CLAIM.sub("", said.strip(), count=1)
+    return judge(candidate, expect) == "hit"
 
 
 def route_reply(said: str, expect: str, label: str | None = None) -> dict:

@@ -108,6 +108,18 @@ class CheckTalkTests(unittest.TestCase):
     def test_good_wording_passes(self):
         self.assertEqual(self.errors(GOOD["steps"]), [])
 
+    def test_article_before_blank_is_a_cue_not_the_fill_answer(self):
+        text = "This is an ___. (apples / apple)"
+        final = {"ask": "选哪个英文词？", "expect": "apple", "explain": "空格前面是 an，所以填 apple。"}
+        computed = compute_answer(text)
+        bad = {"ask": "This 后面的空格是什么东西？说出这个词。", "expect": "an",
+               "explain": "这是第一个空，所以用 an。"}
+        self.assertTrue(any("提示词当成" in error for error in self.errors([bad, final], text, computed)))
+        wrong_cue = {"ask": "空格前面紧挨着的词是什么？", "expect": "a", "explain": "前面是 a。"}
+        self.assertTrue(self.errors([wrong_cue, final], text, computed))
+        good = {"ask": "空格前面紧挨着的词是什么？", "expect": "an", "explain": "前面是 an。"}
+        self.assertEqual(self.errors([good, final], text, computed), [])
+
     def test_too_many_steps(self):
         extra = {"ask": "再想想？", "expect": "x", "explain": "想想。"}
         steps = [extra, extra, extra, GOOD["steps"][-1]]
@@ -209,6 +221,17 @@ class CheckTalkTests(unittest.TestCase):
         for text, steps in cases:
             with self.subTest(text=text):
                 self.assertEqual(self.errors(steps, text, compute_answer(text)), [])
+
+    def test_watch_question_rejects_plain_s_as_the_intermediate_answer(self):
+        text = "He ___ TV. (watch / watches)"
+        steps = [
+            {"ask": "watch 的末尾该加什么？", "expect": "加 s", "explain": "看看 watch 的末尾。"},
+            {"ask": "空里选哪个词？", "expect": "watches", "explain": "watch 末尾是 ch，这里加 es，所以选 watches。"},
+        ]
+        computed = compute_answer(text)
+        self.assertTrue(any("加 es" in error for error in self.errors(steps, text, computed)))
+        steps[0]["expect"] = "加 es"
+        self.assertEqual(self.errors(steps, text, computed), [])
 
     def test_term_is_repaired_not_refused(self):
         steps = repair_terms([{"ask": "?", "expect": "a", "explain": "Mary 是第三人称单数，动词要变。"}])
@@ -316,6 +339,26 @@ class IntentTests(unittest.TestCase):
 
 
 class RunItemTests(unittest.TestCase):
+    def test_explain_an_auxiliary_the_child_mentioned_without_giving_the_fill_answer(self):
+        for text, cue, answer, said in (
+            ("She can ___ fast. (runs / run)", "can", "run", "为什么有 can 就不一样"),
+            ("My aunt doesn't ___ coffee. (drinks / drink)", "doesn't", "drink", "doesn’t 后面为什么这么选"),
+        ):
+            with self.subTest(cue=cue):
+                steps = [
+                    {"ask": "空格前面紧挨着的是哪个词？", "expect": cue, "explain": f"前面是 {cue}。"},
+                    {"ask": "空里应该填哪个词？", "expect": answer,
+                     "explain": f"{cue} 后面要用动词原形，所以填 {answer}。"},
+                ]
+                facts = {**FACTS, "recognizedText": text}
+                result = run_item(text, [said], writer({"steps": steps}), facts)
+                self.assertEqual(result["lesson"]["source"], "model")
+                reply = result["transcript"][-1]
+                self.assertIn("动词用原来的样子", reply)
+                self.assertNotRegex(reply, rf"\b{answer}\b")
+                self.assertEqual(result["record"]["events"][0]["result"], "note")
+                result = run_item(text, ["为什么这么选？"], writer({"steps": steps}), facts)
+                self.assertNotRegex(result["transcript"][-1], rf"\b{cue}\b")
     def test_model_intent_flows_through(self):
         labels = {"不知道": "不会", "为啥": "提问", "我饿了": "其他"}
 
@@ -354,9 +397,30 @@ class RunItemTests(unittest.TestCase):
         computed = {"kind": "x", "rule": "所以这里写 goes。"}
         self.assertEqual(rule_without_answer({"computed": computed}, [{"expect": "goes"}]), SAFE_RULE)
 
-    def test_saying_i_dont_know_twice_shows_the_explanation(self):
+    def test_why_rule_carries_the_condition_and_a_counter_example(self):
+        computed = compute_answer("改错（只改一个词）：She like cats.")
+        rule = rule_without_answer({"computed": computed}, [{"expect": "likes"}])
+        self.assertIn("帮忙", rule)
+        self.assertIn("She can run fast", rule)
+
+    def test_counter_example_is_dropped_when_it_leaks_the_answer(self):
+        computed = compute_answer("She can ___ to school. (go / goes)")
+        rule = rule_without_answer({"computed": computed}, [{"expect": "go"}])
+        self.assertIn("can 后面", rule)
+        self.assertNotIn("goes", rule)
+
+    def test_unconditional_he_she_it_rule_is_refused(self):
+        text = "改错（只改一个词）：She like cats."
+        steps = [
+            {"ask": "哪个词错了？", "expect": "like", "explain": "错的是 like。"},
+            {"ask": "改成什么？", "expect": "likes", "explain": "主语是 he、she、it，动词要加 s，所以改成 likes。"},
+        ]
+        self.assertTrue(any("什么时候才变" in e for e in check_talk(json.dumps({"steps": steps}, ensure_ascii=False), text, compute_answer(text))[1]))
+
+    def test_saying_i_dont_know_twice_offers_explanation_without_revealing_it(self):
         result = run_item(TEXT, ["They", "不知道", "还是不会"], writer(GOOD), FACTS, label_of=lambda q, s: "不会")
-        self.assertEqual(result["transcript"][-1], "手机：" + GOOD["steps"][1]["explain"])
+        self.assertIn("可以点「看讲解」", result["transcript"][-1])
+        self.assertNotIn(GOOD["steps"][1]["explain"], result["transcript"][-1])
         self.assertEqual([e["result"] for e in result["record"]["events"]], ["hit", "note", "note"])
 
     def test_notes_never_change_the_judged_results(self):
@@ -444,6 +508,15 @@ class RunItemTests(unittest.TestCase):
         self.assertEqual([e["result"] for e in record["events"]], ["note", "note"])
         self.assertEqual([e["said"] for e in record["events"]], ["a", "book"])
         self.assertIn("不一定对", result["transcript"][0])
+
+    def test_try_keeps_model_questions_neutral_after_unchecked_answers(self):
+        text = "看中文写单词：书 bo_k"
+        lesson = self.try_lesson()
+        lesson["steps"][1]["ask"] = "很好！现在拼出完整的词。"
+        result = run_item(text, ["x", "book"], writer(lesson), {**FACTS, "recognizedText": text})
+        self.assertIn("手机：现在拼出完整的词。", result["transcript"])
+        self.assertNotIn("很好", "\n".join(result["transcript"]))
+        self.assertEqual([event["result"] for event in result["record"]["events"]], ["note", "note"])
 
     def test_model_try_shows_the_answer_without_reasons(self):
         text = "看中文写单词：书 bo_k"

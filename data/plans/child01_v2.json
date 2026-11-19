@@ -3,21 +3,13 @@
   "plan": {
     "childId": "child_01",
     "planVersion": 2,
-    "basedOnSessionId": "s_01",
+    "basedOnSessionId": null,
     "voice": "先让他看主语，再选该用的那个词。",
-    "reminders": [
-      "主语是 I 的时候，他会写成 is。先问主语，再告诉他 I 后面用 am。"
-    ],
-    "examples": [
-      {
-        "recognizedText": "I ___ a student. (am / is / are)",
-        "steps": [
-          {"ask": "I 后面用 am、is 还是 are？", "expect": "am"}
-        ]
-      }
-    ],
+    "reminders": [],
+    "examples": [],
     "forbid": "不要直接说出标准答案。",
     "checkPassed": true,
-    "checkReasons": []
+    "checkReasons": [],
+    "starter": true
   }
 }

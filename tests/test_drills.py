@@ -112,6 +112,10 @@ class RedoTests(unittest.TestCase):
         many = [session(str(i), f"改错（只改一个词）：He like {word}.") for i, word in enumerate(("apples", "rice", "bread"))]
         self.assertEqual(len(redo_items(many, set())), 2)
 
+    def test_transfer_items_are_not_sent_back_as_redo(self):
+        transfer = session("t1", "He ___ TV. (watch / watches)", source="transfer")
+        self.assertEqual(redo_items([transfer], set()), [])
+
 
 class MakerTests(unittest.TestCase):
     PORTRAIT = {"judgement": "会看主语，想不到动词要变。", "focus": ["she、he 后面的动词"]}
@@ -429,7 +433,7 @@ class PhoneDrillTests(unittest.TestCase):
         view = self.app.start_drill("d1")
         self.assertTrue(view["drill"])
         self.assertEqual(view["mode"], "judged")
-        self.assertEqual(self.app.reply("go")["messages"], ["还不对，再想想。"])
+        self.assertEqual(self.app.reply("go")["messages"], ["再试一次。昨天的事要用过去的样子。"])
         view = self.app.reply("went")
         self.assertTrue(view["done"])
         record = self.store.unsynced()[0]

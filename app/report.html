@@ -61,6 +61,33 @@ li:last-child { padding-bottom: 0; }
 .copy[data-done="1"] { border-color: var(--green); background: var(--green-soft); }
 .copy[data-done="0"] { border-color: #d9b98c; background: var(--amber-soft); color: var(--amber); }
 .copy-note { color: var(--muted); font-size: 13.5px; line-height: 1.4; }
+.answer-edit { width: 100%; min-height: 96px; margin-top: 8px; padding: 10px; border: 1.5px solid var(--line); border-radius: 10px; background: #fff; font: inherit; font-size: 15px; line-height: 1.5; resize: vertical; }
+.answer-edit:focus { outline: 2px solid var(--green); border-color: var(--green); }
+.copy-text { min-height: 12em; }
+.copy-select { margin-top: 8px; }
+.confirm-btn { min-height: 44px; margin-top: 8px; padding: 8px 18px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-weight: 600; cursor: pointer; }
+.confirm-btn:hover { background: var(--green-dark); }
+.confirm-btn:disabled { opacity: .5; cursor: default; }
+.confirm-note { display: block; margin-top: 6px; color: var(--muted); font-size: 13.5px; }
+.confirm-note.bad { color: var(--amber); }
+.plan-card { border-color: #a9c6b7; }
+.plan-header { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+.plan-card .plan-header h2 { color: var(--green-dark); font-size: 20px; margin-bottom: 2px; }
+.plan-refresh { min-height: 36px; padding: 3px 10px; font-size: 14px; flex-shrink: 0; }
+.plan-status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0; }
+.plan-status span { padding: 3px 9px; border-radius: 8px; color: var(--green-dark); background: var(--green-soft); font-size: 13.5px; }
+.plan-status .waiting { color: var(--amber); background: var(--amber-soft); }
+.plan-items > li { padding: 14px 0; }
+.plan-items > li:last-child { padding-bottom: 0; }
+.plan-title { margin: 0 0 9px; font-size: 16px; }
+.plan-evidence { margin-bottom: 10px; padding: 9px 12px; border-left: 3px solid #d5b789; background: #faf4e7; border-radius: 0 8px 8px 0; }
+.plan-evidence .en { font-size: 17px; }
+.plan-evidence p { margin: 0; }
+.plan-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.plan-side { padding: 10px 12px; border-radius: 8px; background: #f2eee5; font-size: 15px; }
+.plan-side.after { background: var(--green-soft); }
+.plan-side b { display: block; color: var(--green-dark); font-size: 13px; margin-bottom: 4px; }
+@media (max-width: 430px) { .plan-compare { grid-template-columns: 1fr; } }
 .hidden { display: none !important; }
 </style>
 </head>
@@ -73,14 +100,20 @@ li:last-child { padding-bottom: 0; }
   </div>
   <div class="card hidden" id="empty"><p>还没有孩子的记录。手机同步之后，这里就会有内容。</p></div>
   <div id="content" class="hidden">
-    <div class="card alert hidden" id="recorded"><p>演示备份：这一页里星火写的句子是提前写好的，不是这次现写的。数字仍由程序现算。</p></div>
+    <div class="card alert hidden" id="recorded"><p id="recorded-text"></p></div>
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-parent" aria-selected="true">给家长</button>
       <button class="tab" role="tab" id="tab-teacher" aria-selected="false">给老师</button>
     </div>
     <div class="copybar">
       <button class="copy" id="copy" type="button">复制给家长</button>
-      <span class="copy-note" id="copy-note"></span>
+      <span class="copy-note" id="copy-note" role="status"></span>
+    </div>
+    <div class="card hidden" id="copy-fallback">
+      <label for="copy-text" id="copy-label">反馈全文</label>
+      <textarea class="answer-edit copy-text" id="copy-text" readonly aria-describedby="copy-instructions"></textarea>
+      <p class="note" id="copy-instructions">选中文字后，用 Ctrl+C（Mac 用 ⌘C）或手机菜单里的「复制」。</p>
+      <button class="copy copy-select" id="copy-select" type="button">全选文字</button>
     </div>
 
     <section id="parent">
@@ -90,13 +123,24 @@ li:last-child { padding-bottom: 0; }
         <p class="lead" id="p-stuck"></p>
       </div>
       <div class="card">
-        <h2>今晚可以做</h2>
+        <h2>接下来的安排</h2>
         <p class="lead" id="p-tonight"></p>
       </div>
       <p class="note" id="p-source"></p>
     </section>
 
     <section id="teacher" class="hidden">
+      <div class="card plan-card">
+        <div class="plan-header">
+          <h2>错题怎么改变下一次讲法</h2>
+          <button class="copy plan-refresh" id="plan-refresh" type="button">刷新</button>
+        </div>
+        <div class="plan-status hidden" id="plan-status" aria-live="polite">
+          <span id="plan-cloud"></span><span id="plan-device"></span>
+        </div>
+        <p class="note" id="plan-empty">还没有生成按题型的专属讲法。</p>
+        <ul class="plan-items" id="plan-items"></ul>
+      </div>
       <div class="card alert hidden" id="t-needs-box">
         <h2>需要您留意</h2>
         <ul id="t-needs"></ul>
@@ -118,6 +162,11 @@ li:last-child { padding-bottom: 0; }
           <tbody id="t-topics"></tbody>
         </table>
       </div>
+      <div class="card hidden" id="t-transfer-box">
+        <h2>读完回信试的新题</h2>
+        <p class="note">每封回信先测原题的考点，再用容易混淆的题做对照。跨日复测会换题。</p>
+        <ul id="t-transfer"></ul>
+      </div>
       <div class="card hidden" id="t-flagged-box">
         <h2>孩子觉得不对的专属题</h2>
         <ul id="t-flagged"></ul>
@@ -128,7 +177,7 @@ li:last-child { padding-bottom: 0; }
       </div>
       <div class="card hidden" id="t-answers-box">
         <h2>疑惑与云端解答</h2>
-        <p class="note">这里的解释由云端模型生成；需要老师确认的内容单独标明。</p>
+        <p class="note">您可以直接回答待解答的疑惑，也可以改写已有解释。发回后，孩子下次同步就能看到。</p>
         <ul id="t-answers"></ul>
       </div>
       <div class="card hidden" id="t-notsure-box">
@@ -145,7 +194,22 @@ li:last-child { padding-bottom: 0; }
 </main>
 <script>
 const $ = id => document.getElementById(id);
+const TIER_LABELS = { independent: "第一次独立做对", assisted: "提示后改对", stopped: "停下来，需要老师再讲" };
+const QUESTION_LABELS = { pending: "待解答", answered: "云端已解答", needs_teacher: "需要老师确认", teacher_confirmed: "老师已确认" };
+function replayText(report) {
+  return report.replayPlanMissing
+    ? "这次做题和演示录制不一致，没有回放新的讲法。这里仍会显示实际作答记录。"
+    : "当前是演示回放模式。匹配到的星火内容来自录制，作答数字由程序统计。";
+}
+
+function pendingAnswer(item) {
+  return item.replayUnavailable ? "这条疑惑没有匹配的回放答复，老师可以直接回答。" : "等待云端处理，老师也可以直接回答。";
+}
 let refreshTimer = null;
+let planRefreshing = false;
+let planWorking = false;
+let copyTimer = null;
+let copyRequest = 0;
 let shown = null;          // 当前显示的这一份反馈，复制时直接用，不去抠页面文字
 let childCount = 0;
 
@@ -153,9 +217,20 @@ function isTeacherTab() {
   return $("tab-teacher").getAttribute("aria-selected") === "true";
 }
 
-function renderCopyButton() {
+function resetCopy() {
+  copyRequest += 1;
+  clearTimeout(copyTimer);
   $("copy").textContent = isTeacherTab() ? "复制给老师" : "复制给家长";
   $("copy").dataset.done = "";
+  $("copy-note").textContent = "";
+  $("copy-fallback").classList.add("hidden");
+  $("copy-text").value = "";
+}
+
+function selectCopyText() {
+  const area = $("copy-text");
+  area.focus();
+  area.select();
 }
 
 function stamp() {
@@ -167,16 +242,26 @@ function tidy(lines) {
   return lines.join("\n").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
+function transferDetails(item) {
+  const basis = item.basis;
+  const lines = [`${item.day} · ${TIER_LABELS[item.tier] || item.tier}${item.retest ? " · 跨日复测" : ""}`];
+  if (basis?.topic) {
+    lines.push(`${basis.contrast ? "对照题" : "同考点题"} · ${basis.topic}`);
+    lines.push(`回信原题：${basis.originalText}${basis.originalReply ? `，当时答「${basis.originalReply}」` : ""}`);
+  }
+  return lines;
+}
+
 function parentText(report) {
   const parent = report.parent || {};
   const lines = ["乡课英语 · 学情反馈", stamp()];
   if (childCount > 1 && report.childId) lines.push(`孩子：${report.childId}`);
   lines.push("", "这几天", parent.facts || "", parent.stuck || "");
-  lines.push("", "今晚可以做", parent.tonight || "");
+  lines.push("", "接下来的安排", parent.tonight || "");
   lines.push("", parent.byModel
     ? "这段话由云端老师根据孩子的记录写成，次数由程序统计。"
     : "这段话由程序根据记录生成。");
-  if (report.recorded) lines.push("（演示备份：星火写的句子是提前写好的。）");
+  if (report.recorded) lines.push(replayText(report));
   return tidy(lines);
 }
 
@@ -192,10 +277,20 @@ function teacherText(report) {
   }
   lines.push("", "卡在哪", teacher.stuck || "", teacher.advice || "");
 
+  if (report.planChanges?.items?.length) {
+    lines.push("", "错题怎么改变下一次讲法", ...planStatus(report.planChanges));
+    report.planChanges.items.forEach(item => {
+      lines.push(`· ${item.title} · 第 ${item.version} 版`);
+      if (item.evidence) lines.push(item.evidence.text, planEvidenceLine(item.evidence));
+      lines.push(`原来　${item.before.steps}`, `现在　${item.after.steps}`);
+      if (item.after.voice) lines.push(item.after.voice);
+    });
+  }
+
   lines.push("", "程序算的数");
   [
     [teacher.judged, "算对错的题"],
-    [teacher.withMistakes, "中途做错过"],
+    [teacher.withMistakes, "曾答错的题"],
     [drills.given, "发过的专属题"],
     [drills.done, "已做完"],
   ].forEach(([value, label]) => lines.push(`${label} ${value}`));
@@ -204,6 +299,13 @@ function teacherText(report) {
     lines.push("", "分类情况");
     teacher.topics.forEach(row => lines.push(
       `· ${row.topic}：做过 ${row.attempts}，错过 ${row.wrong}，最近连对 ${row.streak}`));
+  }
+  if ((teacher.transfer || []).length) {
+    lines.push("", "读完回信试的新题");
+    teacher.transfer.forEach(item => lines.push(
+      `· ${item.text}`,
+      ...transferDetails(item).map(line => `  ${line}`),
+      `  孩子答：${(item.said || []).join(" → ") || "没有作答"}`));
   }
   if ((teacher.flagged || []).length) {
     lines.push("", "孩子觉得不对的专属题");
@@ -215,11 +317,10 @@ function teacherText(report) {
   }
   const questions = report.questions || [];
   if (questions.length) {
-    const labels = { pending: "待解答", answered: "云端已解答", needs_teacher: "需要老师确认" };
     lines.push("", "疑惑与云端解答");
     questions.forEach(item => lines.push(
-      `· ${labels[item.status] || item.status}：${item.question}`,
-      `  ${item.answer || "等待云端处理。"}`));
+      `· ${QUESTION_LABELS[item.status] || item.status}：${item.question}`,
+      `  ${item.answer || pendingAnswer(item)}`));
   }
   if ((teacher.notSure || []).length) {
     lines.push("", "手机不确定答案的题，孩子可能会来问您");
@@ -232,6 +333,7 @@ function teacherText(report) {
   lines.push("", teacher.byModel
     ? "这两句由星火大模型写成，请结合上面的数字看。"
     : "这两句由程序生成。");
+  if (report.recorded) lines.push(replayText(report));
   return tidy(lines);
 }
 
@@ -270,6 +372,17 @@ async function get(path) {
   return response.json();
 }
 
+async function post(path, body) {
+  const response = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || "没发出去，请再试一次");
+  return data;
+}
+
 function fillList(boxId, listId, items, render) {
   $(boxId).classList.toggle("hidden", !items.length);
   $(listId).replaceChildren(...items.map(item => {
@@ -288,12 +401,109 @@ function question(row, text) {
   row.textContent = text;
 }
 
+function planStatus(changes) {
+  const { version, receivedVersion } = changes;
+  return [
+    `云端已生成第 ${version} 版`,
+    receivedVersion >= version ? `孩子端已收到第 ${version} 版 · 离线可用`
+      : receivedVersion ? `孩子端最近确认第 ${receivedVersion} 版 · 等待同步` : "等待孩子端同步",
+  ];
+}
+
+function planEvidenceLine(evidence) {
+  return `孩子答「${evidence.said}」${evidence.expected ? `，正确答案是「${evidence.expected}」` : ""}`;
+}
+
+function planSide(title, data, newer) {
+  const box = document.createElement("div");
+  box.className = newer ? "plan-side after" : "plan-side";
+  const label = document.createElement("b");
+  label.textContent = title;
+  const steps = document.createElement("p");
+  steps.textContent = data.steps;
+  box.append(label, steps);
+  if (data.voice) {
+    const voice = document.createElement("p");
+    voice.className = "note";
+    voice.textContent = data.voice;
+    box.append(voice);
+  }
+  return box;
+}
+
+function renderPlanChanges(changes, working) {
+  planWorking = working;
+  const items = changes?.items || [];
+  $("plan-status").classList.toggle("hidden", !items.length);
+  $("plan-empty").classList.toggle("hidden", Boolean(items.length));
+  $("plan-empty").textContent = working ? "云端正在处理新记录。" : "还没有生成按题型的专属讲法。";
+  if (items.length) {
+    const [cloud, device] = planStatus(changes);
+    $("plan-cloud").textContent = cloud;
+    $("plan-device").textContent = device;
+    $("plan-device").classList.toggle("waiting", changes.receivedVersion < changes.version);
+  }
+  $("plan-items").replaceChildren(...items.map(item => {
+    const row = document.createElement("li");
+    const heading = document.createElement("h3");
+    heading.className = "plan-title";
+    heading.textContent = `${item.title} · 第 ${item.version} 版`;
+    row.append(heading);
+    if (item.evidence) {
+      const evidence = document.createElement("div");
+      evidence.className = "plan-evidence";
+      const text = document.createElement("p");
+      text.className = "en";
+      text.textContent = item.evidence.text;
+      const detail = document.createElement("p");
+      detail.className = "note";
+      detail.textContent = planEvidenceLine(item.evidence);
+      evidence.append(text, detail);
+      if (item.evidence.ask) {
+        const ask = document.createElement("p");
+        ask.className = "note";
+        ask.textContent = `当时问的是「${item.evidence.ask}」`;
+        evidence.insertBefore(ask, detail);
+      }
+      row.append(evidence);
+    }
+    const compare = document.createElement("div");
+    compare.className = "plan-compare";
+    compare.append(planSide("原来怎么讲", item.before, false), planSide("现在怎么讲", item.after, true));
+    row.append(compare);
+    return row;
+  }));
+}
+
+async function refreshPlanChanges(manual = false) {
+  const child = $("child").value;
+  if (!child || shown?.childId !== child || planRefreshing) return;
+  const button = $("plan-refresh");
+  planRefreshing = true;
+  button.disabled = true;
+  try {
+    const fresh = await get(`/api/report/${encodeURIComponent(child)}`);
+    if (shown?.childId !== child) return;
+    if (manual || planWorking !== fresh.working || JSON.stringify(shown.planChanges) !== JSON.stringify(fresh.planChanges)) {
+      shown.planChanges = fresh.planChanges;
+      renderPlanChanges(fresh.planChanges, fresh.working);
+    }
+  } catch (error) {
+    if (manual) button.textContent = "重试刷新";
+  } finally {
+    planRefreshing = false;
+    button.disabled = false;
+  }
+}
+
 function show(report) {
   shown = report;
-  renderCopyButton();
+  $("copy").disabled = false;
   $("recorded").classList.toggle("hidden", !report.recorded);
+  $("recorded-text").textContent = report.recorded ? replayText(report) : "";
   const parent = report.parent;
   const teacher = report.teacher;
+  renderPlanChanges(report.planChanges, report.working);
   $("p-facts").textContent = parent.facts;
   $("p-stuck").textContent = parent.stuck;
   $("p-tonight").textContent = parent.tonight;
@@ -306,7 +516,7 @@ function show(report) {
 
   const numbers = [
     [teacher.judged, "算对错的题"],
-    [teacher.withMistakes, "中途做错过"],
+    [teacher.withMistakes, "曾答错的题"],
     [teacher.drills.given, "发过的专属题"],
     [teacher.drills.done, "已做完"],
   ];
@@ -332,6 +542,20 @@ function show(report) {
     return line;
   }));
 
+  fillList("t-transfer-box", "t-transfer", teacher.transfer || [], (row, item) => {
+    const text = document.createElement("div");
+    text.className = "en";
+    text.textContent = item.text;
+    const details = transferDetails(item).map(line => {
+      const detail = document.createElement("p");
+      detail.className = "note";
+      detail.textContent = line;
+      return detail;
+    });
+    const said = document.createElement("p");
+    said.textContent = `孩子答：${(item.said || []).join(" → ") || "没有作答"}`;
+    row.append(text, ...details, said);
+  });
   fillList("t-flagged-box", "t-flagged", teacher.flagged, (row, item) => {
     const text = document.createElement("span");
     text.className = "en";
@@ -340,9 +564,8 @@ function show(report) {
   });
   fillList("t-questions-box", "t-questions", teacher.questions, plain);
   fillList("t-answers-box", "t-answers", report.questions || [], (row, item) => {
-    const labels = { pending: "待解答", answered: "云端已解答", needs_teacher: "需要老师确认" };
     const title = document.createElement("strong");
-    title.textContent = `${labels[item.status]}：${item.question}`;
+    title.textContent = `${QUESTION_LABELS[item.status] || item.status}：${item.question}`;
     const text = document.createElement("p");
     text.className = "en";
     text.textContent = item.text;
@@ -350,8 +573,35 @@ function show(report) {
     context.textContent = `当时的小问：${item.ask}`;
     const answer = document.createElement("p");
     answer.className = "answer-text";
-    answer.textContent = item.answer || "等待云端处理。";
+    answer.textContent = item.answer || pendingAnswer(item);
     row.append(title, text, context, answer);
+    if (["pending", "answered", "needs_teacher"].includes(item.status)) {
+      const area = document.createElement("textarea");
+      area.className = "answer-edit";
+      area.value = item.answer || "";
+      area.setAttribute("aria-label", "改写给孩子的解释");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "confirm-btn";
+      button.textContent = item.status === "pending" ? "回答并发回" : "确认并发回";
+      const note = document.createElement("span");
+      note.className = "confirm-note";
+      button.onclick = async () => {
+        button.disabled = true;
+        note.classList.remove("bad");
+        note.textContent = "正在发回……";
+        try {
+          await post("/api/confirm", { childId: report.childId, questionId: item.questionId, answer: area.value });
+          note.textContent = "已发回，孩子下次同步就能看到，标明是您确认过的。";
+          loadReport();
+        } catch (error) {
+          note.classList.add("bad");
+          note.textContent = error.message;
+          button.disabled = false;
+        }
+      };
+      row.append(area, button, note);
+    }
   });
   fillList("t-notsure-box", "t-notsure", teacher.notSure, question);
   fillList("t-phone-box", "t-phone", teacher.phoneProblems, question);
@@ -366,13 +616,14 @@ function pickTab(name) {
     $(item).classList.toggle("hidden", item !== name);
     $(`tab-${item}`).setAttribute("aria-selected", String(item === name));
   });
-  if (shown) renderCopyButton();
+  resetCopy();
 }
 
 async function loadReport() {
   const child = $("child").value;
   if (!child) return;
-  show(await get(`/api/report/${encodeURIComponent(child)}`));
+  const report = await get(`/api/report/${encodeURIComponent(child)}`);
+  if ($("child").value === child) show(report);
 }
 
 async function start() {
@@ -392,19 +643,41 @@ async function start() {
 
 $("tab-parent").onclick = () => pickTab("parent");
 $("tab-teacher").onclick = () => pickTab("teacher");
-$("child").onchange = loadReport;
+$("plan-refresh").onclick = () => {
+  $("plan-refresh").textContent = "刷新";
+  return refreshPlanChanges(true);
+};
+setInterval(() => {
+  if (!document.hidden && isTeacherTab()) refreshPlanChanges();
+}, 5000);
+$("child").onchange = () => {
+  shown = null;
+  $("copy").disabled = true;
+  resetCopy();
+  return loadReport();
+};
+$("copy-select").onclick = selectCopyText;
 
 $("copy").onclick = async () => {
   if (!shown) return;
+  resetCopy();
+  const request = copyRequest;
   const teacher = isTeacherTab();
   const text = teacher ? teacherText(shown) : parentText(shown);
   const copied = await copyText(text);
+  if (request !== copyRequest) return;
   const button = $("copy");
-  button.textContent = copied ? "已复制" : "复制不了";
+  button.textContent = copied ? "已复制" : "重试自动复制";
   button.dataset.done = copied ? "1" : "0";
-  $("copy-note").textContent = copied ? "粘到微信就能发" : "这台设备不让自动复制，请长按文字手动选";
   if (copied) {
-    setTimeout(() => { renderCopyButton(); $("copy-note").textContent = ""; }, 2200);
+    $("copy-note").textContent = "粘到微信就能发";
+    copyTimer = setTimeout(resetCopy, 2200);
+  } else {
+    $("copy-note").textContent = "自动复制不可用，请复制下面的全文。";
+    $("copy-label").textContent = teacher ? "给老师的反馈全文" : "给家长的反馈全文";
+    $("copy-text").value = text;
+    $("copy-fallback").classList.remove("hidden");
+    selectCopyText();
   }
 };
 

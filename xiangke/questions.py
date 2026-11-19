@@ -12,7 +12,7 @@ import uuid
 from xiangke.answers import compute_answer
 from xiangke.planner import LlmError, TRIES, _parse
 
-STATUSES = {"pending", "answered", "needs_teacher"}
+STATUSES = {"pending", "answered", "needs_teacher", "teacher_confirmed"}
 MAX_ANSWER = 400
 BATCH_SIZE = 3
 
@@ -22,6 +22,7 @@ SYSTEM = """你是乡村小学英语辅导的云端老师。孩子离线做题�
 要求：
 1. 先回答孩子具体问的点，再结合当时那一道题解释。用简单中文，一般两到四句，不超过 400 字。
 2. 这是做题之后的补讲，可以讲出可靠的答案。只有“已确认答案”才是已核实的；没有时不要把手机模型的猜测当标准答案。
+   已确认规则带着适用条件，讲的时候要把条件说清楚，可以用给定的反例；不要把规则说成任何句子都成立的通则。
 3. 孩子说“不会”时，解释当时的小问；不能据此断言他完全不会，也不要编造他的错误或进步。
 4. 手机只支持文字，不要求朗读、听音、录音或老师不在场时才能完成的操作。不使用复杂语法术语。
    当时的小问由手机生成，可能有问题；不要把不合适的小问当作孩子的错误。
@@ -71,6 +72,7 @@ def collect_questions(record: dict) -> list[dict]:
             "text": record.get("recognizedText", ""), "ask": step.get("ask", ""),
             "question": said.strip(), "askedAt": record.get("endedAt", ""),
             "knownAnswer": known_answer, "rule": computed["rule"] if computed else "",
+            "counter": computed.get("counter", "") if computed else "",
             "contextWarning": "孩子觉得题有问题，需核对题面和答案" if record.get("flagged") else ("手机拆题检查未通过，需先核对小问" if record.get("checkPassed") is False else ""),
             "recentReplies": [e.get("said", "") for e in events[:index] if isinstance(e, dict) and e.get("stepId") == event["stepId"]][-3:],
             "status": "pending", "answer": "",
@@ -99,6 +101,7 @@ def make_answerer(chat, tries: int = TRIES):
             "孩子的疑惑": item["question"],
             "已确认答案": item.get("knownAnswer") or "没有已确认的答案",
             "已确认规则": item.get("rule") or "没有已确认的规则",
+            "反例": item.get("counter") or "无",
             "需要注意": item.get("contextWarning") or "无",
         }
         messages = [{"role": "system", "content": SYSTEM},

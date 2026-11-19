@@ -48,7 +48,7 @@ class LocalModel:
         except subprocess.TimeoutExpired:
             self.process.kill()
 
-    def write(self, system: str, user: str, grammar: str, limit: int = 512) -> str:
+    def write(self, system: str, user: str, grammar: str, limit: int = 512, *, timeout: float = 300) -> str:
         prompt = f"{BOS}<|System|>\nyou are a helpful assistant.\n\n{system}{EOS}{BOS}<|User|>{user}{EOS}{BOS}<|Bot|></think>"
         body = {
             "prompt": prompt,
@@ -60,5 +60,5 @@ class LocalModel:
             "grammar": grammar,
         }
         request = urllib.request.Request(self.url + "/completion", json.dumps(body).encode("utf-8"), {"Content-Type": "application/json"})
-        with urllib.request.urlopen(request, timeout=300) as response:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
             return json.load(response)["content"]

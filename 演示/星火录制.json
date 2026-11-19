@@ -2,11 +2,11 @@
  "rounds": {
   "she ___ apples. (like / likes)|错\nthey ___ my friends. (am / is / are)|对\n改错（只改一个词）：she like cats.|错": {
    "plan": {
-    "voice": "每次先让孩子看清主语是一个人还是不止一个人，再决定动词要不要变。",
+    "voice": "每次先让孩子看清主语是一个人还是不止一个人，句子里有没有 can 这些帮忙的词，再决定动词要不要变。",
     "reminders": [
      "She 后面的动词，孩子容易写成原样，要提醒他加 s。",
      "改错题里，孩子会说成 cats，先让他把整句读完再找错词。",
-     "孩子问过为什么要加 s，用“She 是一个，动词要加 s”就能讲清。"
+     "孩子问过为什么要加 s，要讲清条件：主语是一个别人、又没有 can 这些帮忙的词时才加 s，有 can 帮忙就不变。"
     ],
     "examples": [
      {
@@ -61,30 +61,30 @@
     {
      "text": "She ___ oranges. (like / likes)",
      "answer": "likes",
-     "rule": "主语是她时，动词末尾要加 s",
+     "rule": "主语是一个别人、又没有 can 帮忙时，动词末尾加 s",
      "source": "cloud"
     },
     {
      "text": "改错（只改一个词）：She like dogs.",
      "answer": "likes",
-     "rule": "主语是她时，动词要加 s",
+     "rule": "主语是一个别人、又没有 can 帮忙时，动词才要加 s",
      "source": "cloud"
     },
     {
      "text": "She ___ English.（她喜欢英语）",
      "answer": "likes",
-     "rule": "主语是她时，动词后加 s",
+     "rule": "主语是一个别人、又没有 can 帮忙时，动词后加 s",
      "source": "cloud"
     }
    ]
   },
   "she ___ apples. (like / likes)|对\nshe ___ english.（她喜欢英语）|对\nshe ___ oranges. (like / likes)|对\n改错（只改一个词）：she like cats.|对\n改错（只改一个词）：she like dogs.|对": {
    "plan": {
-    "voice": "每次先让孩子看清主语是一个人还是不止一个人，再决定动词要不要变。",
+    "voice": "每次先让孩子看清主语是一个人还是不止一个人，句子里有没有 can 这些帮忙的词，再决定动词要不要变。",
     "reminders": [
-     "She 后面的动词要加 s，像 likes，要提醒孩子别写成原样。",
+     "句子里没有 can 这些帮忙的词时，She 后面的动词要加 s，像 likes，要提醒孩子别写成原样。",
      "改错题先让孩子读完全句、找准错词，再决定怎么改。",
-     "孩子问过为什么要加 s，就说 She 是一个，动词要加 s。"
+     "孩子问过为什么要加 s，就说清条件：没有 can 这些帮忙的词时才要变，有 can 帮忙就不变。"
     ],
     "examples": [
      {
@@ -142,7 +142,7 @@
  "answers": {
   "[\"改错（只改一个词）：she like cats.\", \"那 like 应该改成什么？\", \"为什么要加s\", \"question\"]": {
    "status": "answered",
-   "answer": "当主语是 he、she、it 时，后面的动词要加 s。这道题的主语是 She，所以动词 like 要改成 likes，句子就正确了。"
+   "answer": "主语是一个别人、句子里又没有 can 这些帮忙的词时，动词才要加 s。这道题 She like cats 里没有帮忙的词，She 是一个别人，所以 like 要改成 likes。要是有 can 帮忙就不变，比如 She can run fast，run 用原来的样子。"
   }
  }
 }

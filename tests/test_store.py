@@ -100,7 +100,8 @@ class PlanTests(unittest.TestCase):
         self.store.save_plan(plan_file("child01_v2.json"))
         latest = self.store.latest_plan("child_01")
         self.assertEqual(latest["planVersion"], 2)
-        self.assertTrue(latest["reminders"])
+        self.assertTrue(latest["starter"])
+        self.assertEqual(latest["reminders"], [])
         # 手机只留最新一版
         self.assertEqual(self.store.connection.execute("SELECT COUNT(*) FROM plans").fetchone()[0], 1)
 

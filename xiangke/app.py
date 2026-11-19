@@ -12,15 +12,17 @@ import threading
 import uuid
 import webbrowser
 from datetime import datetime, timedelta, timezone
+from functools import partial
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from xiangke.intent import make_label_of
 from xiangke.local_model import DEFAULT_MODEL, LocalModel
 from xiangke.one_item import ItemSession
-from xiangke.pack import texts as pack_texts
+from xiangke.pack import spelling_answer, texts as pack_texts
 from xiangke.store import Store
-from xiangke.sync import DEFAULT_CLOUD, SyncFailed, sync_once
+from xiangke.sync import DEFAULT_CLOUD, SyncFailed, acknowledge_plan, sync_once
+from xiangke.transfer import item_for, letter_focus, text_key
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "app" / "index.html"
@@ -42,8 +44,10 @@ def now() -> str:
 class PhoneApp:
     """Everything the page can ask for, without any HTTP. Tests use this directly."""
 
-    def __init__(self, write, store: Store, recognizer=None, child_id: str = CHILD, cloud_url: str = DEFAULT_CLOUD, pack_path: str | Path | None = None):
+    def __init__(self, write, store: Store, recognizer=None, child_id: str = CHILD, cloud_url: str = DEFAULT_CLOUD,
+                 pack_path: str | Path | None = None, *, transition_write=None):
         self.write = write
+        self.transition_write = transition_write
         self.store = store
         self.recognizer = recognizer
         self.child_id = child_id
@@ -55,6 +59,7 @@ class PhoneApp:
         self.item: ItemSession | None = None
         self.saved = True
         self.drill: dict | None = None
+        self.transfer_basis: dict | None = None
         self._seed_plan()
 
     def _seed_plan(self) -> None:
@@ -68,12 +73,13 @@ class PhoneApp:
         pack = json.loads(self.pack_path.read_text(encoding="utf-8"))
         return {
             "planVersion": plan["planVersion"],
+            "starterPlan": bool(plan.get("starter")),
             "online": self.online,
             "waitingSync": len(self.store.unsynced(self.child_id)),
             "pack": pack_texts(pack),
             "drills": [{"drillId": row["drillId"], "text": row["text"], "source": row["source"]} for row in self.store.open_drills(self.child_id)],
             "history": [_history_row(record) for record in self.store.recent(self.child_id)],
-            "questions": self.store.questions(self.child_id),
+            "questions": [{**item, "transferReady": letter_focus(item) is not None} for item in self.store.questions(self.child_id)],
         }
 
     def recognize(self, image: bytes) -> dict:
@@ -107,6 +113,8 @@ class PhoneApp:
         except SyncFailed as error:
             print("同步失败:", error, flush=True)
             raise BadRequest("连不上云端，记录还留在手机上，等一会再试") from error
+        if result["planUpdated"]:
+            acknowledge_plan(self.cloud_url, self.child_id, result["planVersion"])
         return {**self.home(), "syncResult": result}
 
     def start(self, text: str, source: str = "photo", offline: bool | None = None) -> dict:
@@ -118,7 +126,8 @@ class PhoneApp:
         if source not in ("photo", "pack"):
             raise BadRequest("题目来源不对")
         self.leave()
-        return self._begin(text, source, offline)
+        known = spelling_answer(json.loads(self.pack_path.read_text(encoding="utf-8")), text) if source == "pack" else None
+        return self._begin(text, source, offline, known)
 
     def start_drill(self, drill_id) -> dict:
         """做一道云端发来的专属题。题目已经定好，不用孩子确认。"""
@@ -130,6 +139,43 @@ class PhoneApp:
         view = self._begin(drill["text"], "drill", not self.online, known, drill)
         return view
 
+    def transfer(self, question_id: str | None = None) -> dict:
+        """每天最多两道。跨日打开同一封回信，用同一考点换题。"""
+        if self.item is not None and not self.saved:
+            raise BadRequest("先做完或退出正在做的题，再来试新题。")
+        letters = self.store.questions(self.child_id)
+        if question_id is None:
+            letter = next((item for item in letters if letter_focus(item)), None)
+        else:
+            letter = next((item for item in letters if item["questionId"] == question_id), None)
+        focus = letter_focus(letter) if letter else None
+        if not focus:
+            raise BadRequest("这封回信暂时没有可做的新题。")
+        key, topic = focus
+        started_at = now()
+        today = started_at[:10]
+        history = self.store.recent(self.child_id, limit=-1)
+        transfers = [record for record in history if record.get("source") == "transfer"]
+        if sum(record.get("startedAt", "")[:10] == today for record in transfers) >= 2:
+            raise BadRequest("今天的两道新题都试过了，改天再来换题复测吧。")
+        attempts = [record for record in transfers if (record.get("transferBasis") or {}).get("questionId") == letter["questionId"]]
+        slot = sum(record.get("startedAt", "")[:10] == today for record in attempts)
+        original = self.store.load_session(letter.get("sessionId", "")) or {}
+        wrong = ""
+        if not original.get("flagged") and original.get("checkPassed") is not False:
+            wrong = next((event.get("said", "") for event in reversed(original.get("events", []))
+                          if event.get("stepId") == letter.get("stepId") and event.get("result") in ("miss", "assisted")), "")
+        seen = {text_key(record.get("recognizedText") or "") for record in history}
+        seen.add(text_key(letter["text"]))
+        text = item_for(key, slot, seen, wrong)
+        if text is None:
+            raise BadRequest("这个考点的备选新题已经做过了，可以先找老师聊聊。")
+        basis = {"questionId": letter["questionId"], "focus": key, "topic": topic,
+                 "originalText": letter["text"], "originalReply": wrong, "contrast": slot == 1}
+        retest = any((record.get("transferBasis") or {}).get("focus") == key
+                     and "" < record.get("startedAt", "")[:10] < today for record in attempts)
+        return self._begin(text, "transfer", True, started_at=started_at, transfer_basis={**basis, "retest": retest})
+
     def flag(self) -> dict:
         """孩子觉得这道专属题不对。这一次不算对错，留给老师看。"""
         if self.item is None or self.drill is None or self.saved:
@@ -138,7 +184,8 @@ class PhoneApp:
         self.item = None
         return self.home()
 
-    def _begin(self, text: str, source: str, offline: bool, known: dict | None = None, drill: dict | None = None) -> dict:
+    def _begin(self, text: str, source: str, offline: bool, known: dict | None = None, drill: dict | None = None, *,
+               started_at: str | None = None, transfer_basis: dict | None = None) -> dict:
         plan = self.store.latest_plan(self.child_id)
         facts = {
             "sessionId": "s_" + uuid.uuid4().hex[:12],
@@ -148,11 +195,13 @@ class PhoneApp:
             "recognizedText": text,
             "confirmed": True,
             "offline": bool(offline),
-            "startedAt": now(),
+            "startedAt": started_at or now(),
             "endedAt": now(),
         }
-        self.item = ItemSession(text, self.write, facts, plan, self.label_of, known)
+        self.item = ItemSession(text, self.write, facts, plan, self.label_of, known,
+                                transition_write=self.transition_write)
         self.drill = drill
+        self.transfer_basis = transfer_basis
         self.saved = False
         return self._view(self.item.take_messages())
 
@@ -172,6 +221,11 @@ class PhoneApp:
             raise BadRequest("现在没有正在做的小问")
         return self._view(self.item.defer_question(said))
 
+    def explain(self) -> dict:
+        if self.item is None or not self.item.can_explain:
+            raise BadRequest("这一步还没有可以打开的讲解")
+        return self._view(self.item.reveal_explanation())
+
     def leave(self) -> dict:
         """The child left. Whatever happened so far is kept."""
         self._save()
@@ -186,6 +240,10 @@ class PhoneApp:
             record["drillId"] = self.drill["drillId"]
         if flagged:
             record["flagged"] = True
+        if self.transfer_basis is not None:
+            record["transferTier"] = _transfer_tier(record)
+            record["transferRetest"] = self.transfer_basis["retest"]
+            record["transferBasis"] = {key: value for key, value in self.transfer_basis.items() if key != "retest"}
         self.store.save_session(record)
         self.saved = True
         if self.drill is not None:
@@ -206,6 +264,7 @@ class PhoneApp:
             "step": min(item.index + 1, len(item.steps)),
             "steps": len(item.steps),
             "confirming": item.pending,
+            "canExplain": item.can_explain,
             "drill": self.drill is not None,
         }
         if item.done:
@@ -215,17 +274,39 @@ class PhoneApp:
         return view
 
     def _today(self) -> dict:
-        """今天做了几道、还有几道专门练的题。结束页靠它判断该不该收工。"""
-        return {"done": self.store.started_on(self.child_id, now()[:10]), "left": len(self.store.open_drills(self.child_id))}
+        """今天做了几道、还有几道专门练的题、几次辅导没交。结束页靠它判断该不该收工。"""
+        return {
+            "done": self.store.started_on(self.child_id, now()[:10]),
+            "left": len(self.store.open_drills(self.child_id)),
+            "waiting": len(self.store.unsynced(self.child_id)),
+        }
+
+
+def _transfer_tier(record: dict) -> str:
+    """迁移检验分档：独立做对 / 提示后改对 / 停下来。中途退出也算停下来。"""
+    events = record.get("events", [])
+    steps = record.get("steps") or []
+    if any(event.get("result") == "assisted" for event in events):
+        return "stopped"
+    finished = bool(steps) and any(event.get("result") == "hit" and event.get("stepId") == steps[-1].get("stepId") for event in events)
+    if not finished:
+        return "stopped"
+    helped = any(
+        event.get("result") == "miss" or event.get("hintUsed", 0) > 0 or event.get("noteKind") in ("stuck", "question")
+        for event in events
+    )
+    return "assisted" if helped else "independent"
 
 
 def _summary(record: dict) -> dict:
     events = record["events"]
+    shown = sum(bool(event.get("answerShown")) for event in events)
     return {
         "right": sum(event["result"] == "hit" for event in events),
         "wrong": sum(event["result"] in ("miss", "assisted") for event in events),
         "questions": len(record["steps"]),
         "answerSource": record["answerSource"],
+        **({"afterExplanation": shown} if shown else {}),
     }
 
 
@@ -240,6 +321,7 @@ def _history_row(record: dict) -> dict:
         "right": summary["right"],
         "wrong": summary["wrong"],
         "questions": summary["questions"],
+        "afterExplanation": summary.get("afterExplanation", 0),
         "finished": any(event["result"] == "hit" and event["stepId"] == record["steps"][-1]["stepId"] for event in record["events"]) if record["steps"] else False,
     }
 
@@ -298,8 +380,10 @@ def make_handler(app: PhoneApp):
                 "/api/start": lambda: app.start(data.get("text"), data.get("source", "photo"), data.get("offline")),
                 "/api/reply": lambda: app.reply(data.get("said")),
                 "/api/question": lambda: app.defer_question(data.get("said")),
+                "/api/explain": app.explain,
                 "/api/leave": app.leave,
                 "/api/drill": lambda: app.start_drill(data.get("drillId")),
+                "/api/transfer": lambda: app.transfer(data.get("questionId")),
                 "/api/flag": app.flag,
                 "/api/network": lambda: app.set_network(data.get("online")),
                 "/api/sync": app.sync,
@@ -342,7 +426,8 @@ def main() -> None:
         return recognize(image)
 
     with Store(args.db) as store, LocalModel(args.model) as model:
-        app = PhoneApp(model.write, store, recognizer, cloud_url=args.cloud, pack_path=args.pack)
+        app = PhoneApp(model.write, store, recognizer, cloud_url=args.cloud, pack_path=args.pack,
+                       transition_write=partial(model.write, timeout=2.5))
         server = ThreadingHTTPServer(("127.0.0.1", args.port), make_handler(app))
         print(f"手机界面已启动：http://127.0.0.1:{args.port}", flush=True)
         if args.open:

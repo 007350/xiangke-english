@@ -21,12 +21,13 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from xiangke.drills import _norm, make_drill_maker, redo_items
-from xiangke.feedback import build_facts, build_report, make_reporter
+from xiangke.feedback import build_facts, build_plan_changes, build_report, make_reporter
 from xiangke.kernel import check_plan
 from xiangke.planner import chat_from_env, make_planner
 from xiangke.portrait import build_stats, stats_for_model
 from xiangke.questions import BATCH_SIZE, MAX_ANSWER, collect_questions, make_answerer
 from xiangke.replay import Recorder, Replayer
+from xiangke.topic_plans import without_demo_history
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB = ROOT / "demo" / "cloud.db"
@@ -48,6 +49,10 @@ CREATE TABLE IF NOT EXISTS plans (
     planVersion INTEGER NOT NULL,
     plan        TEXT NOT NULL,
     PRIMARY KEY (childId, planVersion)
+);
+CREATE TABLE IF NOT EXISTS plan_receipts (
+    childId TEXT PRIMARY KEY,
+    version INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS portraits (
     childId  TEXT NOT NULL,
@@ -169,7 +174,7 @@ class CloudStore:
         row = self.connection.execute(
             "SELECT plan FROM plans WHERE childId = ? AND planVersion = ?", (child_id, version)
         ).fetchone()
-        return json.loads(row[0]) if row else None
+        return without_demo_history(json.loads(row[0])) if row else None
 
     def add_plan(self, plan: dict) -> None:
         with self.connection:
@@ -177,6 +182,21 @@ class CloudStore:
                 "INSERT INTO plans (childId, planVersion, plan) VALUES (?, ?, ?)",
                 (plan["childId"], plan["planVersion"], json.dumps(plan, ensure_ascii=False)),
             )
+
+    def plans_for(self, child_id: str) -> list[dict]:
+        rows = self.connection.execute("SELECT plan FROM plans WHERE childId = ? ORDER BY planVersion", (child_id,))
+        return [without_demo_history(json.loads(row[0])) for row in rows]
+
+    def received_plan_version(self, child_id: str) -> int | None:
+        row = self.connection.execute("SELECT version FROM plan_receipts WHERE childId = ?", (child_id,)).fetchone()
+        return row[0] if row else None
+
+    def remember_received_plan(self, child_id: str, version: int) -> None:
+        self.connection.execute(
+            """INSERT INTO plan_receipts (childId, version) VALUES (?, ?)
+               ON CONFLICT(childId) DO UPDATE SET version = MAX(version, excluded.version)""",
+            (child_id, version),
+        )
 
     def latest_portrait(self, child_id: str) -> dict | None:
         row = self.connection.execute(
@@ -236,12 +256,33 @@ class CloudStore:
         ).fetchall()
         return [{**json.loads(item), "seq": number} for number, item in rows]
 
-    def pending_questions(self, child_id: str) -> list[dict]:
+    def pending_questions(self, child_id: str, limit: int = BATCH_SIZE) -> list[dict]:
         rows = self.connection.execute(
             "SELECT item FROM questions WHERE childId = ? AND status = 'pending' ORDER BY seq LIMIT ?",
-            (child_id, BATCH_SIZE),
+            (child_id, limit),
         ).fetchall()
         return [json.loads(row[0]) for row in rows]
+
+    def _update_question(self, item: dict, status: str, answer: str) -> None:
+        updated = {**item, "status": status, "answer": answer}
+        seq = self.connection.execute("SELECT COALESCE(MAX(seq), 0) + 1 FROM questions").fetchone()[0]
+        self.connection.execute(
+            "UPDATE questions SET seq = ?, status = ?, item = ? WHERE questionId = ? AND childId = ?",
+            (seq, status, json.dumps(updated, ensure_ascii=False), item["questionId"], item["childId"]),
+        )
+
+    def requeue_replay_misses(self) -> int:
+        """旧版回放的占位答复退回待答疑。原问题和辅导记录照常保留。"""
+        placeholder = "这条疑惑的解答没有录进演示备份，需要老师确认。"
+        rows = self.connection.execute(
+            "SELECT item FROM questions WHERE status IN ('needs_teacher', 'teacher_confirmed') ORDER BY seq"
+        ).fetchall()
+        items = [json.loads(row[0]) for row in rows]
+        misses = [item for item in items if item.get("answer") == placeholder]
+        with self.connection:
+            for item in misses:
+                self._update_question(item, "pending", "")
+        return len(misses)
 
     def answer_question(self, question_id: str, child_id: str, draft: dict) -> None:
         row = self.connection.execute(
@@ -249,13 +290,20 @@ class CloudStore:
         ).fetchone()
         if row is None:
             return
-        item = {**json.loads(row[0]), "status": draft["status"], "answer": draft["answer"]}
-        seq = self.connection.execute("SELECT COALESCE(MAX(seq), 0) + 1 FROM questions").fetchone()[0]
         with self.connection:
-            self.connection.execute(
-                "UPDATE questions SET seq = ?, status = ?, item = ? WHERE questionId = ? AND childId = ?",
-                (seq, item["status"], json.dumps(item, ensure_ascii=False), question_id, child_id),
-            )
+            self._update_question(json.loads(row[0]), draft["status"], draft["answer"])
+
+    def confirm_question(self, question_id: str, child_id: str, answer: str) -> bool:
+        """老师可以直接回答，也可以改好已有解释后发回。"""
+        row = self.connection.execute(
+            "SELECT item FROM questions WHERE questionId = ? AND childId = ? AND status IN ('pending', 'answered', 'needs_teacher')",
+            (question_id, child_id),
+        ).fetchone()
+        if row is None:
+            return False
+        with self.connection:
+            self._update_question(json.loads(row[0]), "teacher_confirmed", answer)
+        return True
 
 
 class CloudApp:
@@ -276,7 +324,13 @@ class CloudApp:
         self.active: set[str] = set()
         self.failed: dict[str, bool] = {}
         self.question_failed: dict[str, bool] = {}
+        self.replay_misses: set[str] = set()
+        self.replay_plan_misses: set[str] = set()
         self.looked: dict[str, int] = {}  # 已经看过、不需要再写的记录位置
+        if not recorded:
+            recovered = store.requeue_replay_misses()
+            if recovered:
+                print(f"已将 {recovered} 条旧回放占位疑惑放回实时答疑队列。", flush=True)
 
     def sync(self, child_id, have_version, sessions, drill_seq=0, question_seq=0) -> dict:
         self._check_request(child_id, have_version, sessions, drill_seq)
@@ -286,6 +340,8 @@ class CloudApp:
             self._seed_plans(child_id)
             with self.store.connection:
                 accepted = []
+                if self.store.plan_at(child_id, have_version):
+                    self.store.remember_received_plan(child_id, have_version)
                 for record in sessions:
                     if self.store.keep_session(record):
                         self.store.keep_questions(record)
@@ -313,11 +369,15 @@ class CloudApp:
                 reply["planFailed"] = True
             if child_id in self.active:
                 reply["working"] = True
-            elif self.question_answerer and not question_failed and self.store.pending_questions(child_id):
+            elif self.question_answerer and not question_failed and self._pending_questions(child_id):
                 # 一次只处理少量疑惑，余下的由下一次自动同步继续处理。
                 reply["working"] = True
             if self.recorded:
                 reply["recorded"] = True
+                if child_id in self.replay_plan_misses:
+                    reply["replayPlanMissing"] = True
+                if any(self._no_replay_answer(item) for item in self.store.pending_questions(child_id, limit=-1)):
+                    reply["replayQuestionMissing"] = True
             return reply
 
     def view(self, child_id: str) -> dict:
@@ -341,6 +401,11 @@ class CloudApp:
             portrait = self.store.latest_portrait(child_id) or {}
             working = child_id in self.active
             questions = self.store.questions_after(child_id)
+            questions = [{**item, "replayUnavailable": True} if self._no_replay_answer(item) else item
+                         for item in questions]
+            replay_plan_missing = child_id in self.replay_plan_misses
+            plans = self.store.plans_for(child_id)
+            received_version = self.store.received_plan_version(child_id)
         stats = build_stats(sessions)
         return {
             "childId": child_id,
@@ -348,13 +413,36 @@ class CloudApp:
             "focus": portrait.get("focus") or [],
             "working": working,
             "recorded": self.recorded,
+            "replayPlanMissing": replay_plan_missing,
             "questions": questions,
+            "planChanges": build_plan_changes(plans, sessions, received_version),
             **build_report(stats, build_facts(sessions, drills), written),
         }
+
+    def confirm_plan_received(self, child_id, version) -> dict:
+        if not isinstance(child_id, str) or not child_id or type(version) is not int or version < 1:
+            raise BadUpload("讲法接收信息不对")
+        with self.lock, self.store.connection:
+            if not self.store.plan_at(child_id, version):
+                raise BadUpload("没有这一版讲法")
+            self.store.remember_received_plan(child_id, version)
+        return {"received": True}
 
     def children(self) -> list[str]:
         with self.lock:
             return self.store.children()
+
+    def confirm_question(self, child_id, question_id, answer) -> dict:
+        """老师改一句解释、确认并发回孩子。不调用大模型，回放演示时也能用。"""
+        if not isinstance(child_id, str) or not child_id or not isinstance(question_id, str) or not question_id:
+            raise BadUpload("没有写清是哪条疑惑")
+        if not isinstance(answer, str) or not answer.strip() or len(answer) > MAX_ANSWER:
+            raise BadUpload(f"解释要写清楚，不超过 {MAX_ANSWER} 字")
+        with self.lock:
+            changed = self.store.confirm_question(question_id, child_id, answer.strip())
+        if not changed:
+            raise BadUpload("这条疑惑已经发回或不存在，请刷新后查看")
+        return {"confirmed": True}
 
     def _check_request(self, child_id, have_version, sessions, drill_seq) -> None:
         if not isinstance(child_id, str) or not child_id:
@@ -387,7 +475,7 @@ class CloudApp:
         # 手机落后时先把现成的发完，版本必须一版一版加
         if latest > have:
             return False
-        if self.question_answerer and self.store.pending_questions(child_id):
+        if self.question_answerer and self._pending_questions(child_id):
             return True
         current = self.store.plan_at(child_id, latest)
         if not self.store.sessions_after(child_id, current.get("basedOnSessionId")):
@@ -449,14 +537,29 @@ class CloudApp:
             if not self.failed.get(child_id):
                 self.looked[child_id] = order
 
+    def _pending_questions(self, child_id: str) -> list[dict]:
+        if self.recorded:
+            return [item for item in self.store.pending_questions(child_id, limit=-1)
+                    if item["questionId"] not in self.replay_misses]
+        return self.store.pending_questions(child_id)
+
+    def _no_replay_answer(self, item: dict) -> bool:
+        return self.recorded and item["status"] == "pending" and (
+            self.question_answerer is None or item["questionId"] in self.replay_misses
+        )
+
     def _answer_questions(self, child_id: str) -> None:
         if self.question_answerer is None:
             return
         with self.lock:
-            questions = self.store.pending_questions(child_id)
+            questions = self._pending_questions(child_id)
         for question in questions:
             try:
                 draft = self.question_answerer(question)
+                if self.recorded and draft is None:
+                    with self.lock:
+                        self.replay_misses.add(question["questionId"])
+                    continue
                 # 可注入的生成器也不能写入任意字段或状态。
                 if not isinstance(draft, dict) or draft.get("status") not in ("answered", "needs_teacher"):
                     raise ValueError("答疑状态不对")
@@ -475,6 +578,9 @@ class CloudApp:
         try:
             draft = self.planner(current, new_sessions)
             if draft is None:
+                if self.recorded:
+                    with self.lock:
+                        self.replay_plan_misses.add(child_id)
                 return None
             plan = {
                 "childId": child_id,
@@ -485,6 +591,8 @@ class CloudApp:
                 "examples": draft.get("examples") or [],
                 "forbid": draft.get("forbid"),
             }
+            if "topicPlans" in draft or "topicPlans" in current:
+                plan["topicPlans"] = draft.get("topicPlans", current.get("topicPlans"))
         except Exception as error:  # 写讲法失败不能影响记录，下次同步再试
             print("写计划出错:", repr(error), flush=True)
             with self.lock:
@@ -498,6 +606,7 @@ class CloudApp:
             return None
         with self.lock:
             self.store.add_plan({**plan, **check})
+            self.replay_plan_misses.discard(child_id)
         return draft
 
     def _write_feedback(self, child_id: str, stats: dict, everything: list[dict]) -> None:
@@ -561,7 +670,7 @@ def make_handler(app: CloudApp):
                 self._json(404, {"error": "没有这个页面"})
 
         def do_POST(self):
-            if self.path != "/api/sync":
+            if self.path not in ("/api/sync", "/api/confirm", "/api/plan-received"):
                 self._json(404, {"error": "没有这个操作"})
                 return
             try:
@@ -571,7 +680,12 @@ def make_handler(app: CloudApp):
                 data = json.loads(self.rfile.read(length) or b"{}")
                 if not isinstance(data, dict):
                     raise BadUpload("内容看不懂")
-                result = app.sync(data.get("childId"), data.get("planVersion"), data.get("sessions"), data.get("drillSeq", 0), data.get("questionSeq", 0))
+                if self.path == "/api/sync":
+                    result = app.sync(data.get("childId"), data.get("planVersion"), data.get("sessions"), data.get("drillSeq", 0), data.get("questionSeq", 0))
+                elif self.path == "/api/plan-received":
+                    result = app.confirm_plan_received(data.get("childId"), data.get("planVersion"))
+                else:
+                    result = app.confirm_question(data.get("childId"), data.get("questionId"), data.get("answer"))
             except (BadUpload, ValueError) as error:
                 self._json(400, {"error": str(error)})
             except Exception as error:  # 服务不能因此退出
@@ -631,6 +745,7 @@ def main() -> None:
     else:
         planner, maker, reporter = pick_planner(args.test_planner), pick_drill_maker(args.test_planner), pick_reporter(args.test_planner)
         question_answerer = pick_question_answerer(args.test_planner)
+        print("答疑：实时星火，收到同步后处理。" if question_answerer else "答疑：待处理，当前没有启用实时星火。", flush=True)
     if args.record:
         recorder = Recorder(args.record)
         planner, reporter = recorder.wrap_planner(planner), recorder.wrap_reporter(reporter) if reporter else None

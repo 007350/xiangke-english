@@ -6,6 +6,7 @@ import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
 from pathlib import Path
+from unittest.mock import patch
 
 from xiangke.app import BadRequest, PhoneApp, make_handler
 from xiangke.store import Store
@@ -43,6 +44,10 @@ class HomeTests(AppCase):
     def test_home_has_plan_pack_and_empty_history(self):
         home = self.app.home()
         self.assertEqual(home["planVersion"], 2)
+        self.assertTrue(home["starterPlan"])
+        plan = self.store.latest_plan(self.app.child_id)
+        self.assertEqual(plan["reminders"], [])
+        self.assertIsNone(plan["basedOnSessionId"])
         self.assertEqual(len(home["pack"]), 4)
         self.assertEqual(home["history"], [])
         self.assertEqual(home["waitingSync"], 0)
@@ -86,6 +91,136 @@ class RecognizeTests(AppCase):
 
 
 class FlowTests(AppCase):
+    def test_english_word_request_accepts_the_meaning_without_counting_a_miss(self):
+        self.app.start(TEXT)
+        view = self.app.reply("他们")
+        self.assertEqual((view["step"], view["messages"]), (1, ["意思对了，试着写出那个英文词。"]))
+        self.app.reply("They")
+        self.assertEqual(self.app.reply("are")["summary"]["wrong"], 0)
+
+    def test_first_mistake_gives_a_hint_and_answer_reveal_is_marked(self):
+        self.app.start(TEXT)
+        first = self.app.reply("friends")
+        self.assertIn("第一个词", first["messages"][0])
+        self.assertNotIn("They", first["messages"][0])
+        second = self.app.reply("my")
+        self.assertTrue(second["canExplain"])
+        self.assertNotIn("They", second["messages"][0])
+        revealed = self.app.explain()
+        self.assertIn("They", revealed["messages"][0])
+        self.assertFalse(revealed["canExplain"])
+        solved = self.app.reply("They")
+        self.assertEqual(solved["messages"][0], "跟着讲解完成了这一问。")
+        self.assertEqual(self.app.reply("are")["summary"]["afterExplanation"], 1)
+        self.assertTrue(self.store.unsynced()[0]["events"][3]["answerShown"])
+
+    def test_second_mistake_in_be_question_gives_a_clue_without_the_word(self):
+        self.app.start(TEXT)
+        self.app.reply("They")
+        self.app.reply("is")
+        view = self.app.reply("am")
+        self.assertTrue(view["canExplain"])
+        self.assertIn("两个或更多", view["messages"][0])
+        self.assertNotIn("are", view["messages"][0])
+        done = self.app.reply("are")
+        self.assertEqual(done["messages"], ["根据提示改对了！"])
+        self.assertNotIn("afterExplanation", done["summary"])
+
+    def test_spelling_pack_checks_letters_without_asking_the_model(self):
+        self.app = PhoneApp(lambda *_: self.fail("课包拼写不需要模型"), self.store)
+        text = "看中文写单词：书 b__k"
+        view = self.app.start(text, "pack")
+        self.assertEqual(view["mode"], "judged")
+        self.assertIn("第 2 个字母", view["messages"][0])
+        view = self.app.reply("o")
+        self.assertEqual(view["step"], 2)
+        self.assertIn("第 3 个字母", view["messages"][-1])
+        wrong = self.app.reply("x")
+        self.assertEqual(wrong["step"], 2)
+        self.assertIn("这一格的字母还不对", wrong["messages"][0])
+        self.assertIn("只补这一格", wrong["messages"][0])
+        self.assertEqual(self.app.reply("o")["step"], 3)
+        self.assertEqual(self.app.reply("book")["summary"],
+                         {"right": 3, "wrong": 1, "questions": 3, "answerSource": "program"})
+
+    def test_explicit_replies_skip_intent_model_and_ambiguous_help_uses_it(self):
+        inputs = []
+
+        def write(system, user, grammar, limit=512):
+            if "孩子说：" in user:
+                inputs.append(user.split("孩子说：")[1])
+                return '{"label":"不会"}'
+            return fake_write(system, user, grammar, limit)
+
+        self.app = PhoneApp(write, self.store)
+        self.app.start(TEXT)
+        reason = self.app.reply("我知道选 are，但不知道为什么")
+        self.assertIn("先看主语是谁", reason["messages"][0])
+        self.assertEqual(inputs, [])
+
+        self.assertEqual(self.app.reply("我觉得是 They")["confirming"], "They")
+        hint = self.app.reply("有他们和朋友，我分不清该看谁")
+        self.assertEqual(hint["step"], 1)
+        self.assertIsNone(hint["confirming"])
+        self.assertIn("第一个词", hint["messages"][0])
+        self.assertNotIn("They", hint["messages"][0])
+        self.assertNotIn(LESSON["steps"][0]["ask"], hint["messages"][0])
+        self.assertEqual(inputs, ["有他们和朋友，我分不清该看谁"])
+
+        self.assertEqual(self.app.reply("我觉得是 They")["confirming"], "They")
+        self.assertEqual(self.app.reply("是")["step"], 2)
+        self.assertEqual(self.app.reply("能给个提示吗")["step"], 2)
+        self.assertEqual(self.app.reply("are")["summary"]["wrong"], 0)
+        self.assertEqual(inputs, ["有他们和朋友，我分不清该看谁"])
+
+    def test_question_during_answer_confirmation_is_not_counted_wrong(self):
+        self.app.start(TEXT)
+        self.app.reply("我觉得是 They")
+        reason = self.app.reply("我知道选 are，但不知道为什么")
+        self.assertIsNone(reason["confirming"])
+        self.assertIn("先看主语是谁", reason["messages"][0])
+        self.app.reply("They")
+        self.assertEqual(self.app.reply("are")["summary"]["wrong"], 0)
+
+    def test_early_final_answer_does_not_count_against_current_step(self):
+        self.app.start(TEXT)
+        for said in ("所以这道题是are", "are", "我选 are"):
+            view = self.app.reply(said)
+            self.assertEqual(view["step"], 1)
+            self.assertFalse(view["done"])
+            self.assertIn("最后一空", view["messages"][0])
+            self.assertEqual(view["messages"][-1], LESSON["steps"][0]["ask"])
+
+        self.assertEqual(self.app.reply("They")["step"], 2)
+        self.assertEqual(self.app.reply("are")["summary"]["wrong"], 0)
+        self.assertEqual([e["result"] for e in self.store.unsynced()[0]["events"]],
+                         ["note", "note", "note", "hit", "hit"])
+
+    def test_early_answer_questions_and_negations_do_not_get_credit(self):
+        for said in ("are？", "不是are", "所以这道题不是 are"):
+            with self.subTest(said=said):
+                self.app.start(TEXT)
+                view = self.app.reply(said)
+                self.assertNotIn("最后一空", "".join(view["messages"]))
+                self.assertEqual(view["step"], 1)
+
+    def test_model_transition_preserves_next_question_and_falls_back(self):
+        for raw, expected in (("这一步想对了，接着看下一问。", "这一步想对了，接着看下一问。"),
+                              ("应该填 is。", "答对了！"),
+                              (TimeoutError(), "答对了！")):
+            with self.subTest(raw=raw):
+                def transition_write(*args):
+                    if isinstance(raw, Exception):
+                        raise raw
+                    return raw
+
+                self.app = PhoneApp(fake_write, self.store, transition_write=transition_write)
+                self.app.start(TEXT)
+                view = self.app.reply("They")
+                self.assertEqual(view["messages"], [expected, LESSON["steps"][1]["ask"]])
+                self.assertEqual(view["step"], 2)
+                self.assertEqual(self.app.reply("are")["summary"]["right"], 2)
+
     def test_whole_item_saves_the_record(self):
         view = self.app.start(TEXT, "pack", offline=True)
         self.assertEqual(view["messages"], [LESSON["steps"][0]["ask"]])
@@ -96,7 +231,7 @@ class FlowTests(AppCase):
         self.assertEqual(view["messages"][0], "答对了！")
         self.assertEqual(view["step"], 2)
         view = self.app.reply("is")
-        self.assertEqual(view["messages"], ["还不对，再想想。"])
+        self.assertIn("先看主语是谁", view["messages"][0])
         view = self.app.reply("是 are 吧")
         self.assertEqual(view["confirming"], "are")
         view = self.app.reply("是")
@@ -247,11 +382,165 @@ class TodayTests(AppCase):
         self.app.reply("They")
         view = self.app.reply("are")
         self.assertTrue(view["done"])
-        self.assertEqual(view["today"], {"done": 1, "left": 0})
+        self.assertEqual(view["today"], {"done": 1, "left": 0, "waiting": 1})
 
     def test_unfinished_item_has_no_today(self):
         view = self.app.start(TEXT, "pack", offline=True)
         self.assertNotIn("today", view)
+
+
+class TransferTests(AppCase):
+    """回信关联的两道验收题离线做，跨日换题。"""
+
+    def letter(self, status="answered", *, text="改错（只改一个词）：She like cats.", question_id="q1", seq=1, session_id="original"):
+        self.store.save_questions([{
+            "questionId": question_id, "childId": "child_01", "seq": seq, "status": status,
+            "text": text, "sessionId": session_id, "stepId": "s1", "answer": "这题要看句子的线索。",
+        }])
+
+    def test_no_letter_no_transfer(self):
+        with self.assertRaises(BadRequest):
+            self.app.transfer()
+
+    def test_pending_letter_is_not_enough(self):
+        self.letter("pending")
+        with self.assertRaises(BadRequest):
+            self.app.transfer()
+
+    def test_unsupported_or_unconfirmed_letter_has_no_transfer(self):
+        self.letter("needs_teacher")
+        self.letter(text="Look!", question_id="q2", seq=2)
+        for question_id in ("q1", "q2", "missing"):
+            with self.subTest(question_id=question_id), self.assertRaises(BadRequest):
+                self.app.transfer(question_id)
+        self.assertFalse(any(item["transferReady"] for item in self.app.home()["questions"]))
+
+    def test_teacher_confirmed_letter_still_opens_transfer(self):
+        self.letter("teacher_confirmed")
+        view = self.app.transfer()
+        self.assertEqual(view["question"], "He ___ TV. (watch / watches)")
+
+    def test_first_item_answered_first_try_is_independent(self):
+        self.letter()
+        view = self.app.transfer()
+        self.assertEqual(view["question"], "He ___ TV. (watch / watches)")
+        self.assertEqual(view["mode"], "judged")
+        self.assertEqual(view["steps"], 1)
+        view = self.app.reply("watches")
+        self.assertTrue(view["done"])
+        record = self.store.unsynced()[0]
+        self.assertEqual(record["source"], "transfer")
+        self.assertTrue(record["offline"])
+        self.assertEqual(record["transferTier"], "independent")
+        self.assertFalse(record["transferRetest"])
+        self.assertEqual(record["transferBasis"]["questionId"], "q1")
+        self.assertFalse(record["transferBasis"]["contrast"])
+
+    def test_selected_letter_and_its_wrong_choice_set_the_focus_and_contrast(self):
+        self.letter(text=TEXT)
+        self.letter(question_id="q2", seq=2)
+        self.store.save_session({
+            "sessionId": "original", "childId": "child_01", "answerSource": "program",
+            "recognizedText": TEXT, "source": "pack", "steps": [],
+            "events": [{"stepId": "s1", "result": "miss", "said": "am"}],
+        })
+        with patch("xiangke.app.now", return_value="2026-11-19T09:00:00+08:00"):
+            view = self.app.transfer("q1")
+            self.assertEqual(view["question"], "They ___ ready. (am / is / are)")
+            self.app.reply("are")
+            view = self.app.transfer("q1")
+            self.assertEqual(view["question"], "I ___ hungry. (am / is / are)")
+            self.app.reply("am")
+            with self.assertRaisesRegex(BadRequest, "今天的两道新题"):
+                self.app.transfer("q2")
+        basis = self.store.unsynced()[-1]["transferBasis"]
+        self.assertEqual((basis["focus"], basis["originalReply"], basis["contrast"]), ("are", "am", True))
+        with patch("xiangke.app.now", return_value="2026-11-20T09:00:00+08:00"):
+            self.assertEqual(self.app.transfer("q2")["question"], "He ___ TV. (watch / watches)")
+            self.app.reply("watches")
+            self.assertFalse(self.store.unsynced()[-1]["transferRetest"])
+
+    def test_repeated_start_keeps_the_open_attempt(self):
+        self.letter()
+        self.app.transfer("q1")
+        with self.assertRaises(BadRequest):
+            self.app.transfer("q1")
+        self.assertTrue(self.app.reply("watches")["done"])
+        self.assertEqual(len(self.store.unsynced()), 1)
+
+    def test_miss_then_hit_is_assisted(self):
+        self.letter()
+        self.app.transfer()
+        self.app.reply("watch")
+        view = self.app.reply("watches")
+        self.assertTrue(view["done"])
+        self.assertEqual(self.store.unsynced()[0]["transferTier"], "assisted")
+
+    def test_asking_why_means_not_independent(self):
+        self.letter()
+        self.app.transfer()
+        self.app.reply("为什么？")
+        view = self.app.reply("watches")
+        self.assertTrue(view["done"])
+        self.assertEqual(self.store.unsynced()[0]["transferTier"], "assisted")
+
+    def test_three_misses_is_stopped(self):
+        self.letter()
+        self.app.transfer()
+        for _ in range(3):
+            view = self.app.reply("watch")
+        self.assertEqual(view["outcome"], "assisted")
+        self.assertEqual(self.store.unsynced()[0]["transferTier"], "stopped")
+
+    def test_leaving_part_way_is_stopped(self):
+        self.letter()
+        self.app.transfer()
+        self.app.leave()
+        self.assertEqual(self.store.unsynced()[0]["transferTier"], "stopped")
+
+    def test_second_item_is_the_can_trap_then_done_for_today(self):
+        self.letter()
+        self.app.transfer()
+        self.app.reply("watches")
+        view = self.app.transfer()
+        self.assertEqual(view["question"], "She can ___ TV. (watch / watches)")
+        view = self.app.reply("watch")
+        self.assertTrue(view["done"])
+        self.assertEqual(self.store.unsynced()[-1]["transferTier"], "independent")
+        with self.assertRaises(BadRequest):
+            self.app.transfer()
+
+    def test_new_day_retests_the_same_focus_with_two_unseen_questions(self):
+        self.letter()
+        with patch("xiangke.app.now", return_value="2026-11-19T09:00:00+08:00"):
+            first = self.app.transfer("q1")["question"]
+            self.app.reply("watches")
+            contrast = self.app.transfer("q1")["question"]
+            self.app.reply("watch")
+        with patch("xiangke.app.now", return_value="2026-11-20T09:00:00+08:00"):
+            later = self.app.transfer("q1")["question"]
+            self.assertNotEqual(first, later)
+            self.assertTrue(self.app.reply("walks")["done"])
+            later_contrast = self.app.transfer("q1")["question"]
+            self.assertNotEqual(contrast, later_contrast)
+            self.assertTrue(self.app.reply("fly")["done"])
+        records = self.store.unsynced()
+        self.assertEqual(len({row["recognizedText"] for row in records}), 4)
+        self.assertEqual([row["transferRetest"] for row in records], [False, False, True, True])
+        self.assertEqual({row["transferBasis"]["focus"] for row in records}, {"change"})
+
+    def test_older_format_and_reordered_options_are_skipped(self):
+        self.store.save_session({
+            "sessionId": "s_old", "childId": "child_01", "answerSource": "program",
+            "source": "transfer", "recognizedText": "HE ___ TV.（watches / watch）",
+            "startedAt": "2026-11-18T09:00:00+08:00", "events": [], "steps": [],
+        })
+        self.letter()
+        view = self.app.transfer()
+        self.assertEqual(view["question"], "Amy ___ to school. (walks / walk)")
+        view = self.app.reply("walks")
+        self.assertTrue(view["done"])
+        self.assertFalse(self.store.unsynced()[-1]["transferRetest"])
 
 
 if __name__ == "__main__":

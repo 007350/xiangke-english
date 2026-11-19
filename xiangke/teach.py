@@ -13,6 +13,7 @@ from pathlib import Path
 
 from xiangke.answers import compute_answer
 from xiangke.kernel import check_session
+from xiangke.topic_plans import topic_key, valid_topic_entry
 from xiangke.verb_3s import plan_correction, template_steps
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +36,9 @@ _REPAIRS = (
 )
 _TERMS = ("第三人称", "第一人称", "宾格", "物主代词", "谓语")
 _BAD_REASONS = ("句子里还有", "句子里用的是", "过去式", "比较级")
+_ASKS_FOR_FILL = re.compile(r"(?:空格|空)(?:里|中|内|是|该|要|可|填|缺)|(?:填|补)(?:入|上)?(?:什么|哪个|一个词)")
+_ASKS_FOR_CUE = re.compile(r"(?:空格|空)(?:的)?(?:前|左)|(?:空格|空)里.{0,12}词前")
+_TRY_PRAISE = re.compile(r"^(?:(?:很好|真棒|不错|太棒了|答对了|对了|没错|你答对了)[！!。，,、\s]+)+")
 
 
 def user_message(text: str, plan: dict, answer: str | None) -> str:
@@ -69,6 +73,21 @@ def answer_grammar(answer: str) -> str:
             'space ::= | " " | "\\n" [ \\t]{0,20}',
         ]
     )
+
+
+def _fixed_grammar(steps: list[dict]) -> str:
+    def literal(text):
+        return json.dumps(text, ensure_ascii=False)
+
+    fields = []
+    for step in steps:
+        fixed = json.dumps({"ask": step["ask"], "expect": step["expect"]}, ensure_ascii=False)
+        prefix = literal(fixed[:-1] + ', "explain": ')
+        fields.append(f'{prefix} string "}}"')
+    sequence = ' ", " '.join(fields)
+    opening = literal('{"steps": [')
+    root = f'root ::= {opening} {sequence} "]}}"'
+    return "\n".join([root, *answer_grammar(steps[-1]["expect"]).splitlines()[3:]])
 
 
 def repair_terms(steps: list[dict]) -> list[dict]:
@@ -111,6 +130,8 @@ def check_talk(raw: str, text: str, computed: dict) -> tuple[list[dict] | None, 
     terms = [term for term in _TERMS if term in joined]
     if terms:
         errors.append(f"用了术语 {'、'.join(terms)}")
+    if "he、she、it" in joined and "帮忙" not in joined:
+        errors.append("规则没有讲清什么时候才变")
     reasons = [item for item in _BAD_REASONS if item in joined and not ("过去式" == item and computed["kind"] == "past")]
     if reasons:
         errors.append(f"理由不可靠 {'、'.join(reasons)}")
@@ -120,12 +141,21 @@ def check_talk(raw: str, text: str, computed: dict) -> tuple[list[dict] | None, 
     errors += _reason_errors(steps, computed)
 
     others = _wrong_answers(text, computed)
+    needs_es = computed["kind"] == "verb_choice" and any(word + "es" == answer.casefold() for word in others)
     wrong_word = (computed.get("wrong") or "").casefold()
     for index, step in enumerate(steps[:-1]):
         expect = step["expect"].strip().casefold()
         # 改错题第一问问的就是错词，这不算选错
         if expect in others and not (index == 0 and expect == wrong_word):
             errors.append(f"中间一问选了错的答案 {step['expect']}")
+        if needs_es and re.fullmatch(r"(?:直接|只)?加(?:上)?\s*s", expect):
+            errors.append("中间一问把加 es 说成了加 s")
+        if computed.get("ruleKey") == "n_a_an" and expect in {"a", "an", "one"}:
+            asks_for_cue = _ASKS_FOR_CUE.search(step["ask"])
+            if asks_for_cue and expect != computed.get("cue"):
+                errors.append("中间一问认错了空格前的提示词")
+            elif not asks_for_cue and _ASKS_FOR_FILL.search(step["ask"]):
+                errors.append("中间一问把空格前的提示词当成了填空答案")
     for other in others:
         if re.search(r"(?:填|选|改成|→)\s*" + re.escape(other) + r"(?![A-Za-z])", last, re.I):
             errors.append(f"解释讲成了 {other}")
@@ -199,6 +229,13 @@ def _has_word(text: str, word: str) -> bool:
 def program_steps(text: str, computed: dict) -> list[dict]:
     """The program's own wording. Used whenever the model's wording is refused."""
     answer, rule = computed["answer"], computed["rule"]
+    if computed["kind"] == "pack_spelling":
+        missing = [(index + 1, answer[index]) for index, letter in enumerate(computed["mask"]) if letter == "_"]
+        return [
+            {"ask": f"从左往右数，第 {position} 个字母是什么？只写一个字母。", "expect": letter,
+             "explain": f"第 {position} 个字母填 {letter}。"}
+            for position, letter in missing
+        ] + [{"ask": "把这个单词完整拼出来。", "expect": answer, "explain": f"完整拼写是 {answer}。"}]
     if computed["kind"] == "verb_3s":
         plan = plan_correction(text)
         talk = template_steps(plan)["steps"]
@@ -208,7 +245,48 @@ def program_steps(text: str, computed: dict) -> list[dict]:
         ]
     choices = _choices(text)
     ask = f"想一想，空里选 {choices}？" if choices else "想一想，这道题的答案是什么？说出那个英文词。"
-    return [{"ask": ask, "expect": answer, "explain": f"{rule}所以答案是 {answer}。" if not choices else f"{rule}所以填 {answer}。"}]
+    counter = computed.get("counter", "")
+    return [{"ask": ask, "expect": answer, "explain": f"{rule}所以答案是 {answer}。{counter}" if not choices else f"{rule}所以填 {answer}。{counter}"}]
+
+
+def _planned_steps(text: str, computed: dict, strategy: str) -> list[dict]:
+    steps = program_steps(text, computed)
+    if strategy == "self_first":
+        return [{"ask": "这句话说的是自己还是别人？用中文说。", "expect": "自己",
+                 "explain": "I 是「我」，说的是说话的人自己。"}, *steps]
+    if strategy == "cue_first":
+        cue = computed["cue"]
+        return [
+            {"ask": "题目里哪个英文词表示「能」？", "expect": cue, "explain": f"{cue} 表示「能」。"},
+            {"ask": f"{cue} 后面的动词要不要变形？回答「要」或「不要」。", "expect": "不要",
+             "explain": computed["rule"]},
+            *steps,
+        ]
+    return steps
+
+
+def _teach_topic(text: str, computed: dict, plan: dict, entry: dict, write) -> dict:
+    scaffold = _planned_steps(text, computed, entry["strategy"])
+    prompt = user_message(text, {**plan, "voice": entry["voice"]}, computed["answer"])
+    prompt += (
+        "\n步骤已由程序确定。保留每一步的 ask 和 expect，只用适合这个孩子的话改写 explain。"
+        "\n以下是可用的正确解释：\n" + json.dumps(scaffold, ensure_ascii=False)
+    )
+    raw = ""
+    try:
+        raw = write(SYSTEM, prompt, _fixed_grammar(scaffold))
+        steps, errors = check_talk(raw, text, computed)
+        if steps is not None and [(s["ask"], s["expect"]) for s in steps] != [
+            (s["ask"], s["expect"]) for s in scaffold
+        ]:
+            errors.append("改变了专属讲法的小问或答案")
+    except (OSError, RuntimeError, ValueError, KeyError, TypeError):
+        steps, errors = None, ["本地模型没有返回可用的讲解"]
+    if steps is not None and not errors:
+        return {"source": "model", "steps": with_ids(steps), "judged": True,
+                "computed": computed, "errors": [], "raw": raw}
+    return {"source": "program", "steps": with_ids(scaffold), "judged": True,
+            "computed": computed, "errors": errors, "raw": raw}
 
 
 def _choices(text: str) -> str | None:
@@ -233,7 +311,7 @@ def looks_like_item(text: str) -> bool:
     return "_" in text or "改错" in text or re.search(r"[(（][^)）]*[)）]", text) is not None
 
 
-def teach(text: str, write, plan: dict | None = None, known: dict | None = None) -> dict:
+def teach(text: str, write, plan: dict | None = None, known: dict | None = None, *, assessment: bool = False) -> dict:
     """Prepare one item.
 
     ``write(system, user, grammar)`` is the model. ``source`` is ``model``,
@@ -244,6 +322,18 @@ def teach(text: str, write, plan: dict | None = None, known: dict | None = None)
     """
     plan = {**DEFAULT_PLAN, **(plan or {})}
     computed = compute_answer(text) or known
+    if computed and (assessment or computed["kind"] == "pack_spelling"):
+        # 验收先让孩子独立选词。规则和解释留到他主动求助或答过以后。
+        return {"source": "program", "steps": with_ids(program_steps(text, computed)),
+                "judged": True, "computed": computed, "errors": [], "raw": ""}
+    if "topicPlans" in plan:
+        topics = plan["topicPlans"]
+        key = topic_key(computed)
+        entry = topics.get(key) if isinstance(topics, dict) else None
+        # 题型计划启用后，旧的跨题型提醒和例题不再发给 v5。
+        plan = {**DEFAULT_PLAN, "forbid": plan["forbid"]}
+        if valid_topic_entry(key, entry):
+            return _teach_topic(text, computed, plan, entry, write)
     if computed is None and not looks_like_item(text):
         return {"source": "none", "steps": None, "judged": False, "computed": None, "errors": ["看不出是一道题"], "raw": ""}
     if computed is None:
@@ -274,9 +364,14 @@ def _check_try(raw: str, text: str = "") -> tuple[list[dict] | None, list[str]]:
         return None, ["不是合法 JSON"]
     if not isinstance(steps, list) or not steps:
         return None, ["没有问"]
-    if any(not isinstance(s, dict) or set(s) != {"ask", "expect", "explain"} for s in steps):
+    if any(not isinstance(s, dict) or set(s) != {"ask", "expect", "explain"}
+           or not all(isinstance(value, str) for value in s.values()) for s in steps):
         return None, ["字段不全"]
     steps = repair_terms(steps)
+    for step in steps:
+        step["ask"] = _TRY_PRAISE.sub("", step["ask"].strip())
+        if not step["ask"] or re.search(r"答对了|答错了|说对了|选对了|说错了|选错了|真棒|很好", step["ask"]):
+            return None, ["试讲的小问带了判分或表扬"]
     if not check_session({"steps": steps})["checkPassed"]:
         return None, ["提前说出答案"]
     if _called_me(steps, text.split("：")[-1]):

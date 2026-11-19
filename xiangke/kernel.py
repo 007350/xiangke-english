@@ -9,6 +9,8 @@ import copy
 import re
 import unicodedata
 
+from xiangke.topic_plans import valid_topic_entry
+
 _PREFIXES = ("是", "选", "用")
 # Phone keyboards and scanned books use curly quotes. Only these fold to '.
 _APOSTROPHES = str.maketrans({"\u2018": "'", "\u2019": "'"})
@@ -103,6 +105,10 @@ def check_plan(plan: dict, previous_version: int | None) -> dict:
         reasons.append("too_many_reminders")
     if len(examples) > 3:
         reasons.append("too_many_examples")
+    if "topicPlans" in plan:
+        topics = plan["topicPlans"]
+        if not isinstance(topics, dict) or not all(valid_topic_entry(key, entry) for key, entry in topics.items()):
+            reasons.append("bad_topic_plans")
     return {"checkPassed": not reasons, "checkReasons": reasons}
 
 

@@ -9,6 +9,7 @@ from http.server import ThreadingHTTPServer
 from xiangke import cloud as cloud_module
 from xiangke.app import BadRequest, PhoneApp, make_handler as phone_handler
 from xiangke.cloud import TEST_REMINDER, BadUpload, CloudApp, CloudStore, make_handler
+from xiangke.planner import make_planner
 from xiangke.store import Store
 from xiangke.sync import SyncFailed, post_json, sync_once
 
@@ -33,6 +34,21 @@ fake_write.seen = []
 
 def session(session_id, child="child_01"):
     return {"sessionId": session_id, "childId": child, "answerSource": "program", "events": [], "steps": []}
+
+
+def question_record(session_id="s1"):
+    return {
+        "sessionId": session_id,
+        "childId": "child_01",
+        "answerSource": "program",
+        "source": "photo",
+        "recognizedText": "改错（只改一个词）：She like cats.",
+        "checkPassed": True,
+        "startedAt": "2026-11-19T09:00:00+08:00",
+        "endedAt": "2026-11-19T09:05:00+08:00",
+        "steps": [{"stepId": "s1", "ask": "改成什么？", "expect": "likes", "explain": "She 是一个人。"}],
+        "events": [{"stepId": "s1", "said": "为什么要加 s？", "result": "note", "hintUsed": 0, "noteKind": "question"}],
+    }
 
 
 class SyncCase(unittest.TestCase):
@@ -63,6 +79,64 @@ class SyncCase(unittest.TestCase):
 
 
 class WholeLoopTests(SyncCase):
+    def test_scoped_plans_sync_and_teach_only_the_matching_new_topic(self):
+        topics = {
+            "be_i": {"strategy": "self_first", "voice": "先分清说的是自己"},
+            "v_base_after:can": {"strategy": "cue_first", "voice": "先找表示能的词"},
+            "be_there": {"strategy": "explain", "voice": "先看后面说的东西"},
+        }
+        requests = []
+
+        def chat(messages):
+            requests.append(messages)
+            return json.dumps({"voice": "每一问都很短。", "reminders": [], "examples": [],
+                               "forbid": "不要直接说出标准答案。", "topicPlans": topics}, ensure_ascii=False)
+
+        self.cloud.planner = make_planner(chat)
+        for text, wrong, correct in (
+            ("I ___ at home. (am / is / are)", "is", "am"),
+            ("She can ___ fast. (runs / run)", "runs", "run"),
+        ):
+            self.phone.start(text)
+            self.phone.reply(wrong)
+            self.assertEqual(self.phone.reply(correct)["summary"]["wrong"], 1)
+        child = self.phone.child_id
+        self.cloud.sync(child, 2, self.store.unsynced(child))
+        pending = self.cloud.report(child)["planChanges"]
+        self.assertEqual((pending["version"], pending["receivedVersion"]), (3, 2))
+        self.assertEqual([item["evidence"]["said"] for item in pending["items"]], ["is", "runs"])
+        self.assertEqual([item["evidence"]["expected"] for item in pending["items"]], ["am", "run"])
+        self.assertIn("通用", pending["items"][0]["before"]["steps"])
+        self.assertIn("自己还是别人", pending["items"][0]["after"]["steps"])
+
+        self.phone.set_network(True)
+        self.assertTrue(self.phone.sync()["syncResult"]["planUpdated"])
+        received = self.cloud.report(child)["planChanges"]
+        self.assertEqual((received["version"], received["receivedVersion"]), (3, 3))
+        self.cloud.confirm_plan_received(child, 2)
+        self.assertEqual(self.cloud.report(child)["planChanges"]["receivedVersion"], 3)
+        self.assertIn('"题型": "be_i"', requests[0][-1]["content"])
+        self.assertEqual(set(self.store.latest_plan("child_01")["topicPlans"]), {"be_i", "v_base_after:can"})
+
+        self.phone.set_network(False)
+        view = self.phone.start("I ___ ten years old. (are / am / is)")
+        self.assertEqual(view["messages"], ["这句话说的是自己还是别人？用中文说。"])
+        self.assertIn(topics["be_i"]["voice"], fake_write.seen[-1])
+        self.assertNotIn(topics["v_base_after:can"]["voice"], fake_write.seen[-1])
+        self.assertEqual(self.phone.reply("自己")["step"], 2)
+        self.assertEqual(self.phone.reply("am")["summary"]["right"], 2)
+
+        view = self.phone.start("My sister can ___ this song. (sings / sing)")
+        self.assertEqual(view["messages"], ["题目里哪个英文词表示「能」？"])
+        self.assertIn(topics["v_base_after:can"]["voice"], fake_write.seen[-1])
+        self.assertNotIn(topics["be_i"]["voice"], fake_write.seen[-1])
+
+        self.phone.start("My aunt doesn't ___ coffee. (drinks / drink)")
+        prompt = fake_write.seen[-1]
+        self.assertNotIn(topics["v_base_after:can"]["voice"], prompt)
+        self.assertNotIn(topics["be_i"]["voice"], prompt)
+        self.assertNotIn("他会写成 is", prompt)
+
     def test_offline_then_online_updates_the_plan_used_for_teaching(self):
         self.do_item()
         self.assertEqual(self.phone.home()["waitingSync"], 1)
@@ -256,6 +330,46 @@ class CloudTests(unittest.TestCase):
         with self.assertRaises(sqlite3.IntegrityError):
             self.store.connection.execute("UPDATE plans SET plan = '{}'")
 
+    def test_teacher_confirms_an_edited_explanation(self):
+        self.cloud.sync("child_01", 2, [question_record()])
+        question = self.store.questions_after("child_01")[0]
+        self.store.answer_question(question["questionId"], "child_01", {"status": "needs_teacher", "answer": "这条需要老师确认。"})
+        self.assertEqual(self.cloud.confirm_question("child_01", question["questionId"], "有 can 帮忙就不变，这道题没有 can，所以 like 要改成 likes。"), {"confirmed": True})
+        updated = self.store.questions_after("child_01")[0]
+        self.assertEqual(updated["status"], "teacher_confirmed")
+        self.assertIn("likes", updated["answer"])
+        self.assertGreater(updated["seq"], question["seq"])
+        # 确认过的不能再改，别的孩子的疑惑也不能动
+        with self.assertRaises(BadUpload):
+            self.cloud.confirm_question("child_01", question["questionId"], "再改一次")
+        with self.assertRaises(BadUpload):
+            self.cloud.confirm_question("child_02", question["questionId"], "别的孩子")
+
+    def test_confirm_refuses_empty_and_overlong_answers(self):
+        self.cloud.sync("child_01", 2, [question_record()])
+        question = self.store.questions_after("child_01")[0]
+        self.store.answer_question(question["questionId"], "child_01", {"status": "answered", "answer": "云端的解释。"})
+        for answer in ("", "   ", "多" * 401, None):
+            with self.subTest(answer=repr(answer)[:20]):
+                with self.assertRaises(BadUpload):
+                    self.cloud.confirm_question("child_01", question["questionId"], answer)
+        self.assertEqual(self.store.questions_after("child_01")[0]["status"], "answered")
+
+
+class TeacherConfirmTests(SyncCase):
+    def test_confirmed_letter_reaches_the_phone_with_a_badge_status(self):
+        self.store.save_session(question_record())
+        self.phone.set_network(True)
+        self.phone.sync()
+        question = self.cloud_store.questions_after("child_01")[0]
+        self.cloud_store.answer_question(question["questionId"], "child_01", {"status": "needs_teacher", "answer": "这条需要老师确认。"})
+        self.phone.sync()
+        self.cloud.confirm_question("child_01", question["questionId"], "有 can 帮忙就不变，这道题没有 can，所以 like 要改成 likes。")
+        home = self.phone.sync()
+        letter = next(item for item in home["questions"] if item["questionId"] == question["questionId"])
+        self.assertEqual(letter["status"], "teacher_confirmed")
+        self.assertIn("likes", letter["answer"])
+
 
 class HttpTests(SyncCase):
     def phone_post(self, url, path, body):
@@ -297,6 +411,19 @@ class HttpTests(SyncCase):
     def test_unknown_cloud_paths_are_refused(self):
         with self.assertRaises(SyncFailed):
             post_json(self.url + "/data/pack.json", {})
+
+    def test_confirm_route_over_http(self):
+        self.store.save_session(question_record())
+        self.phone.set_network(True)
+        self.phone.sync()
+        question = self.cloud_store.questions_after("child_01")[0]
+        self.cloud_store.answer_question(question["questionId"], "child_01", {"status": "answered", "answer": "云端的解释。"})
+        result = self.phone_post(self.url, "/api/confirm", {"childId": "child_01", "questionId": question["questionId"], "answer": "老师改好的解释。"})
+        self.assertTrue(result["confirmed"])
+        with self.assertRaises(urllib.error.HTTPError) as caught:
+            self.phone_post(self.url, "/api/confirm", {"childId": "child_01", "questionId": question["questionId"], "answer": " "})
+        self.assertEqual(caught.exception.code, 400)
+        caught.exception.close()
 
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@ ITEM = "改错（只改一个词）：She like cats."
 GOOD = {
     "steps": [
         {"explain": "She 是她，一个人，后面的动词要变样子，所以 like 不对。"},
-        {"explain": "主语是 he、she、it，动词要加 s，所以改成 likes。"},
+        {"explain": "主语是 he、she、it，句子里没有 can 这些帮忙的词，动词才要加 s，所以改成 likes。"},
     ]
 }
 
@@ -62,7 +62,8 @@ class PlanCorrectionTests(unittest.TestCase):
         self.assertIn(plan["steps"][1]["ask"], message)
         self.assertIn("答案=like", message)
         self.assertIn("答案=likes", message)
-        self.assertIn("主语是 he、she、it，动词要加 s。", message)
+        self.assertIn("主语是 he、she、it，句子里又没有 can 这些帮忙的词，动词才要加 s。", message)
+        self.assertIn("反例=", message)
         self.assertIn("线索=She 是她，一个人", message)
 
     def test_grammar_lets_the_model_write_only_explain(self):
@@ -202,9 +203,17 @@ class WordingCheckTests(unittest.TestCase):
         self.assert_rejected(_with_explain(1, "She 是我，所以改成 likes。"), self.plan, "「我」")
 
     def test_not_me_is_allowed(self):
-        ok, errors, _ = check_wording(_with_explain(1, "She 不是我，是她，所以改成 likes。"), self.plan)
+        ok, errors, _ = check_wording(_with_explain(1, "She 不是我，是她，句子里没有 can 帮忙，所以改成 likes。"), self.plan)
         self.assertEqual(errors, [])
         self.assertTrue(ok)
+
+    def test_rule_must_say_when_it_applies(self):
+        self.assert_rejected(_with_explain(1, "主语是 he、she、it，动词要加 s，所以改成 likes。"), self.plan, "什么时候才变")
+
+    def test_template_carries_the_condition_and_a_counter_example(self):
+        explain = template_steps(self.plan)["steps"][1]["explain"]
+        self.assertIn("帮忙", explain)
+        self.assertIn("She can run fast", explain)
 
     def test_be_verb_and_jargon_fail(self):
         wording = _with_explain(1, "第三人称用 is，所以改成 likes。")

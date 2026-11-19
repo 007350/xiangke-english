@@ -46,6 +46,7 @@ class FactsTests(unittest.TestCase):
         sessions = [
             session("a", checkPassed=False, results=()),
             session("b", answerSource="model", text="We ___ here. (was / were)", results=("note",)),
+            session("c", answerSource="none", checkPassed=False, text="今天天气真好", results=()),
         ]
         facts = build_facts(sessions, [])
         self.assertEqual(facts["judged"], 0)
@@ -66,6 +67,25 @@ class FactsTests(unittest.TestCase):
         self.assertEqual(facts["stopped"], ["改错（只改一个词）：She like cats."])
         self.assertIn("有一问错到第三次停下了", facts["needsTeacher"])
 
+    def test_transfer_sessions_are_recorded_by_tier(self):
+        basis = {"questionId": "q1", "focus": "change", "topic": "动词什么时候要变", "originalReply": "like"}
+        rows = [
+            session("t1", text="He ___ TV. (watch / watches)", results=("hit",), source="transfer", transferTier="independent", startedAt="2026-11-19T09:00:00+08:00"),
+            session("t2", text="Amy ___ to school. (walks / walk)", results=("miss", "hit"), source="transfer", transferTier="assisted", transferRetest=True, transferBasis=basis, startedAt="2026-11-20T09:00:00+08:00"),
+        ]
+        facts = build_facts(rows, [])
+        self.assertEqual([row["tier"] for row in facts["transfer"]], ["independent", "assisted"])
+        self.assertEqual(facts["transfer"][0]["day"], "2026-11-19")
+        self.assertIsNone(facts["transfer"][0]["basis"])
+        self.assertTrue(facts["transfer"][1]["retest"])
+        self.assertEqual(facts["transfer"][1]["basis"], basis)
+        self.assertEqual(facts["transfer"][1]["said"], ["like", "likes"])
+        self.assertEqual(facts["needsTeacher"], [])
+
+    def test_stopped_transfer_needs_the_teacher(self):
+        facts = build_facts([session("t1", results=("miss", "miss", "assisted"), source="transfer", transferTier="stopped")], [])
+        self.assertIn("读完回信试的新题停下来了，需要您再讲", facts["needsTeacher"])
+
 
 class ReportTests(unittest.TestCase):
     def report(self, sessions, drills=(), written=None):
@@ -73,7 +93,7 @@ class ReportTests(unittest.TestCase):
 
     def test_program_numbers_stay_when_the_model_writes(self):
         report = self.report([session()], [drill()], GOOD)
-        self.assertIn("做了 1 道题，其中 1 道中途做错过。手机上还有 1 道专属题", report["parent"]["facts"])
+        self.assertIn("做了 1 道题，其中 1 道曾答错。手机上还有 1 道专属题", report["parent"]["facts"])
         self.assertEqual(report["parent"]["stuck"], GOOD["parentStuck"])
         self.assertTrue(report["parent"]["byModel"])
         self.assertEqual(report["teacher"]["advice"], GOOD["teacherAdvice"])
@@ -83,6 +103,7 @@ class ReportTests(unittest.TestCase):
         self.assertFalse(report["parent"]["byModel"])
         self.assertIn("动词变不变", report["parent"]["stuck"])
         self.assertIn("专属题做完", report["parent"]["tonight"])
+        self.assertIn("下一次", report["parent"]["tonight"])
         self.assertIn("做了 1 次，错 1 次", report["teacher"]["stuck"])
 
     def test_tonight_does_not_mention_drills_when_none_are_left(self):
@@ -97,6 +118,12 @@ class ReportTests(unittest.TestCase):
         record = session()
         record["events"].append({"stepId": "s1", "said": "什么时候不加s", "result": "note"})
         self.assertEqual(self.report([record])["teacher"]["questions"], ["什么时候不加s"])
+
+    def test_transfer_reaches_the_teacher_page(self):
+        record = session("t1", text="He ___ TV. (watch / watches)", results=("hit",), source="transfer", transferTier="independent", startedAt="2026-11-19T09:00:00+08:00")
+        report = self.report([record])
+        self.assertEqual(report["teacher"]["transfer"][0]["tier"], "independent")
+        self.assertEqual(report["teacher"]["transfer"][0]["text"], "He ___ TV. (watch / watches)")
 
 
 class CheckWrittenTests(unittest.TestCase):

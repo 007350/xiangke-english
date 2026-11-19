@@ -6,16 +6,10 @@
     "basedOnSessionId": null,
     "voice": "先让他看主语，再选该用的那个词。",
     "reminders": [],
-    "examples": [
-      {
-        "recognizedText": "I ___ a student. (am / is / are)",
-        "steps": [
-          {"ask": "I 后面用 am、is 还是 are？", "expect": "am"}
-        ]
-      }
-    ],
+    "examples": [],
     "forbid": "不要直接说出标准答案。",
     "checkPassed": true,
-    "checkReasons": []
+    "checkReasons": [],
+    "starter": true
   }
 }
