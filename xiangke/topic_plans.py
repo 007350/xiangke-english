@@ -5,6 +5,11 @@ import re
 MAX_TOPIC_VOICE = 80
 _TOPIC_KEY = re.compile(r"[a-z][a-z0-9_']*(?::[a-z][a-z0-9_']*){0,2}")
 _STRATEGIES = {"be_i": "self_first", "v_base_after:can": "cue_first"}
+_DESCRIPTIONS = {
+    "self_first": "先用中文分清说的是自己还是别人，再选填空的词。",
+    "cue_first": "先找表示「能」的词，再判断动词要不要变形，最后选词。",
+    "explain": "沿用题目的标准小问，按这个孩子容易卡住的地方调整解释。",
+}
 
 
 def without_demo_history(plan: dict) -> dict:
@@ -29,6 +34,10 @@ def topic_key(computed: dict | None) -> str | None:
 
 def topic_strategies(key: str) -> list[str]:
     return ["explain", _STRATEGIES[key]] if key in _STRATEGIES else ["explain"]
+
+
+def strategy_description(strategy: str) -> str:
+    return _DESCRIPTIONS[strategy]
 
 
 def valid_topic_entry(key, entry) -> bool:

@@ -87,6 +87,8 @@ li:last-child { padding-bottom: 0; }
 .plan-side { padding: 10px 12px; border-radius: 8px; background: #f2eee5; font-size: 15px; }
 .plan-side.after { background: var(--green-soft); }
 .plan-side b { display: block; color: var(--green-dark); font-size: 13px; margin-bottom: 4px; }
+.plan-use { margin-top: 10px; padding: 10px 12px; border: 1px solid #a9c6b7; border-radius: 8px; font-size: 15px; }
+.plan-use strong { display: block; color: var(--green-dark); font-size: 14px; }
 @media (max-width: 430px) { .plan-compare { grid-template-columns: 1fr; } }
 .hidden { display: none !important; }
 </style>
@@ -284,6 +286,10 @@ function teacherText(report) {
       if (item.evidence) lines.push(item.evidence.text, planEvidenceLine(item.evidence));
       lines.push(`原来　${item.before.steps}`, `现在　${item.after.steps}`);
       if (item.after.voice) lines.push(item.after.voice);
+      if (item.offlineUse) {
+        lines.push(`离线使用第 ${item.offlineUse.version} 版　${item.offlineUse.text}`,
+          `实际第一问　${item.offlineUse.firstQuestion}`);
+      }
     });
   }
 
@@ -471,6 +477,24 @@ function renderPlanChanges(changes, working) {
     compare.className = "plan-compare";
     compare.append(planSide("原来怎么讲", item.before, false), planSide("现在怎么讲", item.after, true));
     row.append(compare);
+    if (item.offlineUse) {
+      const use = document.createElement("div");
+      use.className = "plan-use";
+      const label = document.createElement("strong");
+      label.textContent = `已回传离线新题 · 第 ${item.offlineUse.version} 版`;
+      const text = document.createElement("div");
+      text.className = "en";
+      text.textContent = item.offlineUse.text;
+      const first = document.createElement("div");
+      first.textContent = `实际第一问「${item.offlineUse.firstQuestion}」`;
+      use.append(label, text, first);
+      row.append(use);
+    } else {
+      const waiting = document.createElement("p");
+      waiting.className = "note plan-use";
+      waiting.textContent = "等待使用这份讲法的离线新题记录同步。";
+      row.append(waiting);
+    }
     return row;
   }));
 }

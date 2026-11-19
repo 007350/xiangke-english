@@ -14,12 +14,8 @@ import re
 from xiangke.planner import COMMON_WORDS, MAX_SESSIONS, TERMS, TRIES, LlmError, _parse, _words, topic_evidence
 from xiangke.portrait import counts_as_judged, stats_for_model, topic_of
 from xiangke.teach import looks_like_item
-
-_PLAN_STEPS = {
-    "self_first": "先用中文分清说的是自己还是别人，再选填空的词。",
-    "cue_first": "先找表示「能」的词，再判断动词要不要变形，最后选词。",
-    "explain": "沿用题目的标准小问，按这个孩子容易卡住的地方调整解释。",
-}
+from xiangke.answers import compute_answer
+from xiangke.topic_plans import strategy_description, topic_key
 _STANDARD_STEPS = "按通用流程讲题，第一问随题目变化。"
 
 
@@ -28,9 +24,11 @@ def build_plan_changes(plans: list[dict], sessions: list[dict], received_version
     changes = {}
     previous = {}
     boundary = 0
+    by_version = {}
     positions = {session["sessionId"]: index + 1 for index, session in enumerate(sessions)}
     for plan in plans:
         current = plan.get("topicPlans") or {}
+        by_version[plan["planVersion"]] = current
         end = max(boundary, positions.get(plan.get("basedOnSessionId"), boundary))
         updated = {key: entry for key, entry in current.items() if entry != previous.get(key)}
         evidence = topic_evidence(sessions[boundary:end][-MAX_SESSIONS:]) if updated else {}
@@ -54,14 +52,40 @@ def build_plan_changes(plans: list[dict], sessions: list[dict], received_version
                             "before": _plan_description(old), "after": _plan_description(entry)}
         boundary, previous = end, current
 
+    _attach_offline_uses(changes, previous, by_version, sessions)
     return {"version": plans[-1]["planVersion"] if plans else None, "receivedVersion": received_version,
             "items": sorted((changes[key] for key in previous), key=lambda item: -item["version"])}
+
+
+def _attach_offline_uses(changes: dict, active: dict, by_version: dict, sessions: list[dict]) -> None:
+    seen_texts = set()
+    for session in sessions:
+        text = session.get("recognizedText")
+        if not isinstance(text, str) or not text.strip():
+            continue
+        normalized = " ".join(text.casefold().split())
+        new_item = normalized not in seen_texts
+        seen_texts.add(normalized)
+        applied = session.get("appliedTopicPlan")
+        if (not new_item or session.get("offline") is not True or not session.get("events")
+                or not counts_as_judged(session) or not isinstance(applied, dict)):
+            continue
+        key, version = applied.get("topic"), session.get("planVersion")
+        if not isinstance(key, str) or key not in active or type(version) is not int or version < changes[key]["version"]:
+            continue
+        steps = session.get("steps") or []
+        if not steps or not steps[0].get("ask"):
+            continue
+        if (by_version.get(version, {}).get(key) == active[key]
+                and applied.get("strategy") == active[key]["strategy"]
+                and topic_key(compute_answer(text)) == key):
+            changes[key]["offlineUse"] = {"text": text, "firstQuestion": steps[0]["ask"], "version": version}
 
 
 def _plan_description(entry: dict | None) -> dict:
     if entry is None:
         return {"steps": _STANDARD_STEPS, "voice": ""}
-    return {"steps": _PLAN_STEPS[entry["strategy"]], "voice": entry["voice"]}
+    return {"steps": strategy_description(entry["strategy"]), "voice": entry["voice"]}
 
 MAX_PARENT = 60
 MAX_TEACHER = 120

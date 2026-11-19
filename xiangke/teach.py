@@ -333,7 +333,9 @@ def teach(text: str, write, plan: dict | None = None, known: dict | None = None,
         # 题型计划启用后，旧的跨题型提醒和例题不再发给 v5。
         plan = {**DEFAULT_PLAN, "forbid": plan["forbid"]}
         if valid_topic_entry(key, entry):
-            return _teach_topic(text, computed, plan, entry, write)
+            lesson = _teach_topic(text, computed, plan, entry, write)
+            lesson["appliedTopicPlan"] = {"topic": key, "strategy": entry["strategy"]}
+            return lesson
     if computed is None and not looks_like_item(text):
         return {"source": "none", "steps": None, "judged": False, "computed": None, "errors": ["看不出是一道题"], "raw": ""}
     if computed is None:

@@ -225,6 +225,8 @@ class ItemSession:
         record["events"] = _merge_notes(record["events"], self.log, self.note_kinds)
         for index in self.shown_answers:
             record["events"][index]["answerShown"] = True
+        if "appliedTopicPlan" in self.lesson:
+            record["appliedTopicPlan"] = self.lesson["appliedTopicPlan"]
         record["answerSource"] = "cloud" if self.lesson["computed"].get("kind") == "cloud" else "program"
         return record
 

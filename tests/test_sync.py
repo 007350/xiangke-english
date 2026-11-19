@@ -113,6 +113,7 @@ class WholeLoopTests(SyncCase):
         self.assertTrue(self.phone.sync()["syncResult"]["planUpdated"])
         received = self.cloud.report(child)["planChanges"]
         self.assertEqual((received["version"], received["receivedVersion"]), (3, 3))
+        self.assertTrue(all("offlineUse" not in item for item in received["items"]))
         self.cloud.confirm_plan_received(child, 2)
         self.assertEqual(self.cloud.report(child)["planChanges"]["receivedVersion"], 3)
         self.assertIn('"题型": "be_i"', requests[0][-1]["content"])
@@ -136,6 +137,17 @@ class WholeLoopTests(SyncCase):
         self.assertNotIn(topics["v_base_after:can"]["voice"], prompt)
         self.assertNotIn(topics["be_i"]["voice"], prompt)
         self.assertNotIn("他会写成 is", prompt)
+
+        self.phone.leave()
+        self.phone.set_network(True)
+        self.phone.sync()
+        used = self.cloud.report(child)["planChanges"]["items"]
+        self.assertEqual(used[0]["offlineUse"], {
+            "text": "I ___ ten years old. (are / am / is)",
+            "firstQuestion": "这句话说的是自己还是别人？用中文说。",
+            "version": 3,
+        })
+        self.assertNotIn("offlineUse", used[1])
 
     def test_offline_then_online_updates_the_plan_used_for_teaching(self):
         self.do_item()

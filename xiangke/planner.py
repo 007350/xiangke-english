@@ -16,7 +16,7 @@ import urllib.request
 
 from xiangke.answers import compute_answer
 from xiangke.kernel import check_session
-from xiangke.topic_plans import topic_key, topic_strategies, valid_topic_entry
+from xiangke.topic_plans import strategy_description, topic_key, topic_strategies, valid_topic_entry
 
 DEFAULT_BASE_URL = "https://maas-api.cn-huabei-1.xf-yun.com/v2"
 DEFAULT_MODEL = "spark-x2.6"
@@ -49,7 +49,7 @@ SYSTEM = """你是乡村小学英语辅导的云端老师。手机上的小模�
 - reminders：最多 3 句，每句不超过 80 字。写这个孩子真实犯过的错，以及下次怎么带他想。只写记录里看得到的错，或旧讲法里仍然有用的。
 - examples：最多 3 道拆题样例，可以为空。只放题目和正确答案，不放孩子的错句。格式：{"recognizedText":"题目","steps":[{"ask":"问句","expect":"答案"}]}。前面的问句不能说出后面的答案。
 - forbid：一句禁令，例如“不要直接说出标准答案”。
-- topicPlans：按题型代码写专属讲法。只给「可更新的题型」中有错题依据的题型写，代码和 strategy 从该列表照抄。每项写 strategy 和 voice。voice 用 80 字以内写清孩子在哪一步卡住、讲解时重点说什么。只有 explain 可选时，保留题目的标准步骤，调整讲解重点。没有可写的就返回 {}。
+- topicPlans：按题型代码写专属讲法。只给「可更新的题型」中有错题依据的题型写，代码和 strategy 从该列表照抄。strategy 决定提问顺序。voice 用 80 字以内写清记录里的错法，以及解释时重点讲什么；不要在 voice 里安排、重复或改动提问顺序。没有可写的就返回 {}。
 
 要求：
 1. 分清两件事。“程序判的错”才是孩子的错。记录里写着“手机把题拆错了”或“答案不一定对”的，不能算孩子的错。
@@ -62,7 +62,7 @@ SYSTEM = """你是乡村小学英语辅导的云端老师。手机上的小模�
 8. 讲到动词加 s 这类规则时，要带上适用条件（比如句子里没有 can 这些帮忙的词时才变），不要写成任何句子都成立的通则。
 
 只输出一个 JSON 对象，不要输出其他文字，格式：
-{"portrait":{"judgement":"...","focus":["..."]},"voice":"...","reminders":["..."],"examples":[],"forbid":"...","topicPlans":{"be_i":{"strategy":"self_first","voice":"先解释 I 指说话的人自己，再跟 am 配对。"}}}"""
+{"portrait":{"judgement":"...","focus":["..."]},"voice":"...","reminders":["..."],"examples":[],"forbid":"...","topicPlans":{"be_i":{"strategy":"self_first","voice":"他把 I 配成了 is。解释时说明 I 指说话的人自己。"}}}"""
 
 
 class PlanFailed(Exception):
@@ -129,7 +129,10 @@ def _step_facts(step: dict, events: list[dict]) -> dict:
 
 def build_messages(current: dict, sessions: list[dict]) -> list[dict]:
     old = {key: current.get(key) for key in ("voice", "reminders", "examples", "forbid", "topicPlans")}
-    eligible = {key: topic_strategies(key) for key in topic_evidence(sessions)}
+    eligible = {
+        key: {strategy: strategy_description(strategy) for strategy in topic_strategies(key)}
+        for key in topic_evidence(sessions)
+    }
     profile = current.get("profile")
     content = (
         ("这个孩子的档案（次数由程序数好）：\n" + json.dumps(profile, ensure_ascii=False, indent=1) + "\n\n" if profile else "")
