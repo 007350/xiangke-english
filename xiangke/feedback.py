@@ -57,6 +57,11 @@ def build_plan_changes(plans: list[dict], sessions: list[dict], received_version
             "items": sorted((changes[key] for key in previous), key=lambda item: -item["version"])}
 
 
+def _has_judged_answer(session: dict) -> bool:
+    """只提了问、点开没答的记录不算，必须有一问真的判过对错。"""
+    return any(event.get("result") in ("hit", "miss", "assisted") for event in session.get("events") or [])
+
+
 def _attach_offline_uses(changes: dict, active: dict, by_version: dict, sessions: list[dict]) -> None:
     seen_texts = set()
     for session in sessions:
@@ -64,10 +69,10 @@ def _attach_offline_uses(changes: dict, active: dict, by_version: dict, sessions
         if not isinstance(text, str) or not text.strip():
             continue
         normalized = " ".join(text.casefold().split())
-        new_item = normalized not in seen_texts
-        seen_texts.add(normalized)
+        if normalized in seen_texts:
+            continue
         applied = session.get("appliedTopicPlan")
-        if (not new_item or session.get("offline") is not True or not session.get("events")
+        if (session.get("offline") is not True or not _has_judged_answer(session)
                 or not counts_as_judged(session) or not isinstance(applied, dict)):
             continue
         key, version = applied.get("topic"), session.get("planVersion")
@@ -80,6 +85,8 @@ def _attach_offline_uses(changes: dict, active: dict, by_version: dict, sessions
                 and applied.get("strategy") == active[key]["strategy"]
                 and topic_key(compute_answer(text)) == key):
             changes[key]["offlineUse"] = {"text": text, "firstQuestion": steps[0]["ask"], "version": version}
+            # 只有真的记下了才算"这题用过了"：先联网做过、或第一次点开没答的，后面重做仍能算新题。
+            seen_texts.add(normalized)
 
 
 def _plan_description(entry: dict | None) -> dict:

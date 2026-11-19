@@ -149,6 +149,64 @@ class WholeLoopTests(SyncCase):
         })
         self.assertNotIn("offlineUse", used[1])
 
+    def test_offline_use_needs_a_judged_answer_and_survives_a_retry(self):
+        topics = {"be_i": {"strategy": "self_first", "voice": "先分清说的是自己还是别人"}}
+        self.cloud.planner = make_planner(
+            lambda messages: json.dumps(
+                {"voice": "每一问都很短。", "reminders": [], "examples": [],
+                 "forbid": "不要直接说出标准答案。", "topicPlans": topics}, ensure_ascii=False))
+        child = self.phone.child_id
+        # 一道 be_i 错题，换来第 3 版讲法
+        self.phone.start("I ___ at home. (am / is / are)")
+        self.phone.reply("is")
+        self.phone.reply("am")
+        self.cloud.sync(child, 2, self.store.unsynced(child))
+        self.phone.set_network(True)
+        self.assertTrue(self.phone.sync()["syncResult"]["planUpdated"])
+
+        def reported():
+            items = self.cloud.report(child)["planChanges"]["items"]
+            return next(item for item in items if item["title"] == "I 和 am 的搭配")
+
+        # 先联网做过同一道题、再断网重做：重做要算数
+        q = "I ___ ten years old. (are / am / is)"
+        self.phone.start(q)
+        self.phone.reply("自己")
+        self.phone.reply("am")
+        self.phone.sync()
+        self.assertNotIn("offlineUse", reported())
+        self.phone.set_network(False)
+        self.phone.start(q)
+        self.phone.reply("自己")
+        self.phone.reply("am")
+        self.phone.leave()
+        self.phone.set_network(True)
+        self.phone.sync()
+        self.assertEqual(reported()["offlineUse"]["text"], q)
+
+        # 第一次点开没答、第二次做完：也要算数
+        q2 = "I ___ a student. (am / is / are)"
+        self.phone.set_network(False)
+        self.phone.start(q2)
+        self.phone.leave()
+        self.phone.start(q2)
+        self.phone.reply("自己")
+        self.phone.reply("am")
+        self.phone.leave()
+        self.phone.set_network(True)
+        self.phone.sync()
+        self.assertEqual(reported()["offlineUse"]["text"], q2)
+
+        # 只记了疑问、一题没答：不能顶掉上面那条
+        q3 = "I ___ from China. (am / is / are)"
+        self.phone.set_network(False)
+        self.phone.start(q3)
+        self.phone.defer_question("为什么是 am？")
+        self.phone.leave()
+        self.phone.set_network(True)
+        self.phone.sync()
+        self.assertEqual(reported()["offlineUse"]["text"], q2)
+
     def test_offline_then_online_updates_the_plan_used_for_teaching(self):
         self.do_item()
         self.assertEqual(self.phone.home()["waitingSync"], 1)
